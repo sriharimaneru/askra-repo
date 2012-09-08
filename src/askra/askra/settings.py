@@ -1,7 +1,9 @@
 # Django settings for askra project.
 import os
 
-PROJECT_DIR = os.path.dirname(__file__)
+#django 1.4, the settings file is moved inside the app. 
+PROJECT_APP_DIR = os.path.dirname(__file__)
+PROJECT_DIR = os.path.dirname(PROJECT_APP_DIR)
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
