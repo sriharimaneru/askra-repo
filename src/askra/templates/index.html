@@ -1,4 +1,119 @@
-{% extends "base.html" %}
-{% block content %}
-<p>This is the content area</p>
-{% endblock content %}
+DOCTYPE HTML>
+<html>
+	
+<head>
+	<meta charset="UTF-8">
+	<link rel="stylesheet" href="{{STATIC_URL}}css/style.css" />
+	<title>Askra - NIT Warangal</title>
+
+	
+	<script src="http://code.jquery.com/jquery-latest.min.js"></script>
+	<script src="{{STATIC_URL}}/js/slides.jquery.js"></script>
+
+
+	<script>
+		function clearText(field){
+
+			if (field.defaultValue == field.value)
+			{
+				field.value = '';
+				field.style.color = 'black';
+			}
+			else if (field.value == '')
+			{
+				field.value = field.defaultValue;
+			}
+		}
+	</script>
+	<script>
+            $(function(){
+                $("#slides").slides({
+                	play: 2000,
+                	pagination: true
+                });
+            });
+    </script>
+</head>
+
+<body>
+
+	<div class="container">
+		<div id="header">
+			<h1>NITW Logo</h1>
+
+			<div id="main_text">
+				<h2>National Institute of Technology, Warangal</h2>
+			</div>
+
+			<div id="login">
+				<h3>LOGIN</h3>
+				<ul>
+					<li><a href="#"><img src="{{STATIC_URL}}/img/linkedin_icon.png" alt="linkedin" class="square_icon" /></a></li>
+					<li><a href="#"><img src="{{STATIC_URL}}/img/facebook_icon.png" alt="facebook" class="square_icon" /></a></li>
+					<li><a href="#"><img src="{{STATIC_URL}}/img/twitter_icon.png" alt="twitter" class="square_icon" /></a></li>
+				</ul>
+
+				<form name="login_form">
+					<input type="text" name ="login_emailid" value="Email ID" onFocus="clearText(this)" onBlur="clearText(this)"/>
+					<input type="password" name ="login_password" value="Password" onFocus="clearText(this)" onBlur="clearText(this)"/>
+					<input type="button" name="login_button" value="Login" />
+				</form>
+			</div>
+		</div>
+
+		<div class="main">
+
+			<div id="slides">
+				<div class="slides_container">
+	                <div>
+	                	<img src="{{STATIC_URL}}/img/slide_nitw_0.jpg" alt="NIT Warangal" />
+                	</div>
+                	<div>
+	                	<img src="{{STATIC_URL}}/img/slide_nitw_1.jpg" alt="NIT Warangal" />
+                	</div>
+                	<div>
+	                	<img src="{{STATIC_URL}}/img/slide_nitw_2.jpg" alt="NIT Warangal" />
+                	</div>
+                	<div>
+	                	<img src="{{STATIC_URL}}/img/slide_nitw_3.jpg" alt="NIT Warangal" />
+                	</div>
+				</div>
+			</div>
+
+			<div id="signup">
+				<h3>SIGN UP</h3>
+
+				<ul>
+					<li><a href="#"><img src="{{STATIC_URL}}/img/linkedin_signup.png" alt="linkedin" /></a></li>
+					<li><a href="#"><img src="{{STATIC_URL}}/img/facebook_signup.png" alt="facebook" /></a></li>
+					<li><a href="#"><img src="{{STATIC_URL}}/img/twitter_signup.png" alt="twitter" /></a></li>
+				</ul>
+
+				<form name="signup_form">
+					<input type="text" name ="firstname" value="First Name" onFocus="clearText(this)" onBlur="clearText(this)"/>
+					<input type="text" name ="lastname" value="Last Name" onFocus="clearText(this)" onBlur="clearText(this)"/><br/>
+					<input type="text" name ="emailId" value="Email ID" class="double_text" onFocus="clearText(this)" onBlur="clearText(this)"/><br/>
+					<input type="password" name ="password" value="password1" class="double_text" onFocus="clearText(this)" onBlur="clearText(this)"/><br/>
+					<input type="password" name ="password_confirm" value="password2" class="double_text" onFocus="clearText(this)" onBlur="clearText(this)"/><br/>
+					<input type="button" name="signup_button" value="Sign Up" />
+				</form>	
+			</div>
+			<div id="friends_on_askra">
+				<blockquote>"Your alma mater is already on Askra"</blockquote>
+				<img src="{{STATIC_URL}}/img/facebook_profile_pictures.png" alt="friends on askra" />
+			</div>
+			<div id="askra_stats">
+				<p>Number of NITW Alumni on Askra = 7000</p>
+				<p>Number of active NITW Alumni on Askra = 5000</p>
+				<p>Number of current NITW students on Askra = 2000</p>
+				<p>Number of NITW Alumni on Askra = 7000</p>
+				<p>Number of active NITW Alumni on Askra = 5000</p>
+				<p>Number of current NITW students on Askra = 2000</p>
+				<p>Number of NITW Alumni on Askra = 7000</p>
+			</div>
+		</div>
+	</div>
+</body>
+
+
+</html>
