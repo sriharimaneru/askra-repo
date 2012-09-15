@@ -1,0 +1,95 @@
+<!DOCTYPE HTML>
+<html>
+	
+<head>
+	<meta charset="UTF-8">
+	<link rel="stylesheet" href="css/style.css" />
+	<title>Registration Step 3 - Askra - NIT Warangal</title>
+
+	<script src="js/jquery-latest.min.js"></script>
+
+	<script>
+
+		$(function(){
+			$(".profile").click(function(){
+				
+			});
+		});
+
+	</script>
+</head>
+
+<body>
+
+	<div class="container">
+		<div id="header">
+			<img src="img/nitw_logo.jpg" alt="Logo" id="logo"/>
+
+			<div id="main_text">
+				<h2>National Institute of Technology, Warangal</h2>
+			</div>
+
+			<div id="login">
+				<h4>Login to connect with your alma mater</h4>
+
+				<ul>
+					<li><a href="#"><img src="img/linkedin_icon.png" alt="linkedin" class="square_icon" /></a></li>
+					<li><a href="#"><img src="img/facebook_icon.png" alt="facebook" class="square_icon" /></a></li>
+					<li><a href="#"><img src="img/twitter_icon.png" alt="twitter" class="square_icon" /></a></li>
+				</ul>
+
+				<div class="clear"></div>
+
+				<form name="login_form">
+					<input type="text" name ="login_emailid" value="Email ID" onFocus="clearText(this)" onBlur="clearText(this)"/>
+					<input type="password" name ="login_password" value="Password" onFocus="clearText(this)" onBlur="clearText(this)"/>
+					<input type="button" name="login_button" value="Login" />
+				</form>
+			</div>
+		</div>
+
+		<div id="mainLayout">
+
+			<ul id="stepSelect">
+				<li>Step 1</li>
+				<li>Step 2</li>
+				<li class="currentStep">Step 3</li>
+			</ul>
+			<div id="mainContainer">
+				<div id="connect_via_linkedin">
+					<a href="#"><img src="img/connect_via_linkedin.gif" alt="connect via linkedin" /></a>	<br>
+					<ul>
+						<li>We will use it to update your profile data automatically</li>
+						<li>We will never post without your permission. A promise!</li>
+						<li>Fastest and easiest way to fill your profile data.</li>
+					</ul>
+				</div>
+
+				<div id="or_text">
+					--------or---------
+				</div>
+				
+				<div id="fillEmpDetails">
+					<form name="emp_details">
+						<span>Current Employer</span>
+						<input type="text" name="employer" /><br>
+						<span>Designation</span>
+						<input type="text" name="designation" /><br>
+						<input type="submit" name="submitform" value="Finish" />
+					</form>
+				</div>
+			</div>
+			<a href="#" id="skip_step">skip this step and finish registration</a>
+
+		</div>
+		<div id="footer">
+				<p>Footer</p>
+				<a href="index.html">Home</a><br>
+				<a href="reg-step-2.html">Registration Step 2</a><br>
+				<a href="reg-step-3.html">Registration Step 3</a>
+		</div>
+	</div>
+</body>
+
+
+</html>

@@ -1,14 +1,14 @@
-DOCTYPE HTML>
+<!DOCTYPE HTML>
 <html>
 	
 <head>
 	<meta charset="UTF-8">
-	<link rel="stylesheet" href="{{STATIC_URL}}css/style.css" />
+	<link rel="stylesheet" href="css/style.css" />
 	<title>Askra - NIT Warangal</title>
 
 	
-	<script src="http://code.jquery.com/jquery-latest.min.js"></script>
-	<script src="{{STATIC_URL}}/js/slides.jquery.js"></script>
+	<script src="js/jquery-latest.min.js"></script>
+	<script src="js/slides.min.jquery.js"></script>
 
 
 	<script>
@@ -22,6 +22,7 @@ DOCTYPE HTML>
 			else if (field.value == '')
 			{
 				field.value = field.defaultValue;
+				field.style.color = 'gray';
 			}
 		}
 	</script>
@@ -32,6 +33,14 @@ DOCTYPE HTML>
                 	pagination: true
                 });
             });
+
+            $(function(){
+            	$("#testimonials").slides({
+            		container: 'testimonials_container',
+            		generateNextPrev: false,
+            		pagination: true
+            	});
+            });
     </script>
 </head>
 
@@ -39,19 +48,22 @@ DOCTYPE HTML>
 
 	<div class="container">
 		<div id="header">
-			<h1>NITW Logo</h1>
+			<img src="img/nitw_logo.jpg" alt="Logo" id="logo"/>
 
 			<div id="main_text">
 				<h2>National Institute of Technology, Warangal</h2>
 			</div>
 
 			<div id="login">
-				<h3>LOGIN</h3>
+				<h4>Login to connect with your alma mater</h4>
+
 				<ul>
-					<li><a href="#"><img src="{{STATIC_URL}}/img/linkedin_icon.png" alt="linkedin" class="square_icon" /></a></li>
-					<li><a href="#"><img src="{{STATIC_URL}}/img/facebook_icon.png" alt="facebook" class="square_icon" /></a></li>
-					<li><a href="#"><img src="{{STATIC_URL}}/img/twitter_icon.png" alt="twitter" class="square_icon" /></a></li>
+					<li><a href="#"><img src="img/linkedin_icon.png" alt="linkedin" class="square_icon" /></a></li>
+					<li><a href="#"><img src="img/facebook_icon.png" alt="facebook" class="square_icon" /></a></li>
+					<li><a href="#"><img src="img/twitter_icon.png" alt="twitter" class="square_icon" /></a></li>
 				</ul>
+
+				<div class="clear"></div>
 
 				<form name="login_form">
 					<input type="text" name ="login_emailid" value="Email ID" onFocus="clearText(this)" onBlur="clearText(this)"/>
@@ -61,21 +73,21 @@ DOCTYPE HTML>
 			</div>
 		</div>
 
-		<div class="main">
+		<div id="main">
 
 			<div id="slides">
 				<div class="slides_container">
-	                <div>
-	                	<img src="{{STATIC_URL}}/img/slide_nitw_0.jpg" alt="NIT Warangal" />
+                	<div>
+	                	<img src="img/slide_nitw_1.jpg" alt="NIT Warangal" />
                 	</div>
                 	<div>
-	                	<img src="{{STATIC_URL}}/img/slide_nitw_1.jpg" alt="NIT Warangal" />
+	                	<img src="img/slide_nitw_2.jpg" alt="NIT Warangal" />
                 	</div>
                 	<div>
-	                	<img src="{{STATIC_URL}}/img/slide_nitw_2.jpg" alt="NIT Warangal" />
+	                	<img src="img/slide_nitw_3.jpg" alt="NIT Warangal" />
                 	</div>
                 	<div>
-	                	<img src="{{STATIC_URL}}/img/slide_nitw_3.jpg" alt="NIT Warangal" />
+	                	<img src="img/slide_nitw_4.jpg" alt="NIT Warangal" />
                 	</div>
 				</div>
 			</div>
@@ -84,9 +96,9 @@ DOCTYPE HTML>
 				<h3>SIGN UP</h3>
 
 				<ul>
-					<li><a href="#"><img src="{{STATIC_URL}}/img/linkedin_signup.png" alt="linkedin" /></a></li>
-					<li><a href="#"><img src="{{STATIC_URL}}/img/facebook_signup.png" alt="facebook" /></a></li>
-					<li><a href="#"><img src="{{STATIC_URL}}/img/twitter_signup.png" alt="twitter" /></a></li>
+					<li><a href="#"><img src="img/linkedin_signup.png" alt="linkedin" /></a></li>
+					<li><a href="#"><img src="img/facebook_signup.png" alt="facebook" /></a></li>
+					<li><a href="#"><img src="img/twitter_signup.png" alt="twitter" /></a></li>
 				</ul>
 
 				<form name="signup_form">
@@ -100,7 +112,7 @@ DOCTYPE HTML>
 			</div>
 			<div id="friends_on_askra">
 				<blockquote>"Your alma mater is already on Askra"</blockquote>
-				<img src="{{STATIC_URL}}/img/facebook_profile_pictures.png" alt="friends on askra" />
+				<img src="img/facebook_profile_pictures.png" alt="friends on askra" />
 			</div>
 			<div id="askra_stats">
 				<p>Number of NITW Alumni on Askra = 7000</p>
@@ -108,9 +120,38 @@ DOCTYPE HTML>
 				<p>Number of current NITW students on Askra = 2000</p>
 				<p>Number of NITW Alumni on Askra = 7000</p>
 				<p>Number of active NITW Alumni on Askra = 5000</p>
-				<p>Number of current NITW students on Askra = 2000</p>
-				<p>Number of NITW Alumni on Askra = 7000</p>
+				
 			</div>
+			<div id="testimonials">
+				<div class="testimonials_container">
+					<div class="each_testimonial">
+						<div class="testimonial_text">
+							"Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.<br>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+						</div>
+						<div class="testimonial_person">
+							<img src="img/director.jpg" alt="Dr. K. Srinivasa Rao" />
+							<p>Dr. K. Srinivasa Rao<br>Director, NIT Warangal</p>
+						</div>
+					</div>	
+					<div class="each_testimonial">
+							<div class="testimonial_text">
+								<p>"Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.<br>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."</p>
+							</div>
+							<div class="testimonial_person">
+								<img src="img/testimonial-2.jpg" alt="Mr. Krishna Prasad" />
+								<p>Mr. Krishna Prasad<br>Partner, Accel Partners</p>
+							</div>
+					</div>
+				</div>
+				<!--<a href="#" class="prev"><img src="img/arrow-prev.png" alt="Previous" /></a>
+				<a href="#" class="next"><img src="img/arrow-next.png" alt="Next" /></a> -->
+			</div>
+		</div>
+		<div id="footer">
+				<p>Footer</p><br>
+				<a href="index.html">Home</a><br>
+				<a href="reg-step-2.html">Registration Step 2</a><br>
+				<a href="reg-step-3.html">Registration Step 3</a>
 		</div>
 	</div>
 </body>

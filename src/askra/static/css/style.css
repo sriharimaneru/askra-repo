@@ -18,7 +18,7 @@ input[type=text], input[type=password] {
 	color: gray;
 }
 
-input[type=button] {
+input[type=button], input[type=submit] {
 	width: 100px;
 	height: 40px;
 	background-color: #124142;
@@ -238,4 +238,164 @@ input[type=button] {
 	text-align: center;
 	border: 1px solid black;
 	padding: 20px;
+}
+
+/*
+*
+* Registration step 2
+*
+*/
+
+#mainLayout {
+	overflow: hidden;
+}
+
+#stepSelect {
+	list-style: none;
+}
+
+#stepSelect li {
+	display: inline;
+}
+
+#stepSelect li:after {
+	content: " > ";
+}
+
+#stepSelect li:last-child:after {
+	content: "";
+}
+
+#stepSelect li.currentStep {
+	font-weight: bold;
+}
+
+#mainLayout #texttip {
+	font-style: italic;
+}
+
+.suggestedProfiles {
+	width: 50%;
+	height: 520px;
+	float: left;
+	border-right: 1px solid black;
+}
+
+.profile {
+	width: 45%;
+	background-color: #f0f0f0;
+	border: 1px solid black;
+	float: left;
+	margin: 5px;
+	cursor: pointer;
+}
+
+.profile ul {
+	list-style: none;
+	margin: 0;
+	padding: 10px 0;
+}
+
+.profile li {
+	text-align: center;
+}
+
+.profile:hover {
+	background-color: gray;	
+}
+
+.fillDetails {
+	float: left;
+	padding-left: 5px;
+}
+
+.fillDetails form span {
+	width: 150px;
+	float: left;
+	padding-top: 10px;
+}
+
+
+.fillDetails form .selectBox select {
+	height: 40px;
+	width: 144px;
+	margin-bottom: 10px;
+	margin-right: 5px;
+	padding-bottom: 0;
+	padding-right: 0;
+	color: black;
+	background-color: #f0f0f0;
+}
+
+.fillDetails form input[type=text] {
+	color: black;
+}
+
+.fillDetails form input[type=file] {
+	height: 40px;
+	width: 244px;
+}
+
+.fillDetails form input[type=submit] {
+	margin-left: 40%;
+	margin-top: 10px;
+}
+
+.fillDetails form input[type=radio] {
+	margin-bottom: 6px;
+}
+
+/*
+*
+* Registration step 3
+*
+*/
+
+
+#mainContainer {
+	overflow: hidden;
+	margin-top: 40px;
+	margin-bottom: 30px;
+}
+
+#connect_via_linkedin {
+	float: left;
+	width: 40%;
+}
+
+#connect_via_linkedin img {
+	margin-left: 70px;
+	margin-bottom: 20px;
+}
+
+#connect_via_linkedin ul
+{
+	list-style-type: square;
+}
+
+#or_text {
+	float: left;
+	width: 15%;
+	margin-top: 50px;
+}
+
+#fillEmpDetails {
+	float: left;
+	width: 43%;
+}
+
+#fillEmpDetails form span {
+	width: 150px;
+	float: left;
+	padding-top: 10px;
+}
+
+#fillEmpDetails form input[type=submit] {
+	margin-left: 30%;
+	margin-top: 10px;
+}
+
+
+#mainLayout #skip_step {
+	float: right;
 }

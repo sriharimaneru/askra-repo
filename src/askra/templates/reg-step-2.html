@@ -1,0 +1,198 @@
+<!DOCTYPE HTML>
+<html>
+	
+<head>
+	<meta charset="UTF-8">
+	<link rel="stylesheet" href="css/style.css" />
+	<title>Registration Step 2- Askra - NIT Warangal</title>
+
+	<script src="js/jquery-latest.min.js"></script>
+
+	<script>
+
+		function getElementsByClass(searchClass,node,tag) {
+			var classElements = new Array();
+			if ( node == null )
+				node = document;
+			if ( tag == null )
+				tag = '*';
+			var els = node.getElementsByTagName(tag);
+			var elsLen = els.length;
+			var pattern = new RegExp("(^|\\s)"+searchClass+"(\\s|$)");
+			for (i = 0, j = 0; i < elsLen; i++) {
+				if ( pattern.test(els[i].className) ) {
+					classElements[j] = els[i];
+					j++;
+				}
+			}
+			return classElements;
+		}
+
+		function filldetails(name, yog, course, branch, element){
+			document.profile_details.name.value = name;
+			document.profile_details.yog.value = yog;
+			document.profile_details.course.value = course;
+			document.profile_details.branch.value = branch;
+
+			var profileElements = getElementsByClass('profile');
+			for(var i=0; i<profileElements.length; i++)
+			{
+				profileElements[i].style.backgroundColor = '#f0f0f0';
+			}
+
+			element.style.backgroundColor = '#226666';
+		}
+
+		//For Jquery functions
+		$(function(){
+			$(".profile").click(function(){
+				
+			});
+		});
+
+	</script>
+</head>
+
+<body>
+
+	<div class="container">
+		<div id="header">
+			<img src="img/nitw_logo.jpg" alt="Logo" id="logo"/>
+
+			<div id="main_text">
+				<h2>National Institute of Technology, Warangal</h2>
+			</div>
+
+			<div id="login">
+				<h4>Login to connect with your alma mater</h4>
+
+				<ul>
+					<li><a href="#"><img src="img/linkedin_icon.png" alt="linkedin" class="square_icon" /></a></li>
+					<li><a href="#"><img src="img/facebook_icon.png" alt="facebook" class="square_icon" /></a></li>
+					<li><a href="#"><img src="img/twitter_icon.png" alt="twitter" class="square_icon" /></a></li>
+				</ul>
+
+				<div class="clear"></div>
+
+				<form name="login_form">
+					<input type="text" name ="login_emailid" value="Email ID" onFocus="clearText(this)" onBlur="clearText(this)"/>
+					<input type="password" name ="login_password" value="Password" onFocus="clearText(this)" onBlur="clearText(this)"/>
+					<input type="button" name="login_button" value="Login" />
+				</form>
+			</div>
+		</div>
+
+		<div id="mainLayout">
+
+			<ul id="stepSelect">
+				<li>Step 1</li>
+				<li class="currentStep">Step 2</li>
+				<li>Step 3</li>
+			</ul>
+
+			<div id="texttip">
+				<h4>We found some profiles that could be yours. Please select the one that matches.</h4>
+			</div>
+
+			<div class="suggestedProfiles">
+				<div class="profile" onclick="filldetails('Srihari M','2008','B.Tech','CSE',this)">
+					<ul>
+						<li>Srihari M</li>
+						<li>2008</li>
+						<li>B.Tech</li>
+						<li>CSE</li>
+					</ul>
+				</div>
+				<div class="profile" onclick="filldetails('Shailesh Rathi','2008','B.Tech','ECE',this)">
+					<ul>
+						<li>Shailesh Rathi</li>
+						<li>2008</li>
+						<li>B.Tech</li>
+						<li>ECE</li>
+					</ul>
+				</div>
+				<div class="profile" onclick="filldetails('Random','2004','M.Tech','Mechanical',this)">
+					<ul>
+						<li>Random</li>
+						<li>2004</li>
+						<li>M.Tech</li>
+						<li>Mechanical</li>
+					</ul>
+				</div>
+				<div class="profile" onclick="filldetails('Random2','2014','M.Sc.','Physics',this)">
+					<ul>
+						<li>Random2</li>
+						<li>2014</li>
+						<li>M.Sc.</li>
+						<li>Physics</li>
+					</ul>
+				</div>
+				<div class="profile" onclick="filldetails('Random3','1964','MBA','Finance',this)">
+					<ul>
+						<li>Random3</li>
+						<li>1964</li>
+						<li>MBA</li>
+						<li>Finance</li>
+					</ul>
+				</div>
+			</div>
+
+			<div class="fillDetails">
+				<form name="profile_details">
+					<span>Name:</span>
+					<input type="text" name="name" /><br>
+					<span>Roll No:</span>
+					<input type="text" name="rollno" /><br>
+					<span>Course:</span>
+					<div class="selectBox">
+						<select name="course">
+							<option>B.Tech</option>
+							<option>M.Tech</option>
+							<option>M.Sc.</option>
+							<option>MBA</option>
+						</select>
+					</div><br>
+					<span>Branch:</span>
+					<div class="selectBox">
+						<select name="branch">
+							<option>CSE</option>
+							<option>ECE</option>
+							<option>EEE</option>
+							<option>Mechanical</option>
+							<option>Civil</option>
+							<option>Chem</option>
+							<option>Meta</option>
+							<option>Physics</option>
+							<option>Finance</option>
+
+						</select>
+					</div><br>
+					<span>Year of Graduation:</span>
+					<input type="text" name="yog" /><br>
+					<span>Picture:</span>
+					<input type="file" name="picture" /><br>
+					<span>City:</span>
+					<input type="text" name="city" /><br>
+					<span>Mobile Numer:</span>
+					<input type="text" name="mobile" /><br>
+					<span>Who can see your mobile number:</span>
+					<input type="radio" name="privacy" value="adminonly">Only admin</input><br>
+					<input type="radio" name="privacy" value="batchmates">Only admin and my batchmates</input><br>
+					<input type="radio" name="privacy" value="all">Everyone</input><br>
+					<input type="submit" name="submitform" value="Next" />
+
+				</form>
+			</div>
+
+		</div>
+		<div id="footer">
+				<p>Footer</p>
+				<a href="index.html">Home</a><br>
+				<a href="reg-step-2.html">Registration Step 2</a><br>
+				<a href="reg-step-3.html">Registration Step 3</a>
+		</div>
+	</div>
+</body>
+
+
+</html>
