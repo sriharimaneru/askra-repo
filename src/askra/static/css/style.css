@@ -1,11 +1,17 @@
+body {
+	background: url(img: '../img/nitw_background.JPG');
+}
 .container {
+	background-color: white;
+	width: 960px;
+	margin: auto;
 }
 
 input[type=text], input[type=password] {
-	height: 40px;
-	width: 170px;
+	height: 27px;
+	width: 140px;
 	margin-bottom: 15px;
-	margin-right: 10px;
+	margin-right: 5px;
 	padding-bottom: 0;
 	padding-right: 0;
 	border-radius: 5px;
@@ -20,49 +26,49 @@ input[type=button] {
 }
 
 #header {
-
 	overflow: hidden;
 	margin-bottom: 10px;
 }
 
-#header h1	{
-
-	height: 150px;
-	width: 10%;
-	background: url(../img/nitw_logo.jpg) no-repeat;
-	text-indent: -9999px;
+#header #logo	{
 	float: left;
+	width: 14%;
 }
 
 #main_text {
-	width: 50%;
+	width: 40%;
 	float: left;
 	text-align: center;
-	margin-top: 80px;
-	margin-bottom: 50px;
+	margin-top: 20px;
+	margin-bottom: 20px;
 	border: 1px solid black;
 }
 
 #main_text h2 {
 	text-transform: uppercase;
 	text-align: center;
+	font-size: 20px;
 }
 
-
 #login {
-	width: 35%;
-	float:right;
-	margin: auto;
-	text-align: center;
+	width: 44%;
+	float:left;
+	margin-left: 5px;
+	padding-left: 5px;
+	padding-bottom: 10px;
 	border: 1px solid black;
 }
 
+#login h4 {
+	float: left;
+}
 
-#login ul, #signup ul {
-	padding-left: 0;
+
+#login ul {
+	float: right;
 	list-style: none;
-	padding-bottom: 20px;
-	border-bottom: 1px dotted black;
+	padding-bottom: 5px;
+	padding-right: 20px;
 }
 
 #login li {
@@ -70,30 +76,36 @@ input[type=button] {
 
 }
 
-.square_icon {
-	widht: 40px;
-	height: 40px;
+#login form {
+	margin-top: 80px;
 }
 
+.square_icon {
+	widht: 30px;
+	height: 30px;
+}
+
+#main
+{
+	overflow: hidden;
+}
 
 #slides {
 	width: 63%;
 	float: left;
-	padding-right: 0.9%;
-	padding-bottom: 85px;
+	padding: 35px 5px 0px;
 	border: 1px solid black;
 	margin-bottom: 10px;
 	text-align: center;
 }
 
 .slides_container {
-    width:570px;
-    height:400px;
+    width:63%;
     margin: auto;
 }
 
 .slides_container div {
-    width:570px;
+    width:63%;
 	height:400px;
     display:block;
 }
@@ -106,8 +118,14 @@ input[type=button] {
 	padding-bottom: 10px;
 }
 
+#signup ul {
+	list-style: none;
+	padding-bottom: 25px;
+	text-align: center;
+}
+
 #signup .double_text {
-	width: 359px;
+	width: 292px;
 }
 
 #signup li {
@@ -117,14 +135,11 @@ input[type=button] {
 #friends_on_askra {
 	border: 1px solid black;
 	float: left;
-	height: 350px;
+	width: 44%;
+	height: 380px;
 	padding-bottom: 10px;
-	margin-right: 10px;
-}
-
-#friends_on_askra img {
-	height: 300px;
-}
+	margin-right: 5px;
+}	
 
 #friends_on_askra blockquote {
 	text-align: center;
@@ -134,9 +149,58 @@ input[type=button] {
 
 #askra_stats
 {
-	width: 14%;
+	width: 19%;
+	height: 390px;
 	float: left;
 	border: 1px solid black;
+	margin-right: 1px;
+}
+
+/* Testimonials */
+
+#testimonials {
+	margin-left: 5px;
+	float: left;
+	border: 1px solid black;
+	width: 35%;
+}
+
+.testimonials_container {
+	height: 340px;
+	padding: 5px;
+}
+
+.testimonial_text {
+	text-align: left;
+	width: 24%;
+	float: left;
+}
+
+.testimonial_person {
+	width: 28%;
+	text-align: center;
+	float: left;
+	font-size: 14px;
+}
+
+.testimonial_person img {
+	width: 120px;
+	height: 120px;
+}
+
+
+#testimonials .next, #testimonials .prev {
+	position: absolute;
+	top: 850px;
+	left: 1000px;
+	width: 24px;
+	height: 43px;
+	display: block;
+	z-index: 101;
+}
+
+#testimonials .next {
+	left: 1085px;
 }
 
 /*For JQuery Slider */
@@ -165,4 +229,13 @@ input[type=button] {
 
 .pagination li.current a {
 	background-position:0 -12px;
+}
+
+/*Footer*/
+
+#footer{
+	margin-top: 10px;
+	text-align: center;
+	border: 1px solid black;
+	padding: 20px;
 }
