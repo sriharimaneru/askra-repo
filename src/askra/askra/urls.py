@@ -8,6 +8,10 @@ admin.autodiscover()
 urlpatterns = patterns('',
     # Examples:
     url(r'^$', direct_to_template, {'template' : 'index.html'}, name='home'),
+    url(r'^index.html$', direct_to_template, {'template' : 'index.html'}, name='home'), #temporarily. Will remove this @srihari
+    url(r'^view_profile$', direct_to_template, {'template' : 'view_profile.html'}, name='view_profile'),    
+    url(r'^reg-step-2.html$', direct_to_template, {'template' : 'reg-step-2.html'}, name='reg-2'),  
+    url(r'^reg-step-3.html$', direct_to_template, {'template' : 'reg-step-3.html'}, name='reg-3'),   
     # url(r'^askra/', include('askra.foo.urls')),
 
     # Uncomment the admin/doc line below to enable admin documentation:
