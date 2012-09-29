@@ -2,7 +2,7 @@ from django.contrib import admin
 from userprofile.models import UserProfile, City, Branch, StudentSection, \
                                Employer, JobDesignation, JobDomain, EmployementDetail, \
                                College, Degree, HigherEducationDetail, Department, \
-                               FacultyDesignation, FacultySection, UserTag
+                               FacultyDesignation, FacultySection, UserTag, HigherEducationBranch
 
 class CityAdmin(admin.ModelAdmin):
     list_display = ('city', 'state', 'country')
@@ -36,7 +36,7 @@ class UserTagInline(admin.TabularInline):
               
 class UserProfileAdmin(admin.ModelAdmin):
     fieldsets = [("Basic Details", {"fields" : (('user', 'role', 'profile_status'), ('first_name','last_name', 'gender'), 
-                                                ('email', 'phone_number',), ('photo', 'city',))}),
+                                                ('email', 'phone_number',), ('photo', 'city',), ('about',),)}),
                  ("Website Urls", {"fields" : (('linked_url', 'facebook_url',), ('website_url', 'twitter_url'))}),]
     raw_id_fields = ('user',)
     list_display = ('id', 'first_name', 'last_name', 'role', 'profile_status',)
@@ -55,6 +55,7 @@ admin.site.register(College)
 admin.site.register(Degree)
 admin.site.register(Department)
 admin.site.register(FacultyDesignation)
+admin.site.register(HigherEducationBranch)
 
 
 

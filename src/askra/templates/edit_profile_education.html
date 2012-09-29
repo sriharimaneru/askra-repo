@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% block content %}
+<div id = "main_content">
+
+	<div id="tabs_nav">
+		<ul>
+			<li><a href="edit_profile_basic">Personal Details</a></li>
+			<li><a href="edit_profile_weblinks">Weblinks</a></li>
+			<li class="current"><a href="#">Education</a></li>
+			<li><a href="edit_profile_employment">Employment</a></li>
+		</ul>
+	</div>
+	
+	<div id="edit_education_form">
+		<form name="edit_education_form">
+			<a href="#">Add a school</a>
+			<div class="edit_education">
+				<p>Education Details: 1</p>
+				<span>College:</span><input type="text" name="college" value="NIT Warangal" /><br><br>
+				<span>Course:</span>
+				<div class="selectBox">
+					<select name="course">
+							<option selected="selected">B.Tech</option>
+							<option>M.Tech</option>
+							<option>M.Sc.</option>
+							<option>MBA</option>
+					</select>
+				</div><br>
+				<span>Year of Graduation:</span><input type="text" name="yog" value="1975" />
+			</div>
+
+			<div class="edit_education">
+				<p>Education Details: 2</p>
+				<span>College:</span><input type="text" name="college" value="IIT Anakapalli" /><br><br>
+				<span>Course:</span>
+				<div class="selectBox">
+					<select name="course">
+							<option selected="selected">M.Tech</option>
+							<option>M.Sc.</option>
+							<option>MBA</option>
+					</select>
+				</div><br>
+				<span>Year of Graduation:</span><input type="text" name="yog" value="1977" />
+			</div>
+
+			<input type="submit" name="submit" value="Save Changes"/>
+			<a href="view_profile">Cancel</a>
+		</form>
+	</div>
+	
+<br class = "cB">
+{% endblock %}

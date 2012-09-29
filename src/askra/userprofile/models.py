@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from tag.models import Tag
+from calendar import calendar
 
 ALUMNI = 0
 STUDENT = 1
@@ -58,18 +59,25 @@ class UserProfile(models.Model):
     linked_url = models.URLField(max_length=100, null=True, blank=True)
     website_url = models.URLField(max_length=100, null=True, blank=True)
     profile_status = models.IntegerField(choices = PROFILE_STATUS, null=True, blank=True)
+    about = models.TextField(null=True, blank=True)
 
     def __unicode__(self):
-        return self.first_name + self.last_name     
+        return self.first_name + " " + self.last_name
+
+    def get_full_name(self):
+        return self.first_name + " " + self.last_name
     
     
 class Branch(models.Model):
     branch = models.CharField(max_length=200, null=True, blank=True)
     course = models.CharField(max_length=200, null=True, blank=True)
     
+    def get_full_name(self):
+        return self.course + ", " + self.branch
+
     def __unicode__(self):
-        return self.branch
-    
+        return self.get_full_name()
+
     class Meta:
         verbose_name_plural = "Branches"
 
@@ -78,6 +86,9 @@ class StudentSection(models.Model):
     roll_num = models.CharField(max_length=20, null=True, blank=True)
     year_of_graduation = models.IntegerField(null=True, blank=True, help_text="Year of passing out")
     branch = models.ForeignKey(Branch, null=True, blank=True)
+
+    def get_full_qualification(self):
+        return self.branch.get_full_name() + " " + str(self.year_of_graduation)
   
     
 class Employer(models.Model):
@@ -107,6 +118,8 @@ class EmployementDetail(models.Model):
     date_of_joining = models.DateField(null=True, blank=True)
     date_of_leaving = models.DateField(null=True, blank=True)
 
+    def get_employment_period(self):
+        return str(self.date_of_joining.strftime("%b")) + ", " + str(self.date_of_joining.year)+ " - " + str(self.date_of_leaving.strftime("%b")) + ", " + str(self.date_of_leaving.year)
 
 class College(models.Model):
     name = models.CharField(max_length=200)
@@ -120,12 +133,18 @@ class Degree(models.Model):
     
     def __unicode__(self):
         return self.name     
+
+class HigherEducationBranch(models.Model):
+    name = models.CharField(max_length=200)
     
+    def __unicode__(self):
+        return self.name     
         
 class HigherEducationDetail(models.Model):
     userprofile = models.ForeignKey(UserProfile)
     college = models.ForeignKey(College)
     degree = models.ForeignKey(Degree)
+    branch = models.ForeignKey(HigherEducationBranch)
     year_of_graduation = models.IntegerField(null=True, blank=True, help_text="Year of passing out")
 
 

@@ -1,5 +1,7 @@
 from django.conf.urls import patterns, include, url
 from django.views.generic.simple import direct_to_template
+from django.conf import settings
+
 
 # Uncomment the next two lines to enable the admin:
 from django.contrib import admin
@@ -8,10 +10,15 @@ admin.autodiscover()
 urlpatterns = patterns('',
     # Examples:
     url(r'^$', direct_to_template, {'template' : 'index.html'}, name='home'),
-    url(r'^index.html$', direct_to_template, {'template' : 'index.html'}, name='home'), #temporarily. Will remove this @srihari
+    url(r'^profile/', include('userprofile.urls')),
+    url(r'^index$', direct_to_template, {'template' : 'index.html'}, name='home'), #temporarily. Will remove this @srihari
     url(r'^view_profile$', direct_to_template, {'template' : 'view_profile.html'}, name='view_profile'),    
-    url(r'^reg-step-2.html$', direct_to_template, {'template' : 'reg-step-2.html'}, name='reg-2'),  
-    url(r'^reg-step-3.html$', direct_to_template, {'template' : 'reg-step-3.html'}, name='reg-3'),   
+    url(r'^reg-step-2$', direct_to_template, {'template' : 'reg-step-2.html'}, name='reg-2'),  
+    url(r'^reg-step-3$', direct_to_template, {'template' : 'reg-step-3.html'}, name='reg-3'),
+    url(r'^edit_profile_basic$', direct_to_template, {'template':'edit_profile_basic.html'}, name='edit_profile_basic'),
+    url(r'^edit_profile_weblinks$', direct_to_template, {'template':'edit_profile_weblinks.html'}, name='edit_profile_weblinks'),
+    url(r'^edit_profile_education$', direct_to_template, {'template':'edit_profile_education.html'}, name='edit_profile_education'),
+    url(r'^edit_profile_employment$', direct_to_template, {'template':'edit_profile_employment.html'}, name='edit_profile_employment'),
     # url(r'^askra/', include('askra.foo.urls')),
 
     # Uncomment the admin/doc line below to enable admin documentation:
@@ -19,4 +26,9 @@ urlpatterns = patterns('',
 
      #Uncomment the next line to enable the admin:
      url(r'^admin/', include(admin.site.urls)),
+
 )
+
+urlpatterns += patterns('',
+        (r'^media/(?P<path>.*)$', 'django.views.static.serve', {
+        'document_root': settings.MEDIA_ROOT}))

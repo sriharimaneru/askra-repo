@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block content %}
+<div id = "main_content">
+
+	<div id="tabs_nav">
+		<ul>
+			<li><a href="edit_profile_basic">Personal Details</a></li>
+			<li class="current"><a href="#">Weblinks</a></li>
+			<li><a href="edit_profile_education">Education</a></li>
+			<li><a href="edit_profile_employment">Employment</a></li>
+		</ul>
+	</div>
+	
+	<div id="weblinks_form">
+		<form name="weblinks_form">
+			<div id="web_links">
+					<span><img src="{{STATIC_URL}}img/facebook_icon.png"></span>
+					<input type="url" name="facebook_profile" value="http://www.facebook.com/kalyanvarmak"><br><br>
+					<span><img src="{{STATIC_URL}}img/linkedin_icon.png"></span>
+					<input type="url" name="linkedin_profile" value="http://www.linkedin.com/in/kalyanvarma"><br><br>
+					<span><img src="{{STATIC_URL}}img/twitter_icon.png"></span>
+					<input type="url" name="twitter_profile" value="http://www.twitter.com/kalyanvarmak"><br><br>
+			</div>
+			<input type="submit" name="submit" value="Save Changes"/>
+			<a href="view_profile">Cancel</a>
+		</form>
+	</div>
+	
+<br class = "cB">
+{% endblock %}

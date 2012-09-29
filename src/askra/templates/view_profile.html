@@ -4,91 +4,99 @@
 	<div id="navigation_div">
 		<div id="breadcrumb">
 			<a href="#">All</a> >
-			<a href="#">Alumni</a> >
-			<a href="#">B.Tech</a> >
-			<a href="#">1975</a> >
-			<a href="#">Chemical</a> > <span>Venkat Chengavalli</span>
+			<a href="#">{{ user_profile.get_role_display }}</a> >
+			<a href="#">{{ student_section.branch.course }}</a> >
+			<a href="#">{{ student_section.year_of_graduation }}</a> >
+			<a href="#">{{ student_section.branch.branch }}</a> > 
+			<span>{{ user_profile.get_full_name }}</span>
 		</div>
 		<div id="search_div">
 			<a href="#">back to search results</a>
 		</div>
 	</div>
 	<div id="pic_div">
-		<img src="{{STATIC_URL}}img/pavan.jpg" width="250px" height="250px">
+		<img src="{{user_profile.photo.url}}" width="250px" height="250px">
 	</div>
 	<div id="basic_details_div">
-		<h2>Venkat Chengavalli</h2>
-		<h4>B.Tech Chemical, 1975</h4>
-		<h4>Hyderabad</h4>
+		<h3>Profile ID: {{ user_profile.id}}</h3>
+		<h2>{{ user_profile.get_full_name }}</h2>
+		<h4>{{ student_section.get_full_qualification }}</h4>
+		<h4>{{ user_profile.city }}</h4>
 		<div id = "social_media_links">
-			<img src="{{STATIC_URL}}img/pavan.jpg" width="50px" height="50px">
-			<img src="{{STATIC_URL}}img/pavan.jpg" width="50px" height="50px">
-			<img src="{{STATIC_URL}}img/pavan.jpg" width="50px" height="50px">
-			<img src="{{STATIC_URL}}img/pavan.jpg" width="50px" height="50px">
+			<a href="{{ user_profile.facebook_url }}" target="blank"><img src="{{STATIC_URL}}img/facebook_icon.png" width="35px" height="35px"></a>
+			<a href="{{ user_profile.linked_url }}" target="blank"><img src="{{STATIC_URL}}img/linkedin_icon.png" width="35px" height="35px"></a>
+			<a href="{{ user_profile.twitter_url }}" target="blank"><img src="{{STATIC_URL}}img/twitter_icon.png" width="35px" height="35px"></a>
 		</div>
 	</div>
-	<div id="contact_div">
-		<h3>Contact Venkat Chengavalli</h3>
-		<p>Email : </p>
-		<div id="mail"><button>Send Mail</button> to Venkat Chegavalli</div>
-		<p>Mobile Number :</p> 
-		<p id="mobile">+91 - 9972359354</p>
+
+	<div id="contact">
+		<div id="edit_profile">
+			<a href="edit_profile_basic">Edit Profile</a>
+		</div>
+
+		<div id="contact_div">
+			<h3>Contact {{ user_profile.get_full_name }}</h3>
+			<p><b>Email</b></p>
+			<div id="mail"><button>Send Mail</button> to {{ user_profile.get_full_name }}</div>
+
+			{% if user_profile.phone_number %}
+			<p><b>Mobile Number</b></p> 
+			<p id="mobile">{{ user_profile.phone_number }}</p>
+			{% endif %}
+		</div>
 	</div>
 	<br class = "cB">
 </div>
 <div id = "other_content">
 	<div id="text_details">
 		<h3>About</h3>
-		<p>asdfasdf sadf sadf sa df sadfsa df sadf sadf sa df sa fs af s df asdf sa fsaf sdf sad fsa12
-			sad fsa df sadf sa f sad fs adf sa f afds<a href="">asdfafdasf</a> a fs saf sa fdsd afd s
-			aasdfasdfas asdfasdfasdf asdfasdf</p>
-		<p>asdfasdf sadf sadf sa df sadfsa df sadf sadf sa df sa fs af s df asdf sa fsaf sdf sad fsa12
-			sad fsa df sadf sa f sad fs adf sa f afds<a href="">asdfafdasf</a> a fs saf sa fdsd afd s
-			aasdfasdfas asdfasdfasdf asdfasdf</p>
+		<p>{{ user_profile.about|safe }}</p>
 		<h3>Education Details</h3>	
+			{% for education_detail in education_details %}
 			<div class="detail_container">
 				<table class="detail">
 					<tr>
-						<td><span class="label">College </span>:<span class="value">National institue of Technology, Warangal</span> </td>
-						<td><span class="label">Duration </span>:<span class="value">1970 - 1975</span> <br></td>
+						<td><span class="label">College</span>: <span class="value">{{ education_detail.college }}</span> </td>
+						<td><span class="label">Year of Graduation</span>: <span class="value">{{ education_detail.year_of_graduation }}</span> <br></td>
 					</tr>
 					<tr>
-						<td><span class="label">Course </span>:<span class="value">B.Tech</span></td>
-						<td><span class="label">Branch </span>:<span class="value">Chemical Engineering</span></td>
+						<td><span class="label">Course</span>: <span class="value">{{ education_detail.degree }}</span></td>
+						<td><span class="label">Branch</span>: <span class="value">{{ education_detail.branch }}</span></td>
 					</tr>         
 				</table>
 			</div>
 			<br>
+			{% endfor %}
 			<div class="detail_container">
 				<table class="detail">
 					<tr>
-						<td><span class="label">College </span>:<span class="value">Indin Institute of Management, Ahmedabad</span> </td>
-						<td><span class="label">Duration </span>:<span class="value">1975 - 1977</span> <br></td>
+						<td><span class="label">College </span>: <span class="value">National institue of Technology, Warangal</span> </td>
+						<td><span class="label">Year of Graduation: </span>:<span class="value">{{ student_section.year_of_graduation }}</span> <br></td>
 					</tr>
 					<tr>
-						<td><span class="label">Course </span>:<span class="value">MBA</span></td>
-						<td><span class="label">Branch </span>:<span class="value">Finance</span></td>
+						<td><span class="label">Course</span>: <span class="value">{{ student_section.branch.course }}</span></td>
+						<td><span class="label">Branch</span>: <span class="value">{{ student_section.branch.branch }}</span></td>
 					</tr>         
 				</table>
 			</div>
+			<br>
+			
 		<h3>Employer Details</h3>
+			{% for employment_detail in employment_details %}
 			<div class="detail_container">
 				<table class="detail">
 					<tr>
-						<td><span class="label">Employer </span>:<span class="value">State Bank of Hyderabad</span> </td>
-						<td><span class="label">Designation </span>:<span class="value">Director</span> <br></td>
+						<td><span class="label">Employer</span>:<span class="value">{{ employment_detail.employer.name }}</span> </td>
+						<td><span class="label">Domain </span>:<span class="value">{{ employment_detail.domain.name }}</span> <br></td>
 					</tr>        
+					<tr>
+						<td><span class="label">Designation </span>:<span class="value">{{ employment_detail.designation.name }}</span> </td>
+						<td><span class="label">From:</span>:<span class="value">{{ employment_detail.get_employment_period }}</span><br></td>
+					</tr>
 				</table>
 			</div>
 			<br>
-			<div class="detail_container">
-				<table class="detail">
-					<tr>
-						<td><span class="label">Employer </span>:<span class="value">The Laksya Foundation</span> </td>
-						<td><span class="label">Designation </span>:<span class="value">Board of Advisor</span> <br></td>
-					</tr>        
-				</table>
-			</div>
+			{% endfor %}
 	</div>
 	<div id="tags">
 		<h3>Tags</h3>

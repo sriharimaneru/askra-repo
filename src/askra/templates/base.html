@@ -4,20 +4,53 @@
 	<meta name="keywords" content="Alumni, Students, Faculty, College, Institution, Networking, Communication" />
 	<LINK rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/style.css"></LINK>
 	{% endblock %}
+
+	{% block title %}
+	<title>Askra - NIT Warangal</title>
+	{% endblock %}
+
+	{% block scripts %}
+	{% endblock %}
 </head>
 <body>
 <div class="container">
 
 {% block header %}
-<h1>ASKRA - NITW</h1><br>
+	<div id="header">
+		<img src="{{STATIC_URL}}img/nitw_logo.jpg" alt="Logo" id="logo"/>
+
+		<div id="main_text">
+			<h2>National Institute of Technology, Warangal</h2>
+		</div>
+
+		<div id="login">
+			<h4>Login to connect with your alma mater</h4>
+
+			<ul>
+				<li><a href="#"><img src="{{STATIC_URL}}img/linkedin_icon.png" alt="linkedin" class="square_icon" /></a></li>
+				<li><a href="#"><img src="{{STATIC_URL}}img/facebook_icon.png" alt="facebook" class="square_icon" /></a></li>
+				<li><a href="#"><img src="{{STATIC_URL}}img/twitter_icon.png" alt="twitter" class="square_icon" /></a></li>
+			</ul>
+
+			<div class="clear"></div>
+
+			<form name="login_form">
+				<input type="text" name ="login_emailid" value="Email ID" onFocus="clearText(this)" onBlur="clearText(this)"/>
+				<input type="password" name ="login_password" value="Password" onFocus="clearText(this)" onBlur="clearText(this)"/>
+				<input type="button" name="login_button" value="Login" />
+			</form>
+		</div>
+	</div>
 {% endblock header %}
 {% block content %}
 {% endblock content %}
 {% block footer %}
-<br>
-<br>
-<br>
-All rights reserved to Askra PVT Ltd
+		<div id="footer">
+				<p>Footer</p><br>
+				<a href="index.html">Home</a><br>
+				<a href="reg-step-2.html">Registration Step 2</a><br>
+				<a href="reg-step-3.html">Registration Step 3</a>
+		</div>
 {% endblock footer%}
 </div>
 </body>

@@ -1,11 +1,10 @@
-<!DOCTYPE HTML>
-<html>
-	
-<head>
-	<meta charset="UTF-8">
-	<link rel="stylesheet" href="{{STATIC_URL}}css/style.css" />
-	<title>Registration Step 3 - Askra - NIT Warangal</title>
+{% extends "base.html" %}
 
+{% block title %}
+	<title>Registration Step 3 - Askra - NIT Warangal</title>
+{% endblock title %}
+
+{% block scripts %}
 	<script src="{{STATIC_URL}}js/jquery-latest.min.js"></script>
 
 	<script>
@@ -17,36 +16,9 @@
 		});
 
 	</script>
-</head>
+{% endblock scripts %}
 
-<body>
-
-	<div class="container">
-		<div id="header">
-			<img src="{{STATIC_URL}}img/nitw_logo.jpg" alt="Logo" id="logo"/>
-
-			<div id="main_text">
-				<h2>National Institute of Technology, Warangal</h2>
-			</div>
-
-			<div id="login">
-				<h4>Login to connect with your alma mater</h4>
-
-				<ul>
-					<li><a href="#"><img src="{{STATIC_URL}}img/linkedin_icon.png" alt="linkedin" class="square_icon" /></a></li>
-					<li><a href="#"><img src="{{STATIC_URL}}img/facebook_icon.png" alt="facebook" class="square_icon" /></a></li>
-					<li><a href="#"><img src="{{STATIC_URL}}img/twitter_icon.png" alt="twitter" class="square_icon" /></a></li>
-				</ul>
-
-				<div class="clear"></div>
-
-				<form name="login_form">
-					<input type="text" name ="login_emailid" value="Email ID" onFocus="clearText(this)" onBlur="clearText(this)"/>
-					<input type="password" name ="login_password" value="Password" onFocus="clearText(this)" onBlur="clearText(this)"/>
-					<input type="button" name="login_button" value="Login" />
-				</form>
-			</div>
-		</div>
+{% block content %}
 
 		<div id="mainLayout">
 
@@ -82,14 +54,4 @@
 			<a href="#" id="skip_step">skip this step and finish registration</a>
 
 		</div>
-		<div id="footer">
-				<p>Footer</p>
-				<a href="index.html">Home</a><br>
-				<a href="reg-step-2.html">Registration Step 2</a><br>
-				<a href="reg-step-3.html">Registration Step 3</a>
-		</div>
-	</div>
-</body>
-
-
-</html>
+{% endblock content %}
