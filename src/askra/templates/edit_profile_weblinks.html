@@ -4,25 +4,25 @@
 
 	<div id="tabs_nav">
 		<ul>
-			<li><a href="edit_profile_basic">Personal Details</a></li>
+			<li><a href="/profile/edit_basic/{{profile_id}}">Personal Details</a></li>
 			<li class="current"><a href="#">Weblinks</a></li>
-			<li><a href="edit_profile_education">Education</a></li>
-			<li><a href="edit_profile_employment">Employment</a></li>
+			<li><a href="/profile/edit_education/{{profile_id}}">Education</a></li>
+			<li><a href="/profile/edit_employment/{{profile_id}}">Employment</a></li>
 		</ul>
 	</div>
 	
 	<div id="weblinks_form">
-		<form name="weblinks_form">
+		<form name="weblinks_form" method="post" action="/profile/edit_weblinks/{{profile_id}}">{% csrf_token %}
 			<div id="web_links">
 					<span><img src="{{STATIC_URL}}img/facebook_icon.png"></span>
-					<input type="url" name="facebook_profile" value="http://www.facebook.com/kalyanvarmak"><br><br>
+					{{form.facebook_url}}<br><br>
 					<span><img src="{{STATIC_URL}}img/linkedin_icon.png"></span>
-					<input type="url" name="linkedin_profile" value="http://www.linkedin.com/in/kalyanvarma"><br><br>
+					{{form.linkedin_url}}<br><br>
 					<span><img src="{{STATIC_URL}}img/twitter_icon.png"></span>
-					<input type="url" name="twitter_profile" value="http://www.twitter.com/kalyanvarmak"><br><br>
+					{{form.twitter_url}}<br><br>
 			</div>
 			<input type="submit" name="submit" value="Save Changes"/>
-			<a href="view_profile">Cancel</a>
+			<a href="/profile/view/{{profile_id}}">Cancel</a>
 		</form>
 	</div>
 	

@@ -406,6 +406,11 @@ input[type=button], input[type=submit] {
 	width: 300px;
 }
 
+#weblinks_form #web_links input[type=text] {
+	color: black;
+	width: 300px;
+}
+
 #weblinks_form #web_links img {
 	height: 30px;
 	width: 30px;

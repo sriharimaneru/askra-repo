@@ -4,113 +4,32 @@
 
 	<div id="tabs_nav">
 		<ul>
-			<li><a href="edit_profile_basic">Personal Details</a></li>
-			<li><a href="edit_profile_weblinks">Weblinks</a></li>
-			<li><a href="edit_profile_education">Education</a></li>
+			<li><a href="/profile/edit_basic/{{user_profile.id}}">Personal Details</a></li>
+			<li><a href="/profile/edit_weblinks/{{user_profile.id}}">Weblinks</a></li>
+			<li><a href="/profile/edit_education/{{user_profile.id}}">Education</a></li>
 			<li class="current"><a href="#">Employment</a></li>
 		</ul>
 	</div>
 	
 	<div id="edit_employment_form">
-		<form name="edit_employment_form">
-			<a href="#">Add a school</a>
+		<form name="edit_employment_form" method="post" action="/profile/edit_employment/{{profile_id}}">{% csrf_token %}
+			{{ formset.management_form }}
+			{% for form in formset %}
 			<div id="edit_employment">
 				<div class="edit_employment">
-					<p>Employment Details: 1</p>
-					<span>Employer:</span><input type="text" name="employer" value="Cisco Systems" /><br><br>
-					<span>Desgination:</span><input type="text" name="designation" value="Head of Engineering" /><br><br>
-					<span>Domain:</span><input type="text" name="domain" value="Telecommunications" /><br><br>
-					<span>From:</span>
-					<div class="selectBox">
-						<select name="fromMonth">
-								<option value='01'>January</option>
-								<option value='02'>February</option>
-								<option value='03' selected="selected">March</option>
-								<option value='04'>April</option>
-								<option value='05'>May</option>
-								<option value='06'>June</option>
-								<option value='07'>July</option>
-								<option value='08'>August</option>
-								<option value='09'>September</option>
-								<option value='10'>October</option>
-								<option value='11'>November</option>
-								<option value='12'>December</option>
-						</select>
-						<input type="text" name="fromYear" value="2008" /><br><br>
-					</div>
-
-					<span>To:</span>
-					<div class="selectBox">
-						<select name="toMonth">
-								<option value='01' selected="selected">January</option>
-								<option value='02'>February</option>
-								<option value='03'>March</option>
-								<option value='04'>April</option>
-								<option value='05'>May</option>
-								<option value='06'>June</option>
-								<option value='07'>July</option>
-								<option value='08'>August</option>
-								<option value='09'>September</option>
-								<option value='10'>October</option>
-								<option value='11'>November</option>
-								<option value='12'>December</option>
-						</select>
-						<input type="text" name="toYear" value="2012" /><br><br>
-					</div>
+					<p>Employment Details: {{ form.id }}</p>
+					<span>Employer:</span>{{ form.employer }}<br><br>
+					<span>Desgination:</span>{{ form.designation }}<br><br>
+					<span>Domain:</span>{{ form.domain }}<br><br>
+					<span>From:</span>{{ form.date_of_joining }}<br><br>
+					<span>To:</span>{{ form.date_of_leaving }}<br><br>
 				</div>
 			</div>
-
-			<div id="edit_employment">
-				<div class="edit_employment">
-					<p>Employment Details: 2</p>
-					<span>Employer:</span><input type="text" name="employer" value="Infosys Technologies" /><br><br>
-					<span>Desgination:</span><input type="text" name="designation" value="Technology Analyst" /><br><br>
-					<span>Domain:</span><input type="text" name="domain" value="Software" /><br><br>
-					<span>From:</span>
-					<div class="selectBox">
-						<select name="fromMonth">
-								<option value='01' selected="selected">January</option>
-								<option value='02'>February</option>
-								<option value='03'>March</option>
-								<option value='04'>April</option>
-								<option value='05'>May</option>
-								<option value='06'>June</option>
-								<option value='07'>July</option>
-								<option value='08'>August</option>
-								<option value='09'>September</option>
-								<option value='10'>October</option>
-								<option value='11'>November</option>
-								<option value='12'>December</option>
-						</select>
-						<input type="text" name="fromYear" value="2000" /><br><br>
-					</div>
-
-					<span>To:</span>
-					<div class="selectBox">
-						<select name="toMonth">
-								<option value='01'>January</option>
-								<option value='02'>February</option>
-								<option value='03'>March</option>
-								<option value='04'>April</option>
-								<option value='05'>May</option>
-								<option value='06'>June</option>
-								<option value='07' selected="selected">July</option>
-								<option value='08'>August</option>
-								<option value='09'>September</option>
-								<option value='10'>October</option>
-								<option value='11'>November</option>
-								<option value='12'>December</option>
-						</select>
-						<input type="text" name="toYear" value="2008" /><br><br>
-					</div>
-				</div>
-			</div>
-
+			{% endfor %}
+			
 			<a href="#">Add employment</a>
-
-
 			<input type="submit" name="submit" value="Save Changes"/>
-			<a href="view_profile">Cancel</a>
+			<a href="/profile/view/{{profile_id}}">Cancel</a>
 		</form>
 	</div>
 	

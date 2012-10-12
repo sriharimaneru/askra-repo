@@ -1,18 +1,29 @@
 {% extends "base.html" %}
+
+{% block scripts %}
+<script>
+	function filterBranches() {
+		var courses = document.getElementById('selectCourse')
+		
+
+	}
+</script>
+{% endblock %}
+
 {% block content %}
 <div id = "main_content">
 
 	<div id="tabs_nav">
 		<ul>
 			<li class="current"><a href="#">Personal Details</a></li>
-			<li><a href="edit_profile_weblinks">Weblinks</a></li>
-			<li><a href="edit_profile_education">Education</a></li>
-			<li><a href="edit_profile_employment">Employment</a></li>
+			<li><a href="/profile/edit_weblinks/{{profile_id}}">Weblinks</a></li>
+			<li><a href="/profile/edit_education/{{profile_id}}">Education</a></li>
+			<li><a href="/profile/edit_employment/{{profile_id}}">Employment</a></li>
 		</ul>
 	</div>
 	
 	<div id="pic_div">
-		<img src="{{STATIC_URL}}img/pavan.jpg" width="200px" height="200px">
+		<img src="{{user_profile.photo.url}}" width="200px" height="200px">
 		<br>
 		<div id="edit_pic">
 			<p>Edit picture</p>
@@ -21,47 +32,25 @@
 	</div>
 	
 	<div id="basic_details_form">
-		<form name="basic_details_form">
+		<form name="basic_details_form" method="post" action="/profile/edit_basic/{{profile_id}}">{% csrf_token %}
+			{{ form.non_field_errors }}
 			<div id="basic_section">
-				<span>Name:</span><input type="text" name="name" value="Venkat Chengavalli" /><br><br>
+				<span>Name:</span>{{ form.name }}<br><br>
 				<span>Course:</span>
 				<div class="selectBox">
-					<select name="course">
-							<option selected="selected">B.Tech</option>
-							<option>M.Tech</option>
-							<option>M.Sc.</option>
-							<option>MBA</option>
-					</select>
+					{{ form.course }}
 				</div><br>
 				<span>Branch:</span>
 				<div class="selectBox">
-					<select name="branch">
-						<option>CSE</option>
-						<option>ECE</option>
-						<option>EEE</option>
-						<option>Mechanical</option>
-						<option>Civil</option>
-						<option selected="selected">Chemical</option>
-						<option>Meta</option>
-						<option>Physics</option>
-						<option>Finance</option>
-					</select>
+					{{ form.branch }}
 				</div><br>
-				<span>Year of Graduation:</span><input type="text" name="yog" value="1975" /><br><br>
-				<span>City:</span><input type="text" name="city" value="Hyderabad" /><br><br>
-				<span>About:</span>
-				<textarea name="about">
-					<p>asdfasdf sadf sadf sa df sadfsa df sadf sadf sa df sa fs af s df asdf sa fsaf sdf sad fsa12
-					sad fsa df sadf sa f sad fs adf sa f afds<a href="">asdfafdasf</a> a fs saf sa fdsd afd s
-					aasdfasdfas asdfasdfasdf asdfasdf</p>
-					<p>asdfasdf sadf sadf sa df sadfsa df sadf sadf sa df sa fs af s df asdf sa fsaf sdf sad fsa12
-					sad fsa df sadf sa f sad fs adf sa f afds<a href="">asdfafdasf</a> a fs saf sa fdsd afd s
-					aasdfasdfas asdfasdfasdf asdfasdf</p>
-				</textarea><br><br>
+				<span>Year of Graduation:</span>{{ form.year_of_graduation }}<br><br>
+				<span>City:</span>{{ form.city }}<br><br>
+				<span>About:</span>{{ form.about }}<br><br>
 			</div>
 
 			<input type="submit" name="submit" value="Save Changes"/>
-			<a href="view_profile">Cancel</a>
+			<a href="/profile/view/{{profile_id}}">Cancel</a>
 
 		</form>
 	</div>

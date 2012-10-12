@@ -4,47 +4,29 @@
 
 	<div id="tabs_nav">
 		<ul>
-			<li><a href="edit_profile_basic">Personal Details</a></li>
-			<li><a href="edit_profile_weblinks">Weblinks</a></li>
+			<li><a href="/profile/edit_basic/{{profile_id}}">Personal Details</a></li>
+			<li><a href="/profile/edit_weblinks/{{profile_id}}">Weblinks</a></li>
 			<li class="current"><a href="#">Education</a></li>
-			<li><a href="edit_profile_employment">Employment</a></li>
+			<li><a href="/profile/edit_employment/{{profile_id}}">Employment</a></li>
 		</ul>
 	</div>
 	
 	<div id="edit_education_form">
-		<form name="edit_education_form">
+		<form name="edit_education_form" method="post" action="/profile/edit_education/{{profile_id}}">{% csrf_token %}
+			{{ formset.management_form }}
 			<a href="#">Add a school</a>
+			{% for form in formset %}
 			<div class="edit_education">
-				<p>Education Details: 1</p>
-				<span>College:</span><input type="text" name="college" value="NIT Warangal" /><br><br>
-				<span>Course:</span>
-				<div class="selectBox">
-					<select name="course">
-							<option selected="selected">B.Tech</option>
-							<option>M.Tech</option>
-							<option>M.Sc.</option>
-							<option>MBA</option>
-					</select>
-				</div><br>
-				<span>Year of Graduation:</span><input type="text" name="yog" value="1975" />
+				<p>Education Details: {{ form.id }}</p>
+				<span>College:</span>{{ form.college }}<br><br>
+				<span>Degree:</span>{{ form.degree }}<br><br>
+				<span>Branch:</span>{{ form.branch }}<br><br>
+				<span>Year of Graduation:</span>{{ form.year_of_graduation }}
 			</div>
-
-			<div class="edit_education">
-				<p>Education Details: 2</p>
-				<span>College:</span><input type="text" name="college" value="IIT Anakapalli" /><br><br>
-				<span>Course:</span>
-				<div class="selectBox">
-					<select name="course">
-							<option selected="selected">M.Tech</option>
-							<option>M.Sc.</option>
-							<option>MBA</option>
-					</select>
-				</div><br>
-				<span>Year of Graduation:</span><input type="text" name="yog" value="1977" />
-			</div>
+			{% endfor %}
 
 			<input type="submit" name="submit" value="Save Changes"/>
-			<a href="view_profile">Cancel</a>
+			<a href="/profile/view/{{profile_id}}">Cancel</a>
 		</form>
 	</div>
 	
