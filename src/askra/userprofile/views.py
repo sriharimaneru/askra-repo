@@ -26,7 +26,7 @@ def reg_step_2(request,x):
 
     return render_to_response("reg-step-2.html", RequestContext(request, {'student_sections':student_sections, 'branches':branches}))
 
-def reg_step_3(request):
+def reg_step_3(request,x):
     return render_to_response("reg-step-3.html", RequestContext(request, {}))
 
 def edit_profile_basic(request, profile_id):
