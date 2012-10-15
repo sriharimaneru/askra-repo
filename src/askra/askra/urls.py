@@ -15,10 +15,6 @@ urlpatterns = patterns('',
     url(r'^view_profile$', direct_to_template, {'template' : 'view_profile.html'}, name='view_profile'),    
     url(r'^reg-step-2$', direct_to_template, {'template' : 'reg-step-2.html'}, name='reg-2'),  
     url(r'^reg-step-3$', direct_to_template, {'template' : 'reg-step-3.html'}, name='reg-3'),
-    url(r'^edit_profile_basic$', direct_to_template, {'template':'edit_profile_basic.html'}, name='edit_profile_basic'),
-    url(r'^edit_profile_weblinks$', direct_to_template, {'template':'edit_profile_weblinks.html'}, name='edit_profile_weblinks'),
-    url(r'^edit_profile_education$', direct_to_template, {'template':'edit_profile_education.html'}, name='edit_profile_education'),
-    url(r'^edit_profile_employment$', direct_to_template, {'template':'edit_profile_employment.html'}, name='edit_profile_employment'),
     # url(r'^askra/', include('askra.foo.urls')),
 
     # Uncomment the admin/doc line below to enable admin documentation:

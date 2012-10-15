@@ -66,50 +66,20 @@
 			</div>
 
 			<div class="suggestedProfiles">
-				<div class="profile" onclick="filldetails('Srihari M','2008','B.Tech','CSE',this)">
+				{% for student_section in student_sections %}
+				<div class="profile" onclick="filldetails('{{ student_section.userprofile.get_full_name }}', '{{ student_section.year_of_graduation }}', '{{ student_section.branch.course }}', '{{ student_section.branch.branch }}', this)">
 					<ul>
-						<li>Srihari M</li>
-						<li>2008</li>
-						<li>B.Tech</li>
-						<li>CSE</li>
+						<li>{{ student_section.userprofile.get_full_name }}</li>
+						<li>{{ student_section.year_of_graduation }}</li>
+						<li>{{ student_section.branch.course }}</li>
+						<li>{{ student_section.branch.branch }}</li>
 					</ul>
 				</div>
-				<div class="profile" onclick="filldetails('Shailesh Rathi','2008','B.Tech','ECE',this)">
-					<ul>
-						<li>Shailesh Rathi</li>
-						<li>2008</li>
-						<li>B.Tech</li>
-						<li>ECE</li>
-					</ul>
-				</div>
-				<div class="profile" onclick="filldetails('Random','2004','M.Tech','Mechanical',this)">
-					<ul>
-						<li>Random</li>
-						<li>2004</li>
-						<li>M.Tech</li>
-						<li>Mechanical</li>
-					</ul>
-				</div>
-				<div class="profile" onclick="filldetails('Random2','2014','M.Sc.','Physics',this)">
-					<ul>
-						<li>Random2</li>
-						<li>2014</li>
-						<li>M.Sc.</li>
-						<li>Physics</li>
-					</ul>
-				</div>
-				<div class="profile" onclick="filldetails('Random3','1964','MBA','Finance',this)">
-					<ul>
-						<li>Random3</li>
-						<li>1964</li>
-						<li>MBA</li>
-						<li>Finance</li>
-					</ul>
-				</div>
+				{% endfor %}
 			</div>
 
 			<div class="fillDetails">
-				<form name="profile_details">
+				<form name="profile_details" method="post" action="/profile/reg-step-3/">{% csrf_token %}
 					<span>Name:</span>
 					<input type="text" name="name" /><br>
 					<span>Roll No:</span>
@@ -117,25 +87,17 @@
 					<span>Course:</span>
 					<div class="selectBox">
 						<select name="course">
-							<option>B.Tech</option>
-							<option>M.Tech</option>
-							<option>M.Sc.</option>
-							<option>MBA</option>
+							{% for branch in branches %}
+							<option>{{ branch.course}}</option>
+							{% endfor %}
 						</select>
 					</div><br>
 					<span>Branch:</span>
 					<div class="selectBox">
 						<select name="branch">
-							<option>CSE</option>
-							<option>ECE</option>
-							<option>EEE</option>
-							<option>Mechanical</option>
-							<option>Civil</option>
-							<option>Chem</option>
-							<option>Meta</option>
-							<option>Physics</option>
-							<option>Finance</option>
-
+							{% for branch in branches %}
+							<option>{{ branch.branch }}</option>
+							{% endfor %}
 						</select>
 					</div><br>
 					<span>Year of Graduation:</span>

@@ -16,6 +16,19 @@ def show_profile(request, profile_id):
     				 'student_section': student_section, 'education_details':education_details,
     				 'employment_details': employment_details}))
 
+def reg_step_2(request,x):
+    user_profiles = UserProfile.objects.filter(role=ALUMNI)
+    branches = Branch.objects.all()
+    student_sections = list()
+    for user_profile in user_profiles:
+        student_section = StudentSection.objects.get(userprofile=user_profile)
+        student_sections.append(student_section)
+
+    return render_to_response("reg-step-2.html", RequestContext(request, {'student_sections':student_sections, 'branches':branches}))
+
+def reg_step_3(request):
+    return render_to_response("reg-step-3.html", RequestContext(request, {}))
+
 def edit_profile_basic(request, profile_id):
     if not profile_id:
        return render_to_response("error.html", RequestContext(request, {}))

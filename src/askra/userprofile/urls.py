@@ -13,4 +13,6 @@ urlpatterns = patterns('',
     url(r'^edit_weblinks(/?)(?P<profile_id>.*)$', 'userprofile.views.edit_profile_weblinks', name='editprofileweblinks'),
     url(r'^edit_education(/?)(?P<profile_id>.*)$', 'userprofile.views.edit_profile_education', name='editprofileeducation'),
     url(r'^edit_employment(/?)(?P<profile_id>.*)$', 'userprofile.views.edit_profile_employment', name='editprofileemployment'),
+    url(r'^reg-step-2(/?)$', 'userprofile.views.reg_step_2', name='regstep2'),
+    url(r'^reg-step-3(/?)$', 'userprofile.views.reg_step_3', name='regstep3'),
 )
