@@ -1,20 +1,24 @@
 # Create your views here.
-from django.shortcuts import render_to_response, redirect, render
+from django.shortcuts import render_to_response, redirect, render, get_object_or_404
 from django.template import RequestContext
 from userprofile.models import *
-from django.http import HttpResponseRedirect
+from userprofile.forms import *
+from django.http import HttpResponseRedirect, Http404
 
 def show_profile(request, profile_id):
     if not profile_id:
         return render_to_response("error.html", RequestContext(request, {}))
 
-    user_profile = UserProfile.objects.get(id=profile_id)
+    user_profile = get_object_or_404(UserProfile, id=profile_id)
+    print user_profile.photo
+    print user_profile.photo.url
     student_section = StudentSection.objects.filter(userprofile = user_profile)[0]
     education_details = HigherEducationDetail.objects.filter(userprofile = user_profile)
     employment_details = EmployementDetail.objects.filter(userprofile = user_profile)
+    other_profiles = StudentSection.objects.exclude(id=student_section.id)[:5] #Change logic to show relevant profiles
     return render_to_response("view_profile.html", RequestContext(request, {'user_profile': user_profile,
     				 'student_section': student_section, 'education_details':education_details,
-    				 'employment_details': employment_details}))
+    				 'employment_details': employment_details, 'other_profiles':other_profiles}))
 
 def reg_step_2(request,x):
     user_profiles = UserProfile.objects.filter(role=ALUMNI)

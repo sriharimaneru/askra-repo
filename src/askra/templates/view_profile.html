@@ -1,4 +1,15 @@
 {% extends "base.html" %}
+
+{% block scripts %}
+<script src="{{STATIC_URL}}js/jquery-latest.min.js"></script>
+<script>
+	$(".related_profile").click(function(){
+       window.location=$(this).find("a").attr("href"); 
+       return false;
+	});
+</script>
+{% endblock %}
+
 {% block content %}
 <div id = "main_content">
 	<div id="navigation_div">
@@ -15,7 +26,11 @@
 		</div>
 	</div>
 	<div id="pic_div">
+		{% if user_profile.photo.url and user_profile.photo.url != "" %}
 		<img src="{{user_profile.photo.url}}" width="250px" height="250px">
+		{% else %}
+		<img src="{{STATIC_URL}}img/default_male_profile_picture.jpg" width="250px" height="250px" alt="No profile picture">
+		{% endif %}
 	</div>
 	<div id="basic_details_div">
 		<h3>Profile ID: {{ user_profile.id}}</h3>
@@ -23,9 +38,17 @@
 		<h4>{{ student_section.get_full_qualification }}</h4>
 		<h4>{{ user_profile.city }}</h4>
 		<div id = "social_media_links">
-			<a href="{{ user_profile.facebook_url }}" target="blank"><img src="{{STATIC_URL}}img/facebook_icon.png" width="35px" height="35px"></a>
+			{% if user_profile.facebook_url %}
+			    <a href="{{ user_profile.facebook_url }}" target="blank"><img src="{{STATIC_URL}}img/facebook_icon.png" width="35px" height="35px"></a>
+			{% endif %}
+
+			{% if user_profile.linked_url %}
 			<a href="{{ user_profile.linked_url }}" target="blank"><img src="{{STATIC_URL}}img/linkedin_icon.png" width="35px" height="35px"></a>
+			{% endif %}
+
+			{% if user_profile.twitter_url %}
 			<a href="{{ user_profile.twitter_url }}" target="blank"><img src="{{STATIC_URL}}img/twitter_icon.png" width="35px" height="35px"></a>
+			{% endif %}
 		</div>
 	</div>
 
@@ -49,8 +72,11 @@
 </div>
 <div id = "other_content">
 	<div id="text_details">
+		{% if user_profile.about %}
 		<h3>About</h3>
 		<p>{{ user_profile.about|safe }}</p>
+		{% endif %}
+
 		<h3>Education Details</h3>	
 			{% for education_detail in education_details %}
 			<div class="detail_container">
@@ -80,7 +106,8 @@
 				</table>
 			</div>
 			<br>
-			
+
+		{% if employment_details %}			
 		<h3>Employer Details</h3>
 			{% for employment_detail in employment_details %}
 			<div class="detail_container">
@@ -91,31 +118,36 @@
 					</tr>        
 					<tr>
 						<td><span class="label">Designation </span>:<span class="value">{{ employment_detail.designation.name }}</span> </td>
-						<td><span class="label">From:</span>:<span class="value">{{ employment_detail.get_employment_period }}</span><br></td>
+						<td><span class="label">Period:</span>:<span class="value">{{ employment_detail.get_employment_period }}</span><br></td>
 					</tr>
 				</table>
 			</div>
 			<br>
 			{% endfor %}
+		{% endif %}
 	</div>
 	<div id="tags">
 		<h3>Tags</h3>
-		<img src="{{STATIC_URL}}img/pavan.jpg" width="150px" height="100px">
-		<img src="{{STATIC_URL}}img/pavan.jpg" width="100px" height="100px">
-		<img src="{{STATIC_URL}}img/pavan.jpg" width="250px" height="100px">
-		<img src="{{STATIC_URL}}img/pavan.jpg" width="150px" height="50px">
-		<img src="{{STATIC_URL}}img/pavan.jpg" width="75px" height="75px">
+		<img src="{{STATIC_URL}}img/tag.jpg" width="150px" height="100px">
+		<img src="{{STATIC_URL}}img/tag.jpg" width="100px" height="100px">
+		<img src="{{STATIC_URL}}img/tag.jpg" width="250px" height="100px">
+		<img src="{{STATIC_URL}}img/tag.jpg" width="150px" height="50px">
+		<img src="{{STATIC_URL}}img/tag.jpg" width="75px" height="75px">
 	</div>
 </div>
+{% if other_profiles %}
 <div id = "related_profiles" class="cB">
 	<h3>People who viewed this also viewed these profiles</h3>
+	{% for student_section in other_profiles %}
 	<div class = "related_profile_container">
 		<div class = "related_profile">
-			<img src="{{STATIC_URL}}img/pavan.jpg" width="150px" height="150px"><br>
-			<p>Vasanth Roy</p>
-			<p>1980, Chemical</p>
+			<img src="{{ student_section.userprofile.photo.url }}" width="150px" height="150px"><br>
+			<p><a href="/profile/view/{{ student_section.userprofile.id }}">{{ student_section.userprofile.get_full_name }}</a></p>
+			<p>{{ student_section.get_full_qualification }}</p>
 		</div>
 	</div>
+	{% endfor %}
+	<br class = "cB">
 </div>
-<br class = "cB">
+{% endif %}
 {% endblock %}
