@@ -641,3 +641,16 @@ input[type=button], input[type=submit] {
 .related_profile p {
 	text-align: center;
 }
+
+ul.errorlist {
+	list-style: none;
+	background-color: #d2d2d2;
+	padding-left: 0;
+}
+
+ul.errorlist li {
+	padding-bottom: 5px;
+	font-family: arial;
+	font-size: 12px;
+	font-style: italic;
+}

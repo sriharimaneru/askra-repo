@@ -22,18 +22,17 @@
 		</ul>
 	</div>
 	
-	<div id="pic_div">
-		<img src="{{user_profile.photo.url}}" width="200px" height="200px">
-		<br>
-		<div id="edit_pic">
-			<p>Edit picture</p>
-			<input type="file" name="picture" />
-		</div>
-	</div>
-	
 	<div id="basic_details_form">
-		<form name="basic_details_form" method="post" action="/profile/edit_basic/{{profile_id}}">{% csrf_token %}
+		<form name="basic_details_form" method="post" action="/profile/edit_basic/{{profile_id}}" enctype="multipart/form-data">{% csrf_token %}
 			{{ form.non_field_errors }}
+			<div id="pic_div">
+				{{ form.picture }}
+				<br>
+				<!--<div id="edit_pic">
+					<p>Edit picture</p>
+					<input type="file" name="picture" />
+				</div> -->
+			</div>
 			<div id="basic_section">
 				<span>Name:</span>{{ form.name }}<br><br>
 				<span>Course:</span>

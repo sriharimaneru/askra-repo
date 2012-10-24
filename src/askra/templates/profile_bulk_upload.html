@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h4>Bulk upload user profiles</h4>
+
+<div id="profile_bulk_upload_form">
+	{{ form.non_field_errors }}
+	{{ form.uploaded_file.errors }}
+	<form name="profile_bulk_upload_form" method="post" action="/profile/bulk_upload" enctype="multipart/form-data">{% csrf_token %}
+		{{ form.uploaded_file }}
+		<input type="submit" name="submit" value="Upload profiles"/>
+	</form>
+</div>
+
+{% endblock %}

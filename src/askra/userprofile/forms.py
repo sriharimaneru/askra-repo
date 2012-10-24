@@ -9,6 +9,7 @@ class EditProfileBasicForm(forms.Form):
     year_of_graduation = forms.IntegerField(min_value=1900)
     city = forms.CharField(max_length=50)
     about = forms.CharField(widget=forms.Textarea)
+    picture = forms.ImageField("Profile picture")
 
     #def __init__(self, curr_branch_course, *args, **kwargs):
     #    super(EditProfileBasicForm, self).__init__(*args, **kwargs)
@@ -43,3 +44,6 @@ class EditProfileEmploymentForm(forms.Form):
     domain = forms.ChoiceField(choices=[(domain.id, domain.name) for domain in JobDomain.objects.all()])
     date_of_joining = forms.DateField()
     date_of_leaving = forms.DateField()
+
+class ProfileBulkUploadForm(forms.Form):
+    uploaded_file = forms.FileField(label='Select a csv file', help_text='Maximum 1000 rows')

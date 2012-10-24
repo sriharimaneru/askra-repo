@@ -4,14 +4,15 @@ from django.template import RequestContext
 from userprofile.models import *
 from userprofile.forms import *
 from django.http import HttpResponseRedirect, Http404
+import csv
+from django.forms.util import ErrorList
+from django.core.exceptions import ObjectDoesNotExist
 
 def show_profile(request, profile_id):
     if not profile_id:
         return render_to_response("error.html", RequestContext(request, {}))
 
     user_profile = get_object_or_404(UserProfile, id=profile_id)
-    print user_profile.photo
-    print user_profile.photo.url
     student_section = StudentSection.objects.filter(userprofile = user_profile)[0]
     education_details = HigherEducationDetail.objects.filter(userprofile = user_profile)
     employment_details = EmployementDetail.objects.filter(userprofile = user_profile)
@@ -41,7 +42,7 @@ def edit_profile_basic(request, profile_id):
     student_section=StudentSection.objects.filter(userprofile = user_profile)[0]
 
     if request.method=='POST':
-    	form = EditProfileBasicForm(request.POST)
+    	form = EditProfileBasicForm(request.POST, request.FILES)
     	if form.is_valid():
             user_profile.first_name = form.cleaned_data['name'].split()[0]
             user_profile.last_name = form.cleaned_data['name'].split()[1]
@@ -57,7 +58,7 @@ def edit_profile_basic(request, profile_id):
     	    return HttpResponseRedirect('/profile/view/'+profile_id)
     else:
         form = EditProfileBasicForm({'name':user_profile.get_full_name(), 'year_of_graduation':student_section.year_of_graduation,
-         'city':user_profile.city, 'about':user_profile.about, })
+         'city':user_profile.city, 'about':user_profile.about, }, {'picture': ''})
 
     return render(request, "edit_profile_basic.html", {'form': form, 'profile_id': profile_id,})
 
@@ -138,3 +139,43 @@ def edit_profile_employment(request, profile_id):
             formset.forms.append(form)
 
     return render(request, "edit_profile_employment.html", {'formset':formset, 'profile_id':profile_id, })
+
+def profile_bulk_upload(request,x):
+    if request.method == 'POST':
+        form = ProfileBulkUploadForm(request.POST, request.FILES)
+        if form.is_valid():
+            errors = form._errors.setdefault("uploaded_file", ErrorList())
+            reader = csv.DictReader(request.FILES['uploaded_file'])
+            for row in reader:
+                first_name = row['First Name']
+                last_name = row['Last Name']
+                phone_number = row['Phone Number']
+                email = row['Email']
+                gender = row['Gender']
+                role = row['User Role']
+                city = row['City']
+
+                try:
+                    user_profile=UserProfile.objects.get(email=email)
+                    text = "A profile with email ID [" + email + "] already exists. Updated the other fields."
+                    user_profile.first_name = first_name
+                    user_profile.last_name = last_name
+                    user_profile.phone_number = phone_number
+                    user_profile.email = email
+                except ObjectDoesNotExist:
+                    user_profile = UserProfile(first_name=first_name, 
+                                               last_name=first_name,
+                                               email=email,
+                                               phone_number=phone_number)
+                    text = "Added new profile with email ID [" + email + "]"
+
+                errors.append(text)
+                user_profile.set_gender(gender)
+                user_profile.set_role(role)
+                user_profile.set_city(city)
+                user_profile.save()
+                
+            errors.append("Bulk upload successful")
+    else:
+        form = ProfileBulkUploadForm()
+    return render(request, "profile_bulk_upload.html", {'form':form, })

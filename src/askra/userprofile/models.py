@@ -34,8 +34,8 @@ USERTAG_STATUS_OPTIONS = ((TAG_APPROVED, "Approved"),
 
 class City(models.Model):
     city = models.CharField(max_length=150)
-    state = models.CharField(max_length=150)
-    country = models.CharField(max_length=150)
+    state = models.CharField(max_length=150,null=True, blank=True)
+    country = models.CharField(max_length=150,null=True, blank=True)
     
     def __unicode__(self):
         return self.city
@@ -58,7 +58,7 @@ class UserProfile(models.Model):
     facebook_url = models.URLField(max_length=100, null=True, blank=True)
     linked_url = models.URLField(max_length=100, null=True, blank=True)
     website_url = models.URLField(max_length=100, null=True, blank=True)
-    profile_status = models.IntegerField(choices = PROFILE_STATUS, null=True, blank=True)
+    profile_status = models.IntegerField(choices = PROFILE_STATUS, null=True, blank=True, default=UNLINKED)
     about = models.TextField(null=True, blank=True)
 
     def __unicode__(self):
@@ -66,6 +66,26 @@ class UserProfile(models.Model):
 
     def get_full_name(self):
         return self.first_name + " " + self.last_name
+
+    def set_gender(self, value):
+        gender_dict=dict(GENDER_CHOICES)
+        self.gender = [key for key,val in gender_dict.items() if val==value ][0]
+        return self
+
+    def set_role(self, value):
+        role_dict=dict(USER_ROLES)
+        self.role = [key for key,val in role_dict.items() if val==value ][0]
+        return self
+
+    def set_city(self, value):
+        cities=City.objects.filter(city=value)
+        if(cities):
+            self.city = cities[0]
+        else:
+            city = City(city=value,state='None',country='None') #Remove state and country after DB migration
+            city.save()
+            self.city = city
+        return self
     
     
 class Branch(models.Model):
