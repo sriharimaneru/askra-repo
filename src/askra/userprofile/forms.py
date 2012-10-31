@@ -4,7 +4,7 @@ from userprofile.models import *
 
 class EditProfileBasicForm(forms.Form):
     name = forms.CharField(max_length=100)
-    course = forms.ChoiceField(choices=[ (branch.id, branch.course) for branch in Branch.objects.all() ])
+    course = forms.ChoiceField(choices=[ (branch.id, branch.course) for branch in Branch.objects.all() ])    
     branch = forms.ChoiceField(choices=[ (branch.id, branch.branch) for branch in Branch.objects.all() ])
     year_of_graduation = forms.IntegerField(min_value=1900)
     city = forms.CharField(max_length=50)

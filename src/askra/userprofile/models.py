@@ -32,6 +32,14 @@ USERTAG_STATUS_OPTIONS = ((TAG_APPROVED, "Approved"),
                           (TAG_PENDING, "Pending"),
                           (TAG_REJECTED, "Rejected"),)
 
+IGNORE = 0
+SAVE = 1
+DO_NOTHING = 2
+ACTION_CHOICES = ((IGNORE, "Ignore"),
+               (SAVE, "Save"),
+               (DO_NOTHING, "Do nothing"),)
+            
+
 class City(models.Model):
     city = models.CharField(max_length=150)
     state = models.CharField(max_length=150,null=True, blank=True)
@@ -194,3 +202,28 @@ class UserTag(models.Model):
     userprofile = models.ForeignKey(UserProfile)
     tag = models.ForeignKey(Tag)
     status = models.IntegerField("Tag Category", choices=USERTAG_STATUS_OPTIONS,)
+    
+class CsvUpload(models.Model):
+    uploaded_file = models.FileField(upload_to="data/upload_files/", blank=False, null=False)
+    description = models.TextField(blank=True, null=True)
+    
+    def save(self,**kwargs):
+        print self.description
+        super(CsvUpload, self).save(**kwargs)    
+    
+    
+class ErrorRow(models.Model):
+    csv_file = models.ForeignKey(CsvUpload)
+    name = models.CharField(max_length=20)
+    reason = models.TextField()
+    action = models.IntegerField(choices = ACTION_CHOICES, default = DO_NOTHING)
+
+    def save(self,**kwargs):
+        #if action is ignore, do nothing 
+        
+        #if action is save, delete it and create correspoinding user profile
+        
+        #if action is ignore, just delete it
+        
+        
+        super(ErrorRow, self).save(**kwargs)      

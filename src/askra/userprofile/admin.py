@@ -2,7 +2,7 @@ from django.contrib import admin
 from userprofile.models import UserProfile, City, Branch, StudentSection, \
                                Employer, JobDesignation, JobDomain, EmployementDetail, \
                                College, Degree, HigherEducationDetail, Department, \
-                               FacultyDesignation, FacultySection, UserTag, HigherEducationBranch
+                               FacultyDesignation, FacultySection, UserTag, HigherEducationBranch, CsvUpload, ErrorRow
 
 class CityAdmin(admin.ModelAdmin):
     list_display = ('city', 'state', 'country')
@@ -44,6 +44,13 @@ class UserProfileAdmin(admin.ModelAdmin):
     search_fields = ('first_name', 'last_name', 'email',)
     inlines = (StudentSectionInline, EmployementDetailInline, HigherEducationDetailInline, FacultySectionInline,
                UserTagInline, )
+ 
+
+class ErrorRowInline(admin.StackedInline):
+    model = ErrorRow
+       
+class CsvUploadAdmin(admin.ModelAdmin):
+    inlines = (ErrorRowInline, )
     
 admin.site.register(City, CityAdmin)
 admin.site.register(UserProfile, UserProfileAdmin)
@@ -56,6 +63,8 @@ admin.site.register(Degree)
 admin.site.register(Department)
 admin.site.register(FacultyDesignation)
 admin.site.register(HigherEducationBranch)
+admin.site.register(CsvUpload, CsvUploadAdmin)
+
 
 
 

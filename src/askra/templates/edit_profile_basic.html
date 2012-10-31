@@ -26,6 +26,7 @@
 		<form name="basic_details_form" method="post" action="/profile/edit_basic/{{profile_id}}" enctype="multipart/form-data">{% csrf_token %}
 			{{ form.non_field_errors }}
 			<div id="pic_div">
+			    {{ form.picture.errors}}
 				{{ form.picture }}
 				<br>
 				<!--<div id="edit_pic">
@@ -34,7 +35,7 @@
 				</div> -->
 			</div>
 			<div id="basic_section">
-				<span>Name:</span>{{ form.name }}<br><br>
+				<span>Name:</span>{{ form.name }}<br>{{ form.name.errors }}<br>
 				<span>Course:</span>
 				<div class="selectBox">
 					{{ form.course }}

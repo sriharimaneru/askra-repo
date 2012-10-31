@@ -43,11 +43,12 @@ def edit_profile_basic(request, profile_id):
 
     if request.method=='POST':
     	form = EditProfileBasicForm(request.POST, request.FILES)
+        print "indisde post"
     	if form.is_valid():
             user_profile.first_name = form.cleaned_data['name'].split()[0]
             user_profile.last_name = form.cleaned_data['name'].split()[1]
-            student_section.branch.course = (Branch.objects.get(id=form.cleaned_data['course'])).course
-            student_section.branch.branch = form.cleaned_data['branch']
+            print form.cleaned_data['course']
+            student_section.branch_id = form.cleaned_data['course']
             student_section.year_of_graduation = form.cleaned_data['year_of_graduation']
             user_profile.city = City.objects.get(city=form.cleaned_data['city'])
             user_profile.about = form.cleaned_data['about']
@@ -57,8 +58,8 @@ def edit_profile_basic(request, profile_id):
 
     	    return HttpResponseRedirect('/profile/view/'+profile_id)
     else:
-        form = EditProfileBasicForm({'name':user_profile.get_full_name(), 'year_of_graduation':student_section.year_of_graduation,
-         'city':user_profile.city, 'about':user_profile.about, }, {'picture': ''})
+        form = EditProfileBasicForm({'name':user_profile.get_full_name(), 'course':student_section.branch.id ,'year_of_graduation':student_section.year_of_graduation,
+         'city':user_profile.city, 'about':user_profile.about, 'branch':student_section.branch.id}, {'picture': ''})
 
     return render(request, "edit_profile_basic.html", {'form': form, 'profile_id': profile_id,})
 
