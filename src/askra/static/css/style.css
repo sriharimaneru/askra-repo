@@ -105,14 +105,14 @@ p, h1, h2, h3, h4{
 }
 
 div#home-section {
-	background-image: url(../img/BLURRED_1.jpg);
+	background-image: url(../img/blurred.jpg);
 	margin: 0px;
 	text-shadow: 0 1px 3px rgba(0, 0, 0, 0.75);
 }
 
 div.home-section-content {
 	padding-top: 60px;
-	padding-bottom: 110px;
+	padding-bottom: 150px;
 }
 
 .home-section-title {
@@ -137,7 +137,7 @@ div.home-section-content {
 img#stakeholder-infographic {
 	position: absolute;
 	top: -8px;
-	right: 12px;
+	right: 0px;
 	width: 377px;
 }
 
@@ -172,8 +172,6 @@ img#stakeholder-infographic {
 div#usecases {
 	background-image: url(../img/paper_bg.gif);
 }
-
-
 
 /************* END USECASES **************/
 
@@ -240,6 +238,9 @@ div#data-building {
 	padding-bottom: 15px;
 }
 
+#facebook-band {
+	width: 100%;
+}
 /************* END DATABASE BUILDING **************/
 
 
