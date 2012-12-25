@@ -105,8 +105,8 @@ p, h1, h2, h3, h4{
 }
 
 div#home-section {
-	background-image: url(../img/splash_04.jpg);
-	margin: 0px;
+/*	background-image: url(../img/splash_04.jpg);
+*/	margin: 0px;
 	text-shadow: 0 1px 3px rgba(0, 0, 0, 0.75);
 }
 
@@ -276,10 +276,25 @@ div#communication .section-title{
 	color: #6B9BB2;	
 }
 
+.communication-feature div h2.section-subtitle{
+	display: inline;
+}
+
 .communication-feature h2.section-subtitle img{
 	width: 50px;
 	height: 50px;
 	padding-right: 20px;
+	vertical-align: center;
+}
+
+.communication-feature-title {
+	padding: 20px 0px;
+}
+
+.communication-feature-title img{
+	width: 50px;
+	height: 50px;
+	vertical-align: middle;
 }
 
 

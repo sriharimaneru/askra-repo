@@ -6,13 +6,29 @@
 <title>Askra - NIT Warangal</title>
 <script src="{{STATIC_URL}}js/jquery-latest.min.js"></script>  
 <script type="text/javascript">
-$(function(){
+$(function(){                       
   $(".data-building-icon-description").hide();
   $(".excel-icon").show(); 
   $(".icon-div").hover(function(){
     $(".data-building-icon-description").hide();
     $("."+this.id).show();
   });
+
+  function showTheList() {
+      var i = 1;
+      var count = 1
+      function showOne() {
+        count++
+        console.log(i)
+        console.log(count)
+        $('#home-section').delay(100).css("background-image","url('static/img/splash_0"+i+".jpg')");
+        if (++i > 2) i = 1;
+        if (++count < 10) showOne();                                                               
+      }
+      showOne();
+    }
+  showTheList();
+
 });
 </script>
 </head>
@@ -128,21 +144,33 @@ $(function(){
     <h2 class="section-subtitle communication-section-subtitle">Snap all the photos you want and spend more time enjoying them. Snap all the photos you want and you want and spend. </h2>
     <div id="communication-features-list">
       <div class="communication-feature left">
-        <h2 class="section-subtitle"><span><img src="{{STATIC_URL}}img/extra_sharing.jpg">Search and Filter</h2>
+        <div class="communication-feature-title">
+          <img src="{{STATIC_URL}}img/search.png">
+          <h2 class="section-subtitle">Search and Filter</h2>
+        </div>
         <p>Snap all the photos you want and spend more time enjoying them.Snap all the photos you want and spend more time enjoying them.Snap all the photos you want and spend more time enjoying them.Snap all the photos you want and spend more time enjoying them.</p>
         <img src="{{STATIC_URL}}img/extra_sharing.jpg">        
       </div>
       <div class="communication-feature left">
-        <h2 class="section-subtitle"><span><img src="{{STATIC_URL}}img/extra_sharing.jpg">Smart Data</h2>
+        <div class="communication-feature-title">
+          <img src="{{STATIC_URL}}img/smart-data.png">
+          <h2 class="section-subtitle">Smart Data</h2>
+        </div>
         <p>Snap all the photos you want and spend more time enjoying them.Snap all the photos you want and spend more time enjoying them.Snap all the photos you want and spend more time enjoying them.Snap all the photos you want and spend more time enjoying them.</p>
         <img src="{{STATIC_URL}}img/extra_sharing.jpg">        
       </div>
       <div class="communication-feature left">
-        <h2 class="section-subtitle"><span><img src="{{STATIC_URL}}img/extra_sharing.jpg"></span>Privacy</h2>
+        <div class="communication-feature-title">
+          <img src="{{STATIC_URL}}img/privacy.png" />
+          <h2 class="section-subtitle">Privacy</h2>
+        </div>
         <p>Snap all the photos you want and spend more time enjoying them.Snap all the photos you want and spend more time enjoying them.Snap all the photos you want and spend more time enjoying them.Snap all the photos you want and spend more time enjoying them.</p>
       </div>
       <div class="communication-feature left">
-        <h2 class="section-subtitle"><span><img src="{{STATIC_URL}}img/extra_sharing.jpg"></span>Spamming</h2>
+        <div class="communication-feature-title">
+          <img src="{{STATIC_URL}}img/spam.png">
+          <h2 class="section-subtitle">Spamming</h2>
+        </div>
         <p>Snap all the photos you want and spend more time enjoying them.Snap all the photos you want and spend more time enjoying them.Snap all the photos you want and spend more time enjoying them.Snap all the photos you want and spend more time enjoying them.</p>
       </div>
     </div>
