@@ -243,9 +243,50 @@ div#data-building {
 /************* END DATABASE BUILDING **************/
 
 
-div#communication-features {
-		background: #fff;
+/************* START COMMUNICATION **************/
+
+div#communication {
+	background: #fff;
+	text-shadow: none;
 }
+
+div#communication .section-title,div#communication p, div#communication .communication-section-subtitle{
+	color: #4D4D4D;
+}
+
+.communication-section-subtitle{
+	padding-bottom: 0px;
+}
+div#communication p{
+	line-height: 25px; 
+	padding-bottom: 15px;
+}
+
+div#communication .section-title{
+	color: #6B9BB2;
+}
+
+.communication-feature{
+	width: 450px;
+	padding-right: 20px;
+	padding-bottom: 30px;
+}
+
+.communication-feature h2.section-subtitle{
+	color: #6B9BB2;	
+}
+
+.communication-feature h2.section-subtitle img{
+	width: 50px;
+	height: 50px;
+	padding-right: 20px;
+}
+
+
+
+/************* END COMMUNICATION **************/
+
+
 
 div#about {
 	background: #667780;
