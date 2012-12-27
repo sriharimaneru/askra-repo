@@ -93,6 +93,7 @@ p, h1, h2, h3, h4{
 	font-size: 14px;
 	text-shadow: 0 2px 4px rgba(0, 0, 0, 0.75);
 	text-transform: uppercase;
+	z-index:10;
 }
 
 #sign-in-note {
@@ -105,7 +106,7 @@ p, h1, h2, h3, h4{
 }
 
 div#home-section {
-	background-image: url(../img/blurred.jpg);
+	background-image: url(../img/splash_01.jpg);
 	margin: 0px;
 	text-shadow: 0 1px 3px rgba(0, 0, 0, 0.75);
 }
