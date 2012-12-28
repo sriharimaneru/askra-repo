@@ -14,19 +14,11 @@ $(function(){
     $("."+this.id).show();
   });
 
-  function showTheList() {
-      var i = 1;
-      var count = 1
-      function showOne() {
-        count++
-        console.log(i + "----" + count)
-        $('#home-section').delay(100).css("background-image","url('static/img/splash_0"+i+".jpg')");
-        if (++i > 2) i = 1;
-        if (++count < 10) showOne();                                                               
-      }
-      showOne();
-    }
-  showTheList();
+  var i = 1
+  setInterval(function() {
+    $('#home-section').css("background-image","url('static/img/splash_0"+i+".jpg')");
+    if (++i == 4) i = 1;
+  }, 10000);
 
 });
 </script>
