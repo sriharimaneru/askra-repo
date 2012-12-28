@@ -113,7 +113,7 @@ div#home-section {
 
 div.home-section-content {
 	padding-top: 60px;
-	padding-bottom: 150px;
+	padding-bottom: 105px;
 }
 
 .home-section-title {
@@ -126,7 +126,7 @@ div.home-section-content {
 	font-size: 22px;
 	line-height: 28px;
 	max-width: 550px;
-	padding-top: 30px;
+	padding-top: 53px;
 }
 
 #home-intro-links {
@@ -137,9 +137,9 @@ div.home-section-content {
 
 img#stakeholder-infographic {
 	position: absolute;
-	top: -8px;
+	top: 46px;
 	right: 0px;
-	width: 377px;
+	width: 354px;
 }
 
 .stake-holder{
@@ -163,7 +163,7 @@ img#stakeholder-infographic {
 .stake-holder-description{
 	font-size: 13px;
 	padding-top: 15px;
-	padding-bottom: 60px;
+	padding-bottom: 15px;
 }
 
 /************* END HOME SECTION **************/
