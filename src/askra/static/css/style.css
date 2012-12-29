@@ -312,10 +312,53 @@ div#data-building .communication-feature {
 /************* END COMMUNICATION **************/
 
 
+/************* END COMMUNICATION **************/
 
 div#about {
 	background: #667780;
 }
+
+div#contact {
+	width: 350px;
+	text-align: center;
+	padding-top: 60px;
+}
+
+div#team_description {
+	width: 550px;
+	padding-bottom: 30px;
+}
+
+div.member-details {
+	width: 70%;
+	padding-top: 12px;
+	padding-left: 10px;
+}
+
+.member-description {
+	font-size: 13px;
+	line-height: 20px;
+}
+
+.member-name {
+	padding-bottom: 10px;
+}
+
+.member-section {
+	padding-bottom: 20px;
+}
+
+.member-pic {
+	width: 25%;
+}
+
+#footer-note {
+	font-size: 10px;
+	text-align: center;
+}
+
+
+/************* END COMMUNICATION **************/
 
 div#footer {
 	background: #3D474D;
