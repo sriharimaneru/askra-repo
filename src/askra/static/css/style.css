@@ -357,6 +357,14 @@ div.member-details {
 	text-align: center;
 }
 
+.member-description a {
+	text-decoration: none;
+	color: white;
+}
+
+.member-description a:hover{
+	text-decoration: underline;
+}
 
 /************* END COMMUNICATION **************/
 
