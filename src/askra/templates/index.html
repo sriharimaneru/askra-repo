@@ -3,6 +3,7 @@
 <meta name="description" content="Enables effective communication and networking among stakeholders of educational institutions">
 <meta name="keywords" content="Alumni, Students, Faculty, College, Institution, Networking, Communication" />
 <LINK rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/style.css"></LINK>
+<link rel="stylesheet" href="{{STATIC_URL}}css/flexslider.css" type="text/css" media="screen" />
 <title>Groupify - NIT Warangal</title>
 <script src="{{STATIC_URL}}js/jquery-latest.min.js"></script>  
 <script type="text/javascript">
@@ -27,8 +28,8 @@ $(function(){
 <div id="header">
 	<div class="section-content"> 
 		<h1 id="logo">Groupify</h1>
-          	<a href="/admin" id="sign-in">sign in</a>
-          	<p id="sign-in-note">(only for admins, for now)</p>
+  	<a href="/admin" id="sign-in">sign in</a>
+  	<p id="sign-in-note">(only for admins, for now)</p>
 	</div>
 </div>
 <div id="home-section">
@@ -77,7 +78,41 @@ $(function(){
   <div class="section-content">
     <h2 class="section-title">Benefits</h2>
     <h2 class="section-subtitle">A connected NITW community opens up endless possibilities. A few of the top benefits are listed below.</h2>
-    <p style="padding-top:300px; padding-bottom:300px; font-size:40px; text-align:center; margin:0px;"; >Horizontal Slider</p>
+
+      <section class="slider">
+        <div class="flexslider">
+          <ul class="slides">
+            <li>
+              <img src="{{STATIC_URL}}img/slider-1.jpg" />
+            </li>
+            <li>
+              <img src="{{STATIC_URL}}img/slider-2.jpg" />
+            </li>
+            <li>
+              <img src="{{STATIC_URL}}img/slider-3.jpg" />
+            </li>
+            <li>
+              <img src="{{STATIC_URL}}img/slider-4.jpg" />
+            </li>
+          </ul>
+        </div>
+      </section>
+
+  <script defer src="{{STATIC_URL}}js/jquery.flexslider.js"></script>
+  
+  <script type="text/javascript">
+    $(function(){
+      SyntaxHighlighter.all();
+    });
+    $(window).load(function(){
+      $('.flexslider').flexslider({
+        animation: "slide",
+        start: function(slider){
+          $('body').removeClass('loading');
+        }
+      });
+    });
+  </script>
     <p class="continuation-text">We need passionate people combined with smart technology to <span>build the database of people</span> and <span>enable effective communication</span> among them.</p>
   </div>  
 </div>
