@@ -175,7 +175,7 @@ img#stakeholder-infographic {
 /************* START USECASES **************/
 
 div#usecases {
-	background-image: url(../img/paper_bg.gif);
+	background-image: url(../img/paper_bg_dark.gif);
 }
 
 /************* END USECASES **************/
@@ -184,7 +184,7 @@ div#usecases {
 
 
 div#data-building {
-	background-image: url(../img/paper_bg_dark.gif);	
+	background-image: url(../img/paper_bg.gif);	
 }
 
 #data-building-icon-list{
