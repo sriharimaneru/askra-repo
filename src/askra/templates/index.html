@@ -14,9 +14,9 @@ $(function(){
     $("."+this.id).show();
   });
 
-  var i = 1
+  var i = 2
   setInterval(function() {
-    $('#home-section').css("background-image","url('static/img/splash_0"+i+".jpg')");
+    $('#home-section').css("background-image","url('static/img/bg_0"+i+".jpg')");
     if (++i == 4) i = 1;
   }, 6000);
 
@@ -85,54 +85,55 @@ $(function(){
   <div class="section-content">
     <h2 class="section-title">Building & maintaining the database</h2>
     <h2 class="section-subtitle">We need to build a robust, accurate and complete database of all the people involved and keep it up-to-date. We do it using smart technology.</h2>
-    <div id="data-building-icon-list" class="left">
-      <div id="excel-icon" class="icon-div left"></div>  
-      <div id="collabative-icon" class="icon-div left"></div>  
-      <div id="admin-data-icon" class="icon-div left"></div>  
-      <div id="social-media-icon" class="icon-div left"></div>
-    </div>
-    <div class="data-building-icon-description left excel-icon" >
-      <h3 class="feature-title">Excel Upload</h3>
-      <ul>
-        <li>Excel sheets with dispersed profile data are available with college and alumni chapters. </li>
-        <li>Data from multiple sources will be collated by the system, and redundant data will be eliminated to create complete profiles.</li>
-        <li>System will detect syntactical errors in these excel sheets and allow for corrections while uploading them.</li>
-      </ul>
-    </div>
-    <div class="data-building-icon-description left collabative-icon" >
-      <h3 class="feature-title">Collaborative Editing</h3>
-      <ul>
-        <li>Allows people to edit other people's profile information, based on privileges.</li>
-        <li>Not all alumni will spend time editing their profile information but this information is useful for other people in the network. For example, an alumnus can add profile information for his batchmates. These edits will then be manually approved by chosen admins from college.</li>
-        <li>This allows complete database to be built quickly.</li>
-      </ul>
-    </div>
-    <div class="data-building-icon-description left admin-data-icon" >
-      <h3 class="feature-title">Data Admins</h3>
-      <ul>
-        <li>15 - 20 admins(students+faculty) will be chosen who will spearhead the effort to build and maintain the database.</li>
-        <li>These admins will</li>
+    <div id="communication-features-list">
+      <div class="communication-feature left">
+        <div class="communication-feature-title">
+          <img src="{{STATIC_URL}}img/excel_new.png">
+          <h2 class="section-subtitle">Excel Upload</h2>
+        </div>
+        <p>Excel sheets with dispersed profile data are available with college and alumni chapters. Data from multiple sources will be collated by the system, and redundant data will be eliminated to create complete profiles.<br><br>
+        System will detect syntactical errors in these excel sheets and allow for corrections while uploading them.</p>
+      </div>
+      <div class="communication-feature left">
+        <div class="communication-feature-title">
+          <img src="{{STATIC_URL}}img/collaborative.png" />
+          <h2 class="section-subtitle">Collaborative Editing</h2>
+        </div>
+        <p>Allows people to edit other people's profile information, based on privileges.
+        Not all alumni will spend time editing their profile information but this information is useful for other people in the network. <br><br>
+        For example, an alumnus can add profile information for his batchmates. These edits will then be manually approved by chosen admins from college. This allows complete database to be built quickly.</p>
+      </div>
+      <div class="communication-feature left">
+        <div class="communication-feature-title">
+          <img src="{{STATIC_URL}}img/admin-data1.png" />
+          <h2 class="section-subtitle">Data Admins</h2>
+        </div>
+        <p>
+        15 - 20 admins(students+faculty) will be chosen who will spearhead the effort to build and maintain the database.
+        <br><br>These admins will
         <ul>
           <li>Add profile information for people of their college.</li>
           <li>Approve/disapprove edits made to profiles.</li>
-        <ul>
-      </ul>
-    </div>
-    <div class="data-building-icon-description left social-media-icon" >
-      <h3 class="feature-title">Social Network Data</h3>
-      <ul>
-        <li>Users can choose to link their social media profiles to their profile on Askra.</li>
-        <li>The following are the benefits of doing so</li>
+        <ul> 
+        </p>
+      </div>
+      <div class="communication-feature left">
+        <div class="communication-feature-title">
+          <img src="{{STATIC_URL}}img/social-sites.png">
+          <h2 class="section-subtitle">Social Network Data</h2>
+        </div>
+        <p>
+        Users can choose to link their social media profiles to their profile on Askra.The following are the benefits of doing so
         <ul>
           <li>Information like education details, employment details etc. will be retrieved automatically and added to the profile in Askra.</li>
-          <li>Changes to profile information will be automatically updated. For example, if you change your job and update the information on LinkedIn, the relevant information will get automatically updated here.</li>
+          <li>Changes to profile information will be automatically updated. </li>
         </ul>
-      </ul>
+        </p>
+      </div>
     </div>
-    <h3>Building a complete alumni database is complicated owing to the large numbers and unavailability of structured data, but with the help of the above technology we can make it happen.</h3><br>
-    <h3>Accurate student, faculty and admin data is available with college and will be regularly updated by the chosen data admins.</h3>
+      <h2 class="section-subtitle db-footer-note cB">Building a complete alumni database is complicated owing to the large numbers and unavailability of structured data, but with the help of the above technology we can make it happen. Accurate student, faculty and admin data is available with college and will be regularly updated by the chosen data admins.</h2>
   </div>
-  <img id= "facebook-band" class="cB" src="{{STATIC_URL}}img/facebook_band.jpg">
+  <img id= "facebook-band" src="{{STATIC_URL}}img/facebook_band.jpg">
 </div>
 <div id="communication">
   <div class="section-content">
@@ -159,10 +160,11 @@ $(function(){
         <p>
            Our smart data systems decrease redundancy and increase accuracy of data added by users. For example, if you add TCS as your company we know that people who work at Tata Consultancy Services are your colleagues. 
            <br><br>
-           While adding information to your profile, we suggest relevant data to make it easier for you. The system gets smarter as more and more information gets added.
+           While adding information to your profile, we suggest relevant data to make it easier for you. The system gets smarter as more and more information gets added.<br><br><br>
         </p>
         <img src="{{STATIC_URL}}img/extra_sharing.jpg">        
       </div>
+      <div class="cB"></div>
       <div class="communication-feature left">
         <div class="communication-feature-title">
           <img src="{{STATIC_URL}}img/privacy.png" />
@@ -191,6 +193,9 @@ $(function(){
 </div>
 <div id="about">
 	<p style="padding-top:200px; padding-bottom:200px; font-size:40px; text-align:center; margin:0px;"; >About</p>
+          <img src="{{STATIC_URL}}img/kalyan_bw.png">
+          <img src="{{STATIC_URL}}img/srihari_bw.png">
+
 </div>
 <div id="footer">
 	<p style="padding-top:20px; padding-bottom:20px; font-size:15px; text-align:center; margin:0px;"; >Footer</p>

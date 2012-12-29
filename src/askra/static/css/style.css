@@ -4,7 +4,7 @@ body{
 	font-family: "DIN Web",Helvetica,Arial,sans-serif;
 	font-weight: 400;
 	font-size: 16px;
-	line-height: 20px;
+	line-height: 25px;
 	color: white;
 	text-shadow: 0 2px 2px rgba(0, 0, 0, 0.25);
   	margin:0;
@@ -28,7 +28,7 @@ p, h1, h2, h3, h4{
 
 .section-subtitle {
 	color: rgba(255, 255, 255, 0.4);
-	font-size: 28px;
+	font-size: 26px;
 	padding-top: 20px;
 	padding-bottom: 20px;
 }
@@ -65,6 +65,9 @@ p, h1, h2, h3, h4{
 	float: left;
 }
 
+.db-footer-note{
+	font-size: 18px;
+}
 /************* END GENERIC **************/
 
 
@@ -106,14 +109,14 @@ p, h1, h2, h3, h4{
 }
 
 div#home-section {
-	background-image: url(../img/splash_01.jpg);
+	background-image: url(../img/bg_01.jpg);
 	margin: 0px;
 	text-shadow: 0 1px 3px rgba(0, 0, 0, 0.75);
 }
 
 div.home-section-content {
 	padding-top: 60px;
-	padding-bottom: 105px;
+	padding-bottom: 95px;
 }
 
 .home-section-title {
@@ -164,6 +167,7 @@ img#stakeholder-infographic {
 	font-size: 13px;
 	padding-top: 15px;
 	padding-bottom: 15px;
+	line-height: 20px;
 }
 
 /************* END HOME SECTION **************/
@@ -235,7 +239,6 @@ div#data-building {
 }
 
 .data-building-icon-description li{
-	line-height: 25px;
 	padding-bottom: 15px;
 }
 
@@ -259,8 +262,8 @@ div#communication .section-title,div#communication p, div#communication .communi
 .communication-section-subtitle{
 	padding-bottom: 0px;
 }
-div#communication p{
-	line-height: 25px; 
+
+div#communication p, div#data-building p{
 	padding-bottom: 15px;
 }
 
@@ -272,6 +275,10 @@ div#communication .section-title{
 	width: 450px;
 	padding-right: 20px;
 	padding-bottom: 30px;
+}
+
+div#data-building .communication-feature {
+	padding-bottom: 10px;
 }
 
 .communication-feature h2.section-subtitle{
