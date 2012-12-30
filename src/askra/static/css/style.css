@@ -1,8 +1,7 @@
 /************* START GENERIC **************/
-
 body{
-	font-family: "DIN Web",Helvetica,Arial,sans-serif;
-	font-weight: 400;
+	font-family: 'Open Sans',Helvetica,Arial,sans-serif;
+	font-weight: 300;
 	font-size: 16px;
 	line-height: 25px;
 	color: white;
@@ -18,7 +17,15 @@ p, h1, h2, h3, h4{
 
 .section-title, .section-subtitle {
 	line-height: 40px;
-	font-weight: 300;	
+	font-weight: 300;
+}
+
+div#about p, div#about h1, div#about h2, div#about h3, div#about h4, div#about .section-title, div#about .section-subtitle{
+	font-weight: 400;
+}
+
+div#communication p, div#communication h1, div#communication h2, div#communication h3, div#communication h4, div#communication .section-title, div#communication .section-subtitle {
+	font-weight: 400;
 }
 
 .section-title {
@@ -28,7 +35,7 @@ p, h1, h2, h3, h4{
 
 .section-subtitle {
 	color: rgba(255, 255, 255, 0.4);
-	font-size: 26px;
+	font-size: 28px;
 	padding-top: 20px;
 	padding-bottom: 20px;
 }
@@ -66,8 +73,8 @@ p, h1, h2, h3, h4{
 }
 
 .db-footer-note{
-	font-size: 18px;
-	line-height: 30px;
+	font-size: 20px;
+	line-height: 38px;
 }
 /************* END GENERIC **************/
 
@@ -116,8 +123,8 @@ div#home-section {
 }
 
 div.home-section-content {
-	padding-top: 60px;
-	padding-bottom: 95px;
+	padding-top: 52px;
+	padding-bottom: 65px;
 }
 
 .home-section-title {
@@ -128,7 +135,7 @@ div.home-section-content {
 
 .home-section-description {
 	font-size: 22px;
-	line-height: 28px;
+	line-height: 34px;
 	max-width: 550px;
 	padding-top: 53px;
 }
@@ -169,6 +176,7 @@ img#stakeholder-infographic {
 	padding-top: 15px;
 	padding-bottom: 15px;
 	line-height: 20px;
+	font-weight: 400;
 }
 
 /************* END HOME SECTION **************/
