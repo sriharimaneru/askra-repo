@@ -362,7 +362,12 @@ div.member-details {
 	color: white;
 }
 
-.member-description a:hover{
+#contact a {
+	text-decoration: none;
+	color: rgba(255, 255, 255, 0.4);
+}
+
+#about a:hover{
 	text-decoration: underline;
 }
 
