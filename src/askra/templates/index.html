@@ -24,15 +24,19 @@
 </script>
 
 <script type="text/javascript">
-$(function(){                       
+$(function(){  
+
+  <![if !IE]>
+   $("#body_wrapper").hide()
+  <![endif]>        
+  $("div").hide()          
   $(".data-building-icon-description").hide();
   $(".excel-icon").show(); 
   $(".icon-div").hover(function(){
     $(".data-building-icon-description").hide();
     $("."+this.id).show();
   });
-
-  var i = 2
+  var i = 1
   setInterval(function() {
     $('#home-section').css("background-image","url('static/img/bg_0"+i+".jpg')");
     if (++i == 4) i = 1;
@@ -42,6 +46,12 @@ $(function(){
 </script>
 </head>
 <body>
+
+<!--[if lt IE 11]> 
+<img src="{{STATIC_URL}}/img/ie_not_supported.png" style="width:100%"/>
+<![endif]-->    
+
+<div id="body_wrapper">  
 <div id="header">
 	<div class="section-content"> 
 		<h1 id="logo">Groupify</h1>
@@ -279,5 +289,6 @@ $(function(){
 <div id="footer">
 	<p id="footer-note">&#9400 Groupify.in 2012. All rights reserved </p>
 </div>
+</div>  
 </body>
 </html>
