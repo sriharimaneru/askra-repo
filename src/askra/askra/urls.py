@@ -15,6 +15,7 @@ urlpatterns = patterns('',
     url(r'^view_profile$', direct_to_template, {'template' : 'view_profile.html'}, name='view_profile'),    
     url(r'^reg-step-2$', direct_to_template, {'template' : 'reg-step-2.html'}, name='reg-2'),  
     url(r'^reg-step-3$', direct_to_template, {'template' : 'reg-step-3.html'}, name='reg-3'),
+    (r'^search/', include('haystack.urls')),
     # url(r'^askra/', include('askra.foo.urls')),
 
     # Uncomment the admin/doc line below to enable admin documentation:

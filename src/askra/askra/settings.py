@@ -144,6 +144,7 @@ INSTALLED_APPS = (
     'tag',
     'userprofile',
     'south',
+    'haystack',
 )
 
 # A sample logging configuration. The only tangible logging
@@ -174,6 +175,13 @@ LOGGING = {
         },
     }
 }
+
+
+HAYSTACK_SEARCH_RESULTS_PER_PAGE = 12
+HAYSTACK_SITECONF = 'askra.search_sites'
+HAYSTACK_SEARCH_ENGINE = 'solr'
+HAYSTACK_SOLR_URL = 'http://127.0.0.1:8983/solr'
+
 
 # Load the local settings
 # This should be at the end for overriding
