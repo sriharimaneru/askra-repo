@@ -40,7 +40,7 @@ class UserProfileAdmin(admin.ModelAdmin):
                                                 ('email', 'phone_number',), ('photo', 'address', 'city',), ('about',),)}),
                  ("Website Urls", {"fields" : (('linked_url', 'facebook_url',), ('website_url', 'twitter_url'))}),]
     raw_id_fields = ('user',)
-    list_display = ('id', 'first_name', 'last_name', 'role', 'profile_status',)
+    list_display = ('id', 'first_name', 'last_name', 'email', 'phone_number', 'city', 'role', 'profile_status', )
     list_filter = ('role', 'profile_status', 'city')
     search_fields = ('first_name', 'last_name', 'email',)
     inlines = (StudentSectionInline, EmployementDetailInline, HigherEducationDetailInline, FacultySectionInline,
