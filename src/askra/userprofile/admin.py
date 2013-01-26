@@ -34,18 +34,38 @@ class FacultySectionInline(admin.TabularInline):
 class UserTagInline(admin.TabularInline):
     model = UserTag
     extra=1   
+
               
+class YOGListFilter(admin.SimpleListFilter):
+    title = "Year of Graduation"
+    parameter_name='yog'
+
+    def lookups(self, request, model_admin):
+        retval = ()
+        for year_of_graduation in StudentSection.objects.values('year_of_graduation').distinct():
+            retval += ((year_of_graduation["year_of_graduation"], str(year_of_graduation["year_of_graduation"])),)
+
+        return retval
+
+
+    def queryset(self, request, queryset):
+        #return queryset.all()
+        print self.value()
+        if self.value():
+            return queryset.filter(studentsection__year_of_graduation = self.value())
+        else:
+            return queryset.all()
+
 class UserProfileAdmin(admin.ModelAdmin):
     fieldsets = [("Basic Details", {"fields" : (('user', 'role', 'profile_status'), ('first_name','last_name', 'gender'), 
                                                 ('email', 'phone_number',), ('photo', 'address', 'city',), ('about',),)}),
                  ("Website Urls", {"fields" : (('linked_url', 'facebook_url',), ('website_url', 'twitter_url'))}),]
     raw_id_fields = ('user',)
-    list_display = ('id', 'first_name', 'last_name', 'email', 'phone_number', 'city', 'role', 'profile_status', )
-    list_filter = ('role', 'profile_status', 'city')
+    list_display = ('id', 'first_name', 'last_name', 'get_branch', 'get_year_of_graduation', 'email', 'phone_number', 'city', 'role', 'profile_status', )
+    list_filter = ('role', 'profile_status', 'city', YOGListFilter)
     search_fields = ('first_name', 'last_name', 'email',)
     inlines = (StudentSectionInline, EmployementDetailInline, HigherEducationDetailInline, FacultySectionInline,
                UserTagInline, )
- 
 
 class ErrorRowInline(admin.TabularInline):
     model = ErrorRow

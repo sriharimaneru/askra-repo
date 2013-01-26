@@ -105,6 +105,23 @@ class UserProfile(models.Model):
 
         return self
 
+    def get_branch(self):
+        if(StudentSection.objects.filter(userprofile=self)):
+            if(StudentSection.objects.filter(userprofile=self)[0].branch):
+                return StudentSection.objects.filter(userprofile=self)[0].branch.branch
+        else:
+            return ""
+
+    get_branch.short_description = "Branch"
+
+    def get_year_of_graduation(self):
+        if(StudentSection.objects.filter(userprofile=self)):
+            return StudentSection.objects.filter(userprofile=self)[0].year_of_graduation
+        else:
+            return ""
+
+    get_year_of_graduation.short_description = "Graudation Year"
+
     
 class Branch(models.Model):
     branch = models.CharField(max_length=200, null=True, blank=True)
