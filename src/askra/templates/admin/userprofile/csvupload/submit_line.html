@@ -1,0 +1,4 @@
+{% load i18n %}
+<div class="submit-row">
+{% if show_save_and_continue %}<input type="submit" value="{% trans 'Save and continue editing' %}" name="_continue" {{ onclick_attrib }}/>{% endif %}
+</div>

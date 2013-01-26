@@ -2,7 +2,8 @@ from django.contrib import admin
 from userprofile.models import UserProfile, City, Branch, StudentSection, \
                                Employer, JobDesignation, JobDomain, EmployementDetail, \
                                College, Degree, HigherEducationDetail, Department, \
-                               FacultyDesignation, FacultySection, UserTag, HigherEducationBranch, CsvUpload, ErrorRow
+                               FacultyDesignation, FacultySection, UserTag, HigherEducationBranch, CsvUpload, ErrorRow, \
+                               XlsUpload
 
 class CityAdmin(admin.ModelAdmin):
     list_display = ('city', 'state', 'country')
@@ -36,7 +37,7 @@ class UserTagInline(admin.TabularInline):
               
 class UserProfileAdmin(admin.ModelAdmin):
     fieldsets = [("Basic Details", {"fields" : (('user', 'role', 'profile_status'), ('first_name','last_name', 'gender'), 
-                                                ('email', 'phone_number',), ('photo', 'city',), ('about',),)}),
+                                                ('email', 'phone_number',), ('photo', 'address', 'city',), ('about',),)}),
                  ("Website Urls", {"fields" : (('linked_url', 'facebook_url',), ('website_url', 'twitter_url'))}),]
     raw_id_fields = ('user',)
     list_display = ('id', 'first_name', 'last_name', 'role', 'profile_status',)
@@ -46,11 +47,15 @@ class UserProfileAdmin(admin.ModelAdmin):
                UserTagInline, )
  
 
-class ErrorRowInline(admin.StackedInline):
+class ErrorRowInline(admin.TabularInline):
     model = ErrorRow
        
 class CsvUploadAdmin(admin.ModelAdmin):
     inlines = (ErrorRowInline, )
+    list_display = ('uploaded_file','description')
+
+class XlsUploadAdmin(admin.ModelAdmin):
+    list_display = ('uploaded_file','description')
     
 admin.site.register(City, CityAdmin)
 admin.site.register(UserProfile, UserProfileAdmin)
@@ -64,6 +69,7 @@ admin.site.register(Department)
 admin.site.register(FacultyDesignation)
 admin.site.register(HigherEducationBranch)
 admin.site.register(CsvUpload, CsvUploadAdmin)
+admin.site.register(XlsUpload, XlsUploadAdmin)
 
 
 
