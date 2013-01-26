@@ -385,3 +385,28 @@ div#footer {
 	background: #3D474D;
 	background-origin: padding-box;
 }
+
+/******************Start Search Page ***********************/
+div#search p, div#search label{
+	color: #333;
+	text-shadow: none;
+}
+
+.profile_summary {
+	width: 200px;
+	border: 1px black solid;
+	color: black;
+	padding: 5px 5px;
+	margin: 5px 5px;
+}
+
+.profile_summary .graduation_tag{
+	color: #867F7F;
+	font-size: 12px;
+}
+
+
+
+
+
+/******************End Search Page ***********************/
