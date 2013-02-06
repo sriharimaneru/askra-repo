@@ -1,0 +1,1146 @@
+[
+  {
+    "pk": 1,
+    "model": "userprofile.city",
+    "fields": {
+      "city": "Hyderabad",
+      "state": "Andhra Pradesh",
+      "country": "India"
+    }
+  },
+  {
+    "pk": 2,
+    "model": "userprofile.city",
+    "fields": {
+      "city": "Davanagere",
+      "state": null,
+      "country": null
+    }
+  },
+  {
+    "pk": 4,
+    "model": "userprofile.city",
+    "fields": {
+      "city": "Warangal",
+      "state": null,
+      "country": null
+    }
+  },
+  {
+    "pk": 5,
+    "model": "userprofile.city",
+    "fields": {
+      "city": "Secunderabad",
+      "state": null,
+      "country": null
+    }
+  },
+  {
+    "pk": 6,
+    "model": "userprofile.city",
+    "fields": {
+      "city": "Bangalore",
+      "state": "Karnataka",
+      "country": "India"
+    }
+  },
+  {
+    "pk": 7,
+    "model": "userprofile.city",
+    "fields": {
+      "city": "Vijayawada",
+      "state": null,
+      "country": null
+    }
+  },
+  {
+    "pk": 8,
+    "model": "userprofile.city",
+    "fields": {
+      "city": "Delhi",
+      "state": null,
+      "country": null
+    }
+  },
+  {
+    "pk": 9,
+    "model": "userprofile.city",
+    "fields": {
+      "city": "Kochi",
+      "state": null,
+      "country": null
+    }
+  },
+  {
+    "pk": 10,
+    "model": "userprofile.city",
+    "fields": {
+      "city": "Trivandrum",
+      "state": null,
+      "country": null
+    }
+  },
+  {
+    "pk": 11,
+    "model": "userprofile.city",
+    "fields": {
+      "city": "Guntakal",
+      "state": null,
+      "country": null
+    }
+  },
+  {
+    "pk": 13,
+    "model": "userprofile.city",
+    "fields": {
+      "city": "Kolar",
+      "state": null,
+      "country": null
+    }
+  },
+  {
+    "pk": 15,
+    "model": "userprofile.city",
+    "fields": {
+      "city": "Mumbai",
+      "state": null,
+      "country": null
+    }
+  },
+  {
+    "pk": 16,
+    "model": "userprofile.city",
+    "fields": {
+      "city": "Kakinada",
+      "state": null,
+      "country": null
+    }
+  },
+  {
+    "pk": 17,
+    "model": "userprofile.city",
+    "fields": {
+      "city": "Gurgaon",
+      "state": null,
+      "country": null
+    }
+  },
+  {
+    "pk": 18,
+    "model": "userprofile.city",
+    "fields": {
+      "city": "Nagpur",
+      "state": null,
+      "country": null
+    }
+  },
+  {
+    "pk": 19,
+    "model": "userprofile.city",
+    "fields": {
+      "city": "Faridabad",
+      "state": null,
+      "country": null
+    }
+  },
+  {
+    "pk": 20,
+    "model": "userprofile.city",
+    "fields": {
+      "city": "",
+      "state": "",
+      "country": "Finland"
+    }
+  },
+  {
+    "pk": 22,
+    "model": "userprofile.city",
+    "fields": {
+      "city": "Thrissur",
+      "state": null,
+      "country": null
+    }
+  },
+  {
+    "pk": 23,
+    "model": "userprofile.city",
+    "fields": {
+      "city": "Chennai",
+      "state": null,
+      "country": null
+    }
+  },
+  {
+    "pk": 24,
+    "model": "userprofile.city",
+    "fields": {
+      "city": "Jaipur",
+      "state": null,
+      "country": null
+    }
+  },
+  {
+    "pk": 25,
+    "model": "userprofile.city",
+    "fields": {
+      "city": "Louisiana",
+      "state": null,
+      "country": null
+    }
+  },
+  {
+    "pk": 26,
+    "model": "userprofile.city",
+    "fields": {
+      "city": "Narsaraopet",
+      "state": "Andhra Pradesh",
+      "country": "India"
+    }
+  },
+  {
+    "pk": 27,
+    "model": "userprofile.city",
+    "fields": {
+      "city": "Bethlehem",
+      "state": null,
+      "country": null
+    }
+  },
+  {
+    "pk": 28,
+    "model": "userprofile.city",
+    "fields": {
+      "city": "Ahmedabad",
+      "state": null,
+      "country": null
+    }
+  },
+  {
+    "pk": 29,
+    "model": "userprofile.city",
+    "fields": {
+      "city": "Maryland",
+      "state": null,
+      "country": null
+    }
+  },
+  {
+    "pk": 30,
+    "model": "userprofile.city",
+    "fields": {
+      "city": "Dubai",
+      "state": "",
+      "country": "UAE"
+    }
+  },
+  {
+    "pk": 33,
+    "model": "userprofile.city",
+    "fields": {
+      "city": "Hazira",
+      "state": null,
+      "country": null
+    }
+  },
+  {
+    "pk": 34,
+    "model": "userprofile.city",
+    "fields": {
+      "city": "Bapatla",
+      "state": null,
+      "country": null
+    }
+  },
+  {
+    "pk": 35,
+    "model": "userprofile.city",
+    "fields": {
+      "city": "",
+      "state": "",
+      "country": "Canada"
+    }
+  },
+  {
+    "pk": 36,
+    "model": "userprofile.city",
+    "fields": {
+      "city": "Nizamabad",
+      "state": null,
+      "country": null
+    }
+  },
+  {
+    "pk": 37,
+    "model": "userprofile.city",
+    "fields": {
+      "city": "Rajahmundry",
+      "state": "Andhra Pradesh",
+      "country": "India"
+    }
+  },
+  {
+    "pk": 38,
+    "model": "userprofile.city",
+    "fields": {
+      "city": "Mancherial",
+      "state": null,
+      "country": null
+    }
+  },
+  {
+    "pk": 39,
+    "model": "userprofile.city",
+    "fields": {
+      "city": "Ongole",
+      "state": null,
+      "country": null
+    }
+  },
+  {
+    "pk": 40,
+    "model": "userprofile.city",
+    "fields": {
+      "city": "Muzaffarnagar",
+      "state": "Uttar Pradesh",
+      "country": "India"
+    }
+  },
+  {
+    "pk": 41,
+    "model": "userprofile.city",
+    "fields": {
+      "city": "Gudiwada",
+      "state": null,
+      "country": null
+    }
+  },
+  {
+    "pk": 42,
+    "model": "userprofile.city",
+    "fields": {
+      "city": "Kuwait",
+      "state": "Kuwait",
+      "country": "Kuwait"
+    }
+  },
+  {
+    "pk": 43,
+    "model": "userprofile.city",
+    "fields": {
+      "city": "Chandrapur",
+      "state": "Maharashtra",
+      "country": "India"
+    }
+  },
+  {
+    "pk": 44,
+    "model": "userprofile.city",
+    "fields": {
+      "city": "Guntur",
+      "state": null,
+      "country": null
+    }
+  },
+  {
+    "pk": 45,
+    "model": "userprofile.city",
+    "fields": {
+      "city": "Tehri",
+      "state": null,
+      "country": null
+    }
+  },
+  {
+    "pk": 46,
+    "model": "userprofile.city",
+    "fields": {
+      "city": "",
+      "state": "",
+      "country": "Oman"
+    }
+  },
+  {
+    "pk": 48,
+    "model": "userprofile.city",
+    "fields": {
+      "city": "Sikkim",
+      "state": null,
+      "country": null
+    }
+  },
+  {
+    "pk": 49,
+    "model": "userprofile.city",
+    "fields": {
+      "city": "Atmakur",
+      "state": null,
+      "country": null
+    }
+  },
+  {
+    "pk": 50,
+    "model": "userprofile.city",
+    "fields": {
+      "city": "Eluru",
+      "state": null,
+      "country": null
+    }
+  },
+  {
+    "pk": 51,
+    "model": "userprofile.city",
+    "fields": {
+      "city": "Nellore",
+      "state": null,
+      "country": null
+    }
+  },
+  {
+    "pk": 52,
+    "model": "userprofile.city",
+    "fields": {
+      "city": "Srikakulam",
+      "state": null,
+      "country": null
+    }
+  },
+  {
+    "pk": 53,
+    "model": "userprofile.city",
+    "fields": {
+      "city": "Nandigama",
+      "state": null,
+      "country": null
+    }
+  },
+  {
+    "pk": 54,
+    "model": "userprofile.city",
+    "fields": {
+      "city": "Pulivendula",
+      "state": null,
+      "country": null
+    }
+  },
+  {
+    "pk": 55,
+    "model": "userprofile.city",
+    "fields": {
+      "city": "Raipur",
+      "state": "",
+      "country": ""
+    }
+  },
+  {
+    "pk": 57,
+    "model": "userprofile.city",
+    "fields": {
+      "city": "Kothagudem",
+      "state": "Andhra Pradesh",
+      "country": "India"
+    }
+  },
+  {
+    "pk": 58,
+    "model": "userprofile.city",
+    "fields": {
+      "city": "Jhansi",
+      "state": null,
+      "country": null
+    }
+  },
+  {
+    "pk": 59,
+    "model": "userprofile.city",
+    "fields": {
+      "city": "Kahalgaon",
+      "state": null,
+      "country": null
+    }
+  },
+  {
+    "pk": 60,
+    "model": "userprofile.city",
+    "fields": {
+      "city": "Ghaziabad",
+      "state": null,
+      "country": null
+    }
+  },
+  {
+    "pk": 61,
+    "model": "userprofile.city",
+    "fields": {
+      "city": "Bilaipur",
+      "state": null,
+      "country": null
+    }
+  },
+  {
+    "pk": 63,
+    "model": "userprofile.city",
+    "fields": {
+      "city": "Huzurabad",
+      "state": null,
+      "country": null
+    }
+  },
+  {
+    "pk": 64,
+    "model": "userprofile.city",
+    "fields": {
+      "city": "Indore",
+      "state": null,
+      "country": null
+    }
+  },
+  {
+    "pk": 65,
+    "model": "userprofile.city",
+    "fields": {
+      "city": "Chandigarh",
+      "state": null,
+      "country": null
+    }
+  },
+  {
+    "pk": 67,
+    "model": "userprofile.city",
+    "fields": {
+      "city": "Palasa",
+      "state": null,
+      "country": null
+    }
+  },
+  {
+    "pk": 68,
+    "model": "userprofile.city",
+    "fields": {
+      "city": "Tenali",
+      "state": null,
+      "country": null
+    }
+  },
+  {
+    "pk": 69,
+    "model": "userprofile.city",
+    "fields": {
+      "city": "Nizamabad",
+      "state": "Andhra Pradesh",
+      "country": "India"
+    }
+  },
+  {
+    "pk": 70,
+    "model": "userprofile.city",
+    "fields": {
+      "city": "Khammam",
+      "state": null,
+      "country": null
+    }
+  },
+  {
+    "pk": 71,
+    "model": "userprofile.city",
+    "fields": {
+      "city": "Marturu",
+      "state": null,
+      "country": null
+    }
+  },
+  {
+    "pk": 72,
+    "model": "userprofile.city",
+    "fields": {
+      "city": "Kaikalur",
+      "state": null,
+      "country": null
+    }
+  },
+  {
+    "pk": 73,
+    "model": "userprofile.city",
+    "fields": {
+      "city": "Ankleswar",
+      "state": null,
+      "country": null
+    }
+  },
+  {
+    "pk": 75,
+    "model": "userprofile.city",
+    "fields": {
+      "city": "",
+      "state": "Haryana",
+      "country": "India"
+    }
+  },
+  {
+    "pk": 76,
+    "model": "userprofile.city",
+    "fields": {
+      "city": "",
+      "state": "",
+      "country": "Australia"
+    }
+  },
+  {
+    "pk": 77,
+    "model": "userprofile.city",
+    "fields": {
+      "city": "Baroda",
+      "state": null,
+      "country": null
+    }
+  },
+  {
+    "pk": 78,
+    "model": "userprofile.city",
+    "fields": {
+      "city": "Visakhapatnam",
+      "state": "Andhra Pradesh",
+      "country": "India"
+    }
+  },
+  {
+    "pk": 79,
+    "model": "userprofile.city",
+    "fields": {
+      "city": "Darsi",
+      "state": null,
+      "country": null
+    }
+  },
+  {
+    "pk": 80,
+    "model": "userprofile.city",
+    "fields": {
+      "city": "Adilabad",
+      "state": null,
+      "country": null
+    }
+  },
+  {
+    "pk": 82,
+    "model": "userprofile.city",
+    "fields": {
+      "city": "Korba",
+      "state": null,
+      "country": null
+    }
+  },
+  {
+    "pk": 83,
+    "model": "userprofile.city",
+    "fields": {
+      "city": "Kolkata",
+      "state": null,
+      "country": null
+    }
+  },
+  {
+    "pk": 84,
+    "model": "userprofile.city",
+    "fields": {
+      "city": "Rourkela",
+      "state": null,
+      "country": null
+    }
+  },
+  {
+    "pk": 86,
+    "model": "userprofile.city",
+    "fields": {
+      "city": "Noida",
+      "state": null,
+      "country": null
+    }
+  },
+  {
+    "pk": 87,
+    "model": "userprofile.city",
+    "fields": {
+      "city": "",
+      "state": "",
+      "country": "UAE"
+    }
+  },
+  {
+    "pk": 88,
+    "model": "userprofile.city",
+    "fields": {
+      "city": "Abu Dhabi",
+      "state": "",
+      "country": "UAE"
+    }
+  },
+  {
+    "pk": 90,
+    "model": "userprofile.city",
+    "fields": {
+      "city": "Surathkal",
+      "state": null,
+      "country": null
+    }
+  },
+  {
+    "pk": 91,
+    "model": "userprofile.city",
+    "fields": {
+      "city": "Boston",
+      "state": "",
+      "country": "USA"
+    }
+  },
+  {
+    "pk": 92,
+    "model": "userprofile.city",
+    "fields": {
+      "city": "Kuppam",
+      "state": null,
+      "country": null
+    }
+  },
+  {
+    "pk": 93,
+    "model": "userprofile.city",
+    "fields": {
+      "city": "Covai",
+      "state": null,
+      "country": null
+    }
+  },
+  {
+    "pk": 94,
+    "model": "userprofile.city",
+    "fields": {
+      "city": "Chicago",
+      "state": "Illinois",
+      "country": "USA"
+    }
+  },
+  {
+    "pk": 95,
+    "model": "userprofile.city",
+    "fields": {
+      "city": "Bhilai",
+      "state": null,
+      "country": null
+    }
+  },
+  {
+    "pk": 96,
+    "model": "userprofile.city",
+    "fields": {
+      "city": "",
+      "state": "Orissa",
+      "country": "India"
+    }
+  },
+  {
+    "pk": 97,
+    "model": "userprofile.city",
+    "fields": {
+      "city": "Tumkur",
+      "state": null,
+      "country": null
+    }
+  },
+  {
+    "pk": 98,
+    "model": "userprofile.city",
+    "fields": {
+      "city": "Tallur",
+      "state": null,
+      "country": null
+    }
+  },
+  {
+    "pk": 99,
+    "model": "userprofile.city",
+    "fields": {
+      "city": "",
+      "state": "",
+      "country": "Saudi Arabia"
+    }
+  },
+  {
+    "pk": 100,
+    "model": "userprofile.city",
+    "fields": {
+      "city": "Nandyal",
+      "state": null,
+      "country": null
+    }
+  },
+  {
+    "pk": 101,
+    "model": "userprofile.city",
+    "fields": {
+      "city": "Srisailam",
+      "state": null,
+      "country": null
+    }
+  },
+  {
+    "pk": 102,
+    "model": "userprofile.city",
+    "fields": {
+      "city": "Ranchi",
+      "state": null,
+      "country": null
+    }
+  },
+  {
+    "pk": 104,
+    "model": "userprofile.city",
+    "fields": {
+      "city": "Parchur",
+      "state": null,
+      "country": null
+    }
+  },
+  {
+    "pk": 105,
+    "model": "userprofile.city",
+    "fields": {
+      "city": "Mathura",
+      "state": null,
+      "country": null
+    }
+  },
+  {
+    "pk": 108,
+    "model": "userprofile.city",
+    "fields": {
+      "city": "",
+      "state": "",
+      "country": "Japan"
+    }
+  },
+  {
+    "pk": 110,
+    "model": "userprofile.city",
+    "fields": {
+      "city": "Pune",
+      "state": null,
+      "country": null
+    }
+  },
+  {
+    "pk": 111,
+    "model": "userprofile.city",
+    "fields": {
+      "city": "Bhopal",
+      "state": null,
+      "country": null
+    }
+  },
+  {
+    "pk": 112,
+    "model": "userprofile.city",
+    "fields": {
+      "city": "",
+      "state": "",
+      "country": "United Kingdom"
+    }
+  },
+  {
+    "pk": 114,
+    "model": "userprofile.city",
+    "fields": {
+      "city": "Karimnagar",
+      "state": "Andhra Pradesh",
+      "country": "India"
+    }
+  },
+  {
+    "pk": 115,
+    "model": "userprofile.city",
+    "fields": {
+      "city": "Paloncha",
+      "state": null,
+      "country": null
+    }
+  },
+  {
+    "pk": 116,
+    "model": "userprofile.city",
+    "fields": {
+      "city": "",
+      "state": "",
+      "country": "Ireland"
+    }
+  },
+  {
+    "pk": 117,
+    "model": "userprofile.city",
+    "fields": {
+      "city": "Goa",
+      "state": null,
+      "country": null
+    }
+  },
+  {
+    "pk": 118,
+    "model": "userprofile.city",
+    "fields": {
+      "city": "Assam",
+      "state": null,
+      "country": null
+    }
+  },
+  {
+    "pk": 119,
+    "model": "userprofile.city",
+    "fields": {
+      "city": "Ernakulam",
+      "state": null,
+      "country": null
+    }
+  },
+  {
+    "pk": 121,
+    "model": "userprofile.city",
+    "fields": {
+      "city": "Dallas",
+      "state": null,
+      "country": null
+    }
+  },
+  {
+    "pk": 122,
+    "model": "userprofile.city",
+    "fields": {
+      "city": "Bangkok",
+      "state": null,
+      "country": null
+    }
+  },
+  {
+    "pk": 123,
+    "model": "userprofile.city",
+    "fields": {
+      "city": "Jammu and Kashmir",
+      "state": "",
+      "country": ""
+    }
+  },
+  {
+    "pk": 124,
+    "model": "userprofile.city",
+    "fields": {
+      "city": "Seoul",
+      "state": null,
+      "country": null
+    }
+  },
+  {
+    "pk": 125,
+    "model": "userprofile.city",
+    "fields": {
+      "city": "Udaipur",
+      "state": null,
+      "country": null
+    }
+  },
+  {
+    "pk": 126,
+    "model": "userprofile.city",
+    "fields": {
+      "city": "Singapore",
+      "state": "Singapore",
+      "country": "Singapore"
+    }
+  },
+  {
+    "pk": 127,
+    "model": "userprofile.city",
+    "fields": {
+      "city": "Malaysia",
+      "state": null,
+      "country": null
+    }
+  },
+  {
+    "pk": 128,
+    "model": "userprofile.city",
+    "fields": {
+      "city": "London",
+      "state": null,
+      "country": null
+    }
+  },
+  {
+    "pk": 129,
+    "model": "userprofile.city",
+    "fields": {
+      "city": "Lucknow",
+      "state": null,
+      "country": null
+    }
+  },
+  {
+    "pk": 131,
+    "model": "userprofile.city",
+    "fields": {
+      "city": "",
+      "state": "",
+      "country": "USA"
+    }
+  },
+  {
+    "pk": 132,
+    "model": "userprofile.city",
+    "fields": {
+      "city": "Bhubaneswar",
+      "state": "Orissa",
+      "country": "India"
+    }
+  },
+  {
+    "pk": 133,
+    "model": "userprofile.city",
+    "fields": {
+      "city": "Vijayanagaram",
+      "state": "Andhra Pradesh",
+      "country": "India"
+    }
+  },
+  {
+    "pk": 1,
+    "model": "userprofile.citysynonym",
+    "fields": {
+      "city": 123,
+      "name": "J&K"
+    }
+  },
+  {
+    "pk": 2,
+    "model": "userprofile.citysynonym",
+    "fields": {
+      "city": 7,
+      "name": "VJA"
+    }
+  },
+  {
+    "pk": 3,
+    "model": "userprofile.citysynonym",
+    "fields": {
+      "city": 126,
+      "name": "Sng'pore"
+    }
+  },
+  {
+    "pk": 4,
+    "model": "userprofile.citysynonym",
+    "fields": {
+      "city": 133,
+      "name": "Viz'Ngrm"
+    }
+  },
+  {
+    "pk": 5,
+    "model": "userprofile.citysynonym",
+    "fields": {
+      "city": 114,
+      "name": "Karim Nagar"
+    }
+  },
+  {
+    "pk": 6,
+    "model": "userprofile.citysynonym",
+    "fields": {
+      "city": 123,
+      "name": "Bh'war"
+    }
+  },
+  {
+    "pk": 7,
+    "model": "userprofile.citysynonym",
+    "fields": {
+      "city": 7,
+      "name": "Vij. Wada"
+    }
+  },
+  {
+    "pk": 8,
+    "model": "userprofile.citysynonym",
+    "fields": {
+      "city": 78,
+      "name": "Vizag"
+    }
+  },
+  {
+    "pk": 9,
+    "model": "userprofile.citysynonym",
+    "fields": {
+      "city": 36,
+      "name": "Niz'bad"
+    }
+  },
+  {
+    "pk": 10,
+    "model": "userprofile.citysynonym",
+    "fields": {
+      "city": 57,
+      "name": "Kth'gudem"
+    }
+  },
+  {
+    "pk": 11,
+    "model": "userprofile.citysynonym",
+    "fields": {
+      "city": 43,
+      "name": "Chndr'pur"
+    }
+  },
+  {
+    "pk": 12,
+    "model": "userprofile.citysynonym",
+    "fields": {
+      "city": 40,
+      "name": "Mzf'nagar"
+    }
+  },
+  {
+    "pk": 13,
+    "model": "userprofile.citysynonym",
+    "fields": {
+      "city": 37,
+      "name": "R'mundry"
+    }
+  },
+  {
+    "pk": 14,
+    "model": "userprofile.citysynonym",
+    "fields": {
+      "city": 83,
+      "name": "Calcutta"
+    }
+  },
+  {
+    "pk": 15,
+    "model": "userprofile.citysynonym",
+    "fields": {
+      "city": 8,
+      "name": "N'Delhi"
+    }
+  },
+  {
+    "pk": 16,
+    "model": "userprofile.citysynonym",
+    "fields": {
+      "city": 26,
+      "name": "N'raopet"
+    }
+  },
+  {
+    "pk": 17,
+    "model": "userprofile.citysynonym",
+    "fields": {
+      "city": 40,
+      "name": "Muz'fr'ngr"
+    }
+  }
+]
