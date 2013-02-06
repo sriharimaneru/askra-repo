@@ -180,3 +180,12 @@ def profile_bulk_upload(request,x):
     else:
         form = ProfileBulkUploadForm()
     return render(request, "profile_bulk_upload.html", {'form':form, })
+
+def draw_charts(request, x):
+    dict = {}
+    for yog in StudentSection.objects.values('year_of_graduation').distinct():
+        year = yog["year_of_graduation"]
+        number = UserProfile.objects.filter(studentsection__year_of_graduation=year).count()
+        dict[str(year)] = number
+    
+    return render_to_response("reports.html", RequestContext(request, {'data':dict,}))

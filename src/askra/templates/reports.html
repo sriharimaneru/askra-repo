@@ -1,0 +1,79 @@
+{% load userprofile_tags %}
+
+<html>
+  <head>
+    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+    <script type="text/javascript">
+      google.load("visualization", "1", {packages:["corechart"]});
+      google.setOnLoadCallback(drawCharts);
+      function drawCharts() {
+
+        var counter=1
+
+        var options = {
+          title: 'Alumni Data Collection Progress',
+          hAxis: {title: 'Year', titleTextStyle: {color: 'red'}},
+          animation: {duration: 2000, easing: 'out'},
+          isStacked: true,
+          bar: {groupWidth: '90%'},
+          chartArea: {width: '60%', height: '70%'},
+          backgroundColor: '#ffeeff'
+        };
+
+        var chart = new google.visualization.ColumnChart(document.getElementById('chart_div'));
+
+         var js_dict = {
+              {% for k, v in data.items %}
+              "{{ k }}": "{{ v }}"{% if not forloop.last %},{% endif %}
+              {% endfor %}
+        };
+        console.log(js_dict[2001]);
+
+        function newChart(data) {
+        /*  //var data = google.visualization.arrayToDataTable([
+          //  ['Year', 'Alumni profiles added'],
+          //  for(var year in js_dict)
+          //  {
+          //    [year, js_dict[year]]
+          //  }
+            //{% for year, number in data.items %}
+            //[{{year}},  {{number}}],
+            //{% endfor %}
+          //]); */
+
+          var data = new google.visualization.DataTable();
+          data.addColumn('string', 'year');
+          data.addColumn('number', 'Alumni profiles collected');
+          data.addColumn('number', 'Remaining Alumni Profiles');
+
+          for(var year in js_dict)
+          {
+            value = parseInt(js_dict[year]);
+            data.addRow([year, value, value]);
+          }
+          chart.draw(data, options);
+        }
+
+        /*google.visualization.events.addListener(chart, 'ready', function() {
+            if(counter==1)
+            {
+              //newChart(20);
+            }
+            counter=2;
+            //if(counter<=10)
+            //{
+              //newChart(++counter);
+            //}
+          });
+        */
+
+        newChart(1);
+
+      }
+    </script>
+  </head>
+  <body>
+    <div id="chart_div" style="width: 900px; height: 500px; margin: auto;"></div><br>
+    <div id="pie_chart" style="width: 900px; height: 500px; margin: auto;"></div>
+  </body>
+</html>
