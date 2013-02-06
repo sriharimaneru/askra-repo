@@ -4,8 +4,13 @@ from tag.models import Tag
 from calendar import calendar
 import csv
 from django.core.exceptions import ObjectDoesNotExist
-import re
+from django.core.exceptions import MultipleObjectsReturned
 from xlrd import open_workbook
+from django.db.models import Q
+import logging
+from utils import *
+
+log = logging.getLogger('GROUPIFY')
 
 ALUMNI = 0
 STUDENT = 1
@@ -45,16 +50,27 @@ ACTION_CHOICES = ((IGNORE, "Ignore"),
             
 
 class City(models.Model):
-    city = models.CharField(max_length=150)
+    city = models.CharField(max_length=150,null=True, blank=True, unique=True)
     state = models.CharField(max_length=150,null=True, blank=True)
     country = models.CharField(max_length=150,null=True, blank=True)
     
     def __unicode__(self):
-        return self.city
+        if(self.city):
+            return self.city
+        elif(self.state):
+            return self.state
+        else:
+            return self.country
     
     class Meta:
         verbose_name_plural = "Cities"
 
+class CitySynonym(models.Model):
+    city = models.ForeignKey(City)
+    name = models.CharField(max_length=100)
+
+    def __unicode__(self):
+        return self.name
 
 class UserProfile(models.Model):
     user = models.ForeignKey(User, null=True, blank=True)
@@ -94,14 +110,15 @@ class UserProfile(models.Model):
 
     def set_city(self, value):
         if(value):
-            cities=City.objects.filter(city=value)
+            cities=City.objects.filter(Q(city__iexact=value) | Q(state__iexact=value) | Q(country__iexact=value))
             if(cities):
                 self.city = cities[0]
             else:
-                city = City(city=value)
-                city.save()
-                print "Created a new city: [" + city.city + "]"
-                self.city = city
+                synonyms=CitySynonym.objects.filter(name__iexact=value)
+                if(synonyms):
+                    self.city = synonyms[0].city
+                else:
+                    log.debug("IMPORTANT: City not added: [" + value + "]")
 
         return self
 
@@ -136,6 +153,13 @@ class Branch(models.Model):
     class Meta:
         verbose_name_plural = "Branches"
 
+class BranchSynonym(models.Model):
+    branch = models.ForeignKey(Branch)
+    name = models.CharField(max_length=100)
+
+    def __unicode__(self):
+        return self.name
+
 class StudentSection(models.Model):
     userprofile = models.ForeignKey(UserProfile)
     roll_num = models.CharField(max_length=20, null=True, blank=True)
@@ -147,16 +171,17 @@ class StudentSection(models.Model):
 
     def set_branch(self, value):
         if(value):
-            branches=Branch.objects.filter(branch__icontains=value)
+            branches=Branch.objects.filter(branch__iexact=value)
             if(branches):
                 self.branch=branches[0]
             else:
-                print "Could not find branch [" + value + "]. Therefore not setting the value"
-
+                synonyms=BranchSynonym.objects.filter(name__iexact=value)
+                if(synonyms):
+                    self.branch=synonyms[0].branch
+                else:
+                    log.debug("Could not find branch [" + value + "]. Therefore not setting the value")
         return self
 
-    
-  
     
 class Employer(models.Model):
     name = models.CharField(max_length=200)
@@ -247,13 +272,13 @@ class CsvUpload(models.Model):
     description = models.TextField(blank=True, null=True)
     
     def save(self,**kwargs):
-        print self.description
+        log.debug(self.description)
         reader = csv.DictReader(self.uploaded_file)
         for row in reader:
             first_name = row['First Name']
             last_name = row['Last Name']
             phone_number = row['Phone Number']
-            emailErrorRow = self.validEmailId(row['Email'])
+            emailErrorRow = isValidEmailId(row['Email'])
             if(emailErrorRow is True):
                 email = row['Email']
             else:
@@ -276,27 +301,17 @@ class CsvUpload(models.Model):
                                            phone_number=phone_number)
                 text = "Added new profile with email ID [" + email + "]"
 
-            print text
+            log.debug(text)
             user_profile.set_gender(gender)
             user_profile.set_role(role)
             user_profile.set_city(city)
             user_profile.save()
                 
-        print "Bulk upload successful"
+        log.debug("Bulk upload successful")
         super(CsvUpload, self).save(**kwargs)
         if(emailErrorRow is not True):
             errorRow.csv_file=self;
             errorRow.save()
-
-
-    def validEmailId(self,email):
-        if(re.match('[^@]+@[^@]+\.[^@]+',email) is None):
-            print "Email ID "+email+" is invalid! Creating an error row"
-            errorRow = ErrorRow(csv_file=self,name='Invalid Email',reason='Email ID '+email+' is invalid')
-            return errorRow
-        else:
-            print "Email ID "+email+" is valid!"
-            return True
     
     
 class ErrorRow(models.Model):
@@ -315,23 +330,22 @@ class ErrorRow(models.Model):
         
         super(ErrorRow, self).save(**kwargs)
 
-
 class XlsUpload(models.Model):
     uploaded_file = models.FileField(upload_to="data/upload_files/", blank=False, null=False)
     description = models.TextField(blank=True, null=True)
     
     def save(self,**kwargs):
         wb = open_workbook(file_contents=self.uploaded_file.read())
-        print "Opening workbook ["+self.uploaded_file.url+"] to bulk upload profiles"
+        log.debug("Opening workbook ["+self.uploaded_file.url+"] to bulk upload profiles")
         for s in wb.sheets():
-            print "Sheet: ["+s.name+"], Num Rows: ["+str(s.nrows)+"], Num Cols: ["+str(s.ncols)+"]"
+            log.debug("Sheet: ["+s.name+"], Num Rows: ["+str(s.nrows)+"], Num Cols: ["+str(s.ncols)+"]")
             colIndex = {}
             for row in range(s.nrows):
                 if(row==0): #Header
                     for col in range(s.ncols):
                         header = (str(s.cell(row,col).value)).lower()
                         colIndex[header] = col
-                    print "Resulting colIndex Map index : "+str(colIndex)
+                    #log.debug("Resulting colIndex Map index : "+str(colIndex))
                 else: #Data
                     name, mobile, email, branch, city, address, yog, rollno = '','','','','','',0,0
                     first_name, last_name = '',''
@@ -340,8 +354,11 @@ class XlsUpload(models.Model):
                     #Add all fields here.
                     if(colIndex.get('email') is not None):
                         email = str(s.cell(row,colIndex['email']).value)
+                        if(email!='' and (isValidEmailId(email) is False)):
+                            log.debug("The email ID [" + email + "] is invalid. Ignoring it.")
+                            email='' #For invalid email ID treat it as if the email ID is not present
                     else:
-                        print "Email does not exist in the excel sheet"
+                        log.debug("Email does not exist in the excel sheet")
 
                     if(colIndex.get('name') is not None):
                         name = str(s.cell(row,colIndex['name']).value)
@@ -364,18 +381,31 @@ class XlsUpload(models.Model):
                         address = (str(s.cell(row,colIndex['address']).value))
                     
                     if(colIndex.get('rollno') is not None):
-                        rollno = int(s.cell(row,colIndex['rollno']).value)
+                        rollnostr = s.cell(row,colIndex['rollno']).value
+                        if(rollnostr==''):
+                            rollno=0
+                        elif(isValidRollNo(rollnostr) is False):
+                            log.debug("The roll no [" +rollnostr+ "] is invalid. Ignoring it.")
+                            rollno=0
+                        else:
+                            rollno = int(rollnostr)
 
                     if(colIndex.get('yog') is not None):
-                        if(s.cell(row,colIndex['yog']).value != ''):
-                            yog = int(s.cell(row,colIndex['yog']).value)
+                        yogstr = s.cell(row,colIndex['yog']).value
+                        if(yogstr==''):
+                            yog=0
+                        elif(isValidYOG(yogstr) is False):
+                            log.debug("The YOG [" +yogstr+ "] is invalid. Ignoring it.")
+                            yog=0
+                        else:
+                            yog = int(yogstr)
 
                     if(email=='' and name==''): #Currently email and name are being used as keys to check duplicates, so do not accept profile with blank email ID and name
-                        print "Email ID and name are empty, so profile is being ignored"
-                        continue 
+                        log.debug("Email ID and name are empty, so profile is being ignored")
+                        continue
 
-                    #print "First Name: ["+first_name+"], Last Name: ["+last_name+"], Mobile: ["+mobile+"], Email: ["+email+"], Branch: ["+branch+"]"
-                    #print "City: ["+city+"], Address: ["+address+"], YOG: ["+ str(yog) +"], RollNo: ["+ str(rollno) + "]"
+                    log.debug("Details - First Name: ["+first_name+"], Last Name: ["+last_name+"], Email: ["+email+"], Branch: ["+branch+"]")
+                    #log.debug("Mobile: ["+mobile+"], City: ["+city+"], Address: ["+address+"], YOG: ["+ str(yog) +"], RollNo: ["+ str(rollno) + "]")
 
                     #Part 2: Set the values of UserProfile fields.
                     try:
@@ -383,7 +413,7 @@ class XlsUpload(models.Model):
                             user_profile=UserProfile.objects.get(email=email)
                             text = "A profile with email ID [" + email + "] already exists. Updated the other fields."
                         elif(name):
-                            user_profile=UserProfile.objects.get(first_name=first_name, last_name=last_name)
+                            user_profile=UserProfile.objects.get(first_name=first_name, last_name=last_name, studentsection__year_of_graduation=yog)
                             text = "A profile with name [" + name + "] already exists. Updated the other fields."
 
                             if first_name: 
@@ -403,13 +433,16 @@ class XlsUpload(models.Model):
                                                    role=ALUMNI)
                         text = "Added new profile with email ID [" + email + "] and name [" + name + "]"
 
+                    except MultipleObjectsReturned:
+                        text = "Seems like multiple profiles exist for [" +name+ "], email [" +email+ "]. Ignoring this row."
+
                     #Part 3: Set the foreign key fields
                     if(user_profile):
-                        print "Setting city for ["+user_profile.first_name+"] to ["+city+"]"
+                        #log.debug("Setting city for ["+user_profile.first_name+"] to ["+city+"]")
                         user_profile.set_city(city)
 
                     user_profile.save()
-                    print text
+                    log.debug(text)
 
                     #Part 4: Set other objects that have a relation to UserProfile
                     try:
@@ -418,15 +451,15 @@ class XlsUpload(models.Model):
                             student_section.roll_num=rollno;
                         if(yog):
                             student_section.year_of_graduation=yog;
-                        print "Student Section already exists. Updating values for [" + user_profile.first_name + "]"
+                        log.debug("Student Section already exists. Updating values for [" + name + "]")
                     except ObjectDoesNotExist:
                         student_section = StudentSection(userprofile=user_profile,
                                                          roll_num=rollno,
                                                          year_of_graduation=yog)
-                        print "Creating new student section for ["+ user_profile.first_name + "]"
+                        log.debug("Creating new student section for ["+ user_profile.first_name + "]")
                     
                     student_section.set_branch(branch)
                     student_section.save()
 
-        print "Bulk upload completed"
+        log.debug("Bulk upload completed")
         super(XlsUpload, self).save(**kwargs)

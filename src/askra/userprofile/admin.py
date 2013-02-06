@@ -3,7 +3,7 @@ from userprofile.models import UserProfile, City, Branch, StudentSection, \
                                Employer, JobDesignation, JobDomain, EmployementDetail, \
                                College, Degree, HigherEducationDetail, Department, \
                                FacultyDesignation, FacultySection, UserTag, HigherEducationBranch, CsvUpload, ErrorRow, \
-                               XlsUpload
+                               XlsUpload, CitySynonym, BranchSynonym
 
 class CityAdmin(admin.ModelAdmin):
     list_display = ('city', 'state', 'country')
@@ -90,6 +90,8 @@ admin.site.register(FacultyDesignation)
 admin.site.register(HigherEducationBranch)
 admin.site.register(CsvUpload, CsvUploadAdmin)
 admin.site.register(XlsUpload, XlsUploadAdmin)
+admin.site.register(CitySynonym)
+admin.site.register(BranchSynonym)
 
 
 
