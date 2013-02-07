@@ -39,6 +39,7 @@ class UserTagInline(admin.TabularInline):
 class YOGListFilter(admin.SimpleListFilter):
     title = "Year of Graduation"
     parameter_name='yog'
+    all_param_value='any'
 
     def lookups(self, request, model_admin):
         retval = ()
@@ -49,12 +50,14 @@ class YOGListFilter(admin.SimpleListFilter):
 
 
     def queryset(self, request, queryset):
-        #return queryset.all()
         print self.value()
         if self.value():
-            return queryset.filter(studentsection__year_of_graduation = self.value())
-        else:
-            return queryset.all()
+            if self.value() == self.all_param_value:
+                return queryset
+            else:
+                return queryset.filter(studentsection__year_of_graduation = self.value())
+        #else:
+        #    return queryset.all()
 
 class UserProfileAdmin(admin.ModelAdmin):
     fieldsets = [("Basic Details", {"fields" : (('user', 'role', 'profile_status'), ('first_name','last_name', 'gender'), 
@@ -66,6 +69,8 @@ class UserProfileAdmin(admin.ModelAdmin):
     search_fields = ('first_name', 'last_name', 'email',)
     inlines = (StudentSectionInline, EmployementDetailInline, HigherEducationDetailInline, FacultySectionInline,
                UserTagInline, )
+
+    change_list_template = "admin/change_list_filter_sidebar.html"
 
 class ErrorRowInline(admin.TabularInline):
     model = ErrorRow
