@@ -187,5 +187,8 @@ def draw_charts(request, x):
         year = yog["year_of_graduation"]
         number = UserProfile.objects.filter(studentsection__year_of_graduation=year).count()
         dict[str(year)] = number
+
+    totalalumcollected = UserProfile.objects.filter(role=0).count()
+    remainingalumdata = 30000 - totalalumcollected
     
-    return render_to_response("reports.html", RequestContext(request, {'data':dict,}))
+    return render_to_response("reports.html", RequestContext(request, {'columnchartdata':dict, 'totalalumdata': totalalumcollected, 'remainingalumdata': remainingalumdata, }))

@@ -1,14 +1,22 @@
-{% load userprofile_tags %}
-
 <html>
   <head>
+    <script src="{{STATIC_URL}}js/jquery-latest.min.js"></script> 
     <script type="text/javascript" src="https://www.google.com/jsapi"></script>
     <script type="text/javascript">
+      $(function(){
+        $('#mybutton').click(function() {
+          drawColumnChart();
+        })
+      });
       google.load("visualization", "1", {packages:["corechart"]});
       google.setOnLoadCallback(drawCharts);
       function drawCharts() {
 
-        var counter=1
+        drawColumnChart();
+        drawPieChart();
+      }
+
+      function drawColumnChart() {
 
         var options = {
           title: 'Alumni Data Collection Progress',
@@ -17,63 +25,69 @@
           isStacked: true,
           bar: {groupWidth: '90%'},
           chartArea: {width: '60%', height: '70%'},
-          backgroundColor: '#ffeeff'
+          backgroundColor: '#ffeeff',
+          vAxis: {minValue:0, maxValue:200}
         };
 
-        var chart = new google.visualization.ColumnChart(document.getElementById('chart_div'));
+        var chart = new google.visualization.ColumnChart(document.getElementById('column_chart'));
 
-         var js_dict = {
-              {% for k, v in data.items %}
+        var js_dict = {
+              {% for k, v in columnchartdata.items %}
               "{{ k }}": "{{ v }}"{% if not forloop.last %},{% endif %}
               {% endfor %}
         };
-        console.log(js_dict[2001]);
+        
+        var data = new google.visualization.DataTable();
+        data.addColumn('string', 'year');
+        data.addColumn('number', 'Collected');
+        data.addColumn('number', 'Remaining');  
 
-        function newChart(data) {
-        /*  //var data = google.visualization.arrayToDataTable([
-          //  ['Year', 'Alumni profiles added'],
-          //  for(var year in js_dict)
-          //  {
-          //    [year, js_dict[year]]
-          //  }
-            //{% for year, number in data.items %}
-            //[{{year}},  {{number}}],
-            //{% endfor %}
-          //]); */
-
-          var data = new google.visualization.DataTable();
-          data.addColumn('string', 'year');
-          data.addColumn('number', 'Alumni profiles collected');
-          data.addColumn('number', 'Remaining Alumni Profiles');
-
+        for(var year in js_dict)
+        {
+          value = Math.round(parseInt(js_dict[year])*0.1);
+          data.addRow([year, value, value]);
+        }
+        chart.draw(data, options);
+        var row, newvalue;
+        for(i=1; i<=10; i++)
+        {
+          row = 0, newvalue=0;
           for(var year in js_dict)
           {
-            value = parseInt(js_dict[year]);
-            data.addRow([year, value, value]);
+            newvalue = Math.round(parseInt(js_dict[year])*0.1*i);
+            data.setValue(row, 1, newvalue);
+            data.setValue(row, 2, newvalue);
+            row++;
           }
           chart.draw(data, options);
         }
+      }
 
-        /*google.visualization.events.addListener(chart, 'ready', function() {
-            if(counter==1)
-            {
-              //newChart(20);
-            }
-            counter=2;
-            //if(counter<=10)
-            //{
-              //newChart(++counter);
-            //}
-          });
-        */
+      function drawPieChart() {
 
-        newChart(1);
+        var options = {
+          title: 'Alumni Data Collection Progress',
+          animation: {duration: 2000, easing: 'out'},
+          chartArea: {width: '60%', height: '70%'},
+          backgroundColor: '#ffeeff',
+          is3D: true
+        };
 
+        var chart = new google.visualization.PieChart(document.getElementById('pie_chart'));
+        
+        var data = new google.visualization.DataTable();
+        data.addColumn('string', 'Category');
+        data.addColumn('number', 'Number');
+        data.addRow(['Collected', {{ totalalumdata }}]);
+        data.addRow(['Remaining', {{ remainingalumdata }}]);
+
+        chart.draw(data, options);
       }
     </script>
   </head>
   <body>
-    <div id="chart_div" style="width: 900px; height: 500px; margin: auto;"></div><br>
-    <div id="pie_chart" style="width: 900px; height: 500px; margin: auto;"></div>
+    <button id="mybutton">Draw again</button>
+    <div id="column_chart" style="width: 900px; height: 500px; margin: auto;"></div><br>
+    <div id="pie_chart" style="width: 450px; height: 250px; margin: auto;"></div
   </body>
 </html>
