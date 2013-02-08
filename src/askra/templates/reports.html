@@ -1,0 +1,93 @@
+<html>
+  <head>
+    <script src="{{STATIC_URL}}js/jquery-latest.min.js"></script> 
+    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+    <script type="text/javascript">
+      $(function(){
+        $('#mybutton').click(function() {
+          drawColumnChart();
+        })
+      });
+      google.load("visualization", "1", {packages:["corechart"]});
+      google.setOnLoadCallback(drawCharts);
+      function drawCharts() {
+
+        drawColumnChart();
+        drawPieChart();
+      }
+
+      function drawColumnChart() {
+
+        var options = {
+          title: 'Alumni Data Collection Progress',
+          hAxis: {title: 'Year', titleTextStyle: {color: 'red'}},
+          animation: {duration: 2000, easing: 'out'},
+          isStacked: true,
+          bar: {groupWidth: '90%'},
+          chartArea: {width: '60%', height: '70%'},
+          backgroundColor: '#ffeeff',
+          vAxis: {minValue:0, maxValue:200}
+        };
+
+        var chart = new google.visualization.ColumnChart(document.getElementById('column_chart'));
+
+        var js_dict = {
+              {% for k, v in columnchartdata.items %}
+              "{{ k }}": "{{ v }}"{% if not forloop.last %},{% endif %}
+              {% endfor %}
+        };
+        
+        var data = new google.visualization.DataTable();
+        data.addColumn('string', 'year');
+        data.addColumn('number', 'Collected');
+        data.addColumn('number', 'Remaining');  
+
+        for(var year in js_dict)
+        {
+          value = Math.round(parseInt(js_dict[year])*0.1);
+          data.addRow([year, value, value]);
+        }
+        chart.draw(data, options);
+        var row, newvalue;
+        for(i=1; i<=10; i++)
+        {
+          row = 0, newvalue=0;
+          for(var year in js_dict)
+          {
+            newvalue = Math.round(parseInt(js_dict[year])*0.1*i);
+            data.setValue(row, 1, newvalue);
+            data.setValue(row, 2, newvalue);
+            row++;
+          }
+          chart.draw(data, options);
+        }
+      }
+
+      function drawPieChart() {
+
+        var options = {
+          title: 'Alumni Data Collection Progress',
+          animation: {duration: 2000, easing: 'out'},
+          chartArea: {width: '60%', height: '70%'},
+          backgroundColor: '#ffeeff',
+          is3D: true
+        };
+
+        var chart = new google.visualization.PieChart(document.getElementById('pie_chart'));
+        
+        var data = new google.visualization.DataTable();
+        data.addColumn('string', 'Category');
+        data.addColumn('number', 'Number');
+        data.addRow(['Collected', {{ totalalumdata }}]);
+        data.addRow(['Remaining', {{ remainingalumdata }}]);
+
+        chart.draw(data, options);
+      }
+    </script>
+  </head>
+  <body>
+    <button id="mybutton">Draw again</button>
+    <div id="column_chart" style="width: 900px; height: 500px; margin: auto;"></div><br>
+    <div id="pie_chart" style="width: 450px; height: 250px; margin: auto;"></div
+  </body>
+</html>
