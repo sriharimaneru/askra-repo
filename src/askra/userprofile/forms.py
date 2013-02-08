@@ -47,3 +47,10 @@ class EditProfileEmploymentForm(forms.Form):
 
 class ProfileBulkUploadForm(forms.Form):
     uploaded_file = forms.FileField(label='Select a csv file', help_text='Maximum 1000 rows')
+    
+class ProfileSearchBasicForm(forms.Form):
+    name = forms.CharField(max_length=100, required=False)
+    branch = forms.CharField(max_length=100, required=False)
+    year_of_passing = forms.CharField(max_length=100, required=False)
+    
+    
