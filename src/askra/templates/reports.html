@@ -8,12 +8,13 @@
           drawColumnChart();
         })
       });
-      google.load("visualization", "1", {packages:["corechart"]});
+      google.load("visualization", "1", {packages:['corechart', 'gauge']});
       google.setOnLoadCallback(drawCharts);
       function drawCharts() {
 
         drawColumnChart();
         drawPieChart();
+        drawGaugeChart();
       }
 
       function drawColumnChart() {
@@ -83,11 +84,37 @@
 
         chart.draw(data, options);
       }
+
+      function drawGaugeChart() {
+
+        var options = {
+          width: 250, height: 250,
+          minorTicks: 5,
+          animation: {duration: 2000, easing: 'linear'},
+          max: 30000
+        };
+
+        var chart = new google.visualization.Gauge(document.getElementById('gauge'));
+
+        var data = google.visualization.arrayToDataTable([
+          ['Label', 'Value'],
+          ['Collected', 0]
+        ]);
+        chart.draw(data, options);
+
+        data = google.visualization.arrayToDataTable([
+          ['Label', 'Value'],
+          ['Collected', {{ totalalumdata }}]
+        ]);
+        chart.draw(data, options);
+
+      }
     </script>
   </head>
   <body>
     <button id="mybutton">Draw again</button>
     <div id="column_chart" style="width: 900px; height: 500px; margin: auto;"></div><br>
-    <div id="pie_chart" style="width: 450px; height: 250px; margin: auto;"></div
+    <div id="pie_chart" style="width: 450px; height: 250px; margin: auto;"></div>
+    <div id="gauge" style="width: 250px; height: 250px; margin: auto;"></div>
   </body>
 </html>
