@@ -1142,5 +1142,53 @@
       "city": 40,
       "name": "Muz'fr'ngr"
     }
+  },
+  {
+    "pk": 18,
+    "model": "userprofile.citysynonym",
+    "fields": {
+      "city": 4,
+      "name": "RECW"
+    }
+  },
+  {
+    "pk": 19,
+    "model": "userprofile.citysynonym",
+    "fields": {
+      "city": 99,
+      "name": "Saudi"
+    }
+  },
+  {
+    "pk": 20,
+    "model": "userprofile.citysynonym",
+    "fields": {
+      "city": 112,
+      "name": "UK"
+    }
+  },
+  {
+    "pk": 21,
+    "model": "userprofile.citysynonym",
+    "fields": {
+      "city": 126,
+      "name": "Sin'pore"
+    }
+  },
+  {
+    "pk": 22,
+    "model": "userprofile.citysynonym",
+    "fields": {
+      "city": 1,
+      "name": "Hyd"
+    }
+  },
+  {
+    "pk": 23,
+    "model": "userprofile.citysynonym",
+    "fields": {
+      "city": 6,
+      "name": "B'lore"
+    }
   }
 ]

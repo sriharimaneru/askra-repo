@@ -109,7 +109,10 @@ class UserProfile(models.Model):
         return self
 
     def set_city(self, value):
+        value=value.strip()
         if(value):
+            if('/' in value): #Multiple cities separated by '/'. We take the first one.
+                value = value.split('/')[0].strip()
             cities=City.objects.filter(Q(city__iexact=value) | Q(state__iexact=value) | Q(country__iexact=value))
             if(cities):
                 self.city = cities[0]
@@ -170,6 +173,7 @@ class StudentSection(models.Model):
         return self.branch.get_full_name() + " " + str(self.year_of_graduation)
 
     def set_branch(self, value):
+        value=value.strip()
         if(value):
             branches=Branch.objects.filter(branch__iexact=value)
             if(branches):

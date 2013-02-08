@@ -80,6 +80,14 @@
     }
   },
   {
+    "pk": 13,
+    "model": "userprofile.branch",
+    "fields": {
+      "course": "PhD",
+      "branch": ""
+    }
+  },
+  {
     "pk": 1,
     "model": "userprofile.branchsynonym",
     "fields": {
@@ -261,6 +269,14 @@
     "fields": {
       "name": "che",
       "branch": 5
+    }
+  },
+  {
+    "pk": 24,
+    "model": "userprofile.branchsynonym",
+    "fields": {
+      "name": "PhD",
+      "branch": 13
     }
   }
 ]
