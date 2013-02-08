@@ -75,7 +75,7 @@
     "pk": 10,
     "model": "userprofile.branch",
     "fields": {
-      "course": "M.Tech.",
+      "course": "M.Tech",
       "branch": ""
     }
   },

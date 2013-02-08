@@ -1,4 +1,6 @@
 from django.contrib import admin
+from django.core.exceptions import ObjectDoesNotExist
+from django.db.models import Q
 from userprofile.models import UserProfile, City, Branch, StudentSection, \
                                Employer, JobDesignation, JobDomain, EmployementDetail, \
                                College, Degree, HigherEducationDetail, Department, \
@@ -44,28 +46,51 @@ class YOGListFilter(admin.SimpleListFilter):
     def lookups(self, request, model_admin):
         retval = ()
         for year_of_graduation in StudentSection.objects.values('year_of_graduation').distinct():
-            retval += ((year_of_graduation["year_of_graduation"], str(year_of_graduation["year_of_graduation"])),)
+            retval += ((str(year_of_graduation["year_of_graduation"]), str(year_of_graduation["year_of_graduation"])),)
 
         return retval
 
-
     def queryset(self, request, queryset):
-        print self.value()
         if self.value():
             if self.value() == self.all_param_value:
                 return queryset
             else:
-                return queryset.filter(studentsection__year_of_graduation = self.value())
-        #else:
-        #    return queryset.all()
+                return queryset.filter(studentsection__year_of_graduation=int(self.value()))
+        else:
+            return queryset
+
+class BranchListFilter(admin.SimpleListFilter):
+    title = 'Branch'
+    parameter_name='branch'
+
+    def lookups(self, request, model_admin):
+        retval = ()
+        for branch in Branch.objects.all():
+            retval += ((branch.get_full_name(), branch.get_full_name()),)
+        return retval
+
+    def queryset(self, request, queryset):
+        print self.value()
+        if self.value():
+            try:
+                if ',' in self.value():
+                    (course, branch) = self.value().split(',', 1)
+                    selectedBranch=Branch.objects.get(course__iexact=course.strip(), branch__iexact=branch.strip())
+                else:
+                    selectedBranch=Branch.objects.get(Q(course__iexact=self.value()) | Q(branch__iexact=self.value()))
+                return queryset.filter(studentsection__branch=selectedBranch)
+            except ObjectDoesNotExist:
+                return queryset
+        else:
+            return queryset
 
 class UserProfileAdmin(admin.ModelAdmin):
     fieldsets = [("Basic Details", {"fields" : (('user', 'role', 'profile_status'), ('first_name','last_name', 'gender'), 
                                                 ('email', 'phone_number',), ('photo', 'address', 'city',), ('about',),)}),
                  ("Website Urls", {"fields" : (('linked_url', 'facebook_url',), ('website_url', 'twitter_url'))}),]
     raw_id_fields = ('user',)
-    list_display = ('id', 'first_name', 'last_name', 'get_branch', 'get_year_of_graduation', 'email', 'phone_number', 'city', 'role', 'profile_status', )
-    list_filter = ('role', 'profile_status', 'city', YOGListFilter)
+    list_display = ('id', 'first_name', 'last_name', 'get_course', 'get_branch', 'get_year_of_graduation', 'email', 'phone_number', 'city', 'role', 'profile_status', )
+    list_filter = ('role', 'profile_status', 'city', YOGListFilter, BranchListFilter)
     search_fields = ('first_name', 'last_name', 'email',)
     inlines = (StudentSectionInline, EmployementDetailInline, HigherEducationDetailInline, FacultySectionInline,
                UserTagInline, )
