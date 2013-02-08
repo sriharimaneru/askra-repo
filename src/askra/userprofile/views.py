@@ -7,6 +7,11 @@ from django.http import HttpResponseRedirect, Http404
 import csv
 from django.forms.util import ErrorList
 from django.core.exceptions import ObjectDoesNotExist
+from haystack.query import SearchQuerySet
+from models import *
+from forms import *
+from haystack.forms import SearchForm
+from forms import ProfileSearchBasicForm
 
 def show_profile(request, profile_id):
     if not profile_id:
@@ -180,6 +185,34 @@ def profile_bulk_upload(request,x):
     else:
         form = ProfileBulkUploadForm()
     return render(request, "profile_bulk_upload.html", {'form':form, })
+
+def search(request):
+	
+	context = {}   
+	context['request'] = request
+		
+	name = request.GET.get("name", '')
+	branch = request.GET.get("branch", '')
+	year = request.GET.get("year_of_passing", '')
+
+	
+
+		
+	sqs = SearchQuerySet().facet('branch')
+	sqs = sqs.facet('year_of_passing')
+	
+#	import pdb; pdb.set_trace()
+
+	if name or branch or year:
+		context['form'] = ProfileSearchBasicForm(request.GET)
+		sqs = sqs.auto_query(name + branch + year)
+	else:
+		context['form'] = ProfileSearchBasicForm()	
+	
+	context['results'] = sqs
+	context['facets'] = sqs.facet_counts()
+	
+	return render(request, "search/search.html", context)
 
 def draw_charts(request, x):
     dict = {}
