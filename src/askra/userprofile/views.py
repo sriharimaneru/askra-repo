@@ -233,5 +233,7 @@ def draw_charts(request, x):
 
     totalalumcollected = UserProfile.objects.filter(role=0).count()
     remainingalumdata = 30000 - totalalumcollected
+    percentalumdatacollected = 100*(totalalumcollected/30000.0)
     
-    return render_to_response("reports.html", RequestContext(request, {'columnchartdata':dict, 'totalalumdata': totalalumcollected, 'remainingalumdata': remainingalumdata, }))
+    return render_to_response("reports.html", RequestContext(request, {'columnchartdata':dict, 'totalalumdata': totalalumcollected, 
+                              'remainingalumdata': remainingalumdata, 'percentalumdatacollected': percentalumdatacollected, }))

@@ -9,6 +9,7 @@ from xlrd import open_workbook
 from django.db.models import Q
 import logging
 from utils import *
+import pdb
 
 log = logging.getLogger('GROUPIFY')
 
@@ -134,6 +135,15 @@ class UserProfile(models.Model):
 
     get_branch.short_description = "Branch"
 
+    def get_course(self):
+        if(StudentSection.objects.filter(userprofile=self)):
+            if(StudentSection.objects.filter(userprofile=self)[0].branch):
+                return StudentSection.objects.filter(userprofile=self)[0].branch.course
+        else:
+            return ""
+
+    get_course.short_description = "Course"
+
     def get_year_of_graduation(self):
         if(StudentSection.objects.filter(userprofile=self)):
             return StudentSection.objects.filter(userprofile=self)[0].year_of_graduation
@@ -148,7 +158,12 @@ class Branch(models.Model):
     course = models.CharField(max_length=200, null=True, blank=True)
     
     def get_full_name(self):
-        return self.course + ", " + self.branch
+        if(self.branch==''):
+            return self.course
+        elif(self.course==''):
+            return self.branch
+        else:
+            return self.course + ", " + self.branch
 
     def __unicode__(self):
         return self.get_full_name()
@@ -357,7 +372,7 @@ class XlsUpload(models.Model):
                     #Part 1: Extract all necessary values from the row.
                     #Add all fields here.
                     if(colIndex.get('email') is not None):
-                        email = str(s.cell(row,colIndex['email']).value)
+                        email = str(s.cell(row,colIndex['email']).value).strip()
                         if(email!='' and (isValidEmailId(email) is False)):
                             log.debug("The email ID [" + email + "] is invalid. Ignoring it.")
                             email='' #For invalid email ID treat it as if the email ID is not present
@@ -365,7 +380,7 @@ class XlsUpload(models.Model):
                         log.debug("Email does not exist in the excel sheet")
 
                     if(colIndex.get('name') is not None):
-                        name = str(s.cell(row,colIndex['name']).value)
+                        name = str(s.cell(row,colIndex['name']).value).strip()
                         if(name):
                             try:
                                 (first_name, last_name) = name.split(' ',1)
@@ -373,19 +388,24 @@ class XlsUpload(models.Model):
                                 first_name = name
                         
                     if(colIndex.get('mobile') is not None):
-                        mobile = str(s.cell(row,colIndex['mobile']).value)
+                        mobilestr = s.cell(row,colIndex['mobile']).value
+                        if type(mobilestr) is float: #to remove a trailing .0 for float numbers
+                            mobile=str(int(mobilestr)).strip()
+                            log.debug("Mobile number is ["+mobile+ "]")
+                        else:
+                            mobile = str(mobilestr).strip()
 
                     if(colIndex.get('branch') is not None):
-                        branch = str(s.cell(row,colIndex['branch']).value)
+                        branch = str(s.cell(row,colIndex['branch']).value).strip()
 
                     if(colIndex.get('city') is not None):
-                        city = str(s.cell(row,colIndex['city']).value)
+                        city = str(s.cell(row,colIndex['city']).value).strip()
 
                     if(colIndex.get('address') is not None):
-                        address = (str(s.cell(row,colIndex['address']).value))
+                        address = (str(s.cell(row,colIndex['address']).value)).strip()
                     
                     if(colIndex.get('rollno') is not None):
-                        rollnostr = s.cell(row,colIndex['rollno']).value
+                        rollnostr = s.cell(row,colIndex['rollno']).value.strip()
                         if(rollnostr==''):
                             rollno=0
                         elif(isValidRollNo(rollnostr) is False):
@@ -395,7 +415,7 @@ class XlsUpload(models.Model):
                             rollno = int(rollnostr)
 
                     if(colIndex.get('yog') is not None):
-                        yogstr = s.cell(row,colIndex['yog']).value
+                        yogstr = s.cell(row,colIndex['yog']).value.strip()
                         if(yogstr==''):
                             yog=0
                         elif(isValidYOG(yogstr) is False):
