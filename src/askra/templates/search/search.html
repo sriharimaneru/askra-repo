@@ -1,0 +1,71 @@
+<LINK rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/style.css"></LINK>
+
+<div style="background:#9E9898">
+
+<form method="get" action="/search">
+    <table>
+        <tbody>
+            {{ form.as_p }}
+            <tr>
+                <td>&nbsp;</td>
+                <td><input type="submit" value="Search"></td>
+            </tr>
+        </tbody>
+    </table>
+</form>
+
+{% if branch_facet_selected  %}
+<a href="{{ request.get_full_path }}&amp;branch_facet=">{{ branch_facet_selected }} X </a>
+{% endif %}
+<br>
+{% if year_facet_selected  %}
+<a href="{{ request.get_full_path }}&amp;year_of_passing_facet=">{{ year_facet_selected }} X </a>
+{% endif %}
+
+<div style="float:left; width:20%; background:#9E9898">
+    <dl>
+        {% if facets.fields.branch %}
+            <dt>Branch</dt>
+            {# Provide only the top 5 branchs #}
+            {% for branch in facets.fields.branch %}
+                {% if branch.1 %}
+                    {% if branch.0 == branch_facet_selected %}
+                        <dd><a href="{{ request.get_full_path }}&amp;branch_facet={{ branch.0|urlencode }}">{{ branch.0 }}</a> ({{ branch.1 }}) -- selected</dd>
+                    {% else %}
+                        <dd><a href="{{ request.get_full_path }}&amp;branch_facet={{ branch.0|urlencode }}">{{ branch.0 }}</a> ({{ branch.1 }})</dd>                        
+                    {% endif %}
+                {% else %}
+                    <dd>{{ branch.0 }}({{ branch.1 }})</dd>
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+    </dl>
+    <dl>
+        {% if facets.fields.year_of_passing %}
+            <dt>year</dt>
+            {# Provide only the top 5 year_of_passings #}
+            {% for year_of_passing in facets.fields.year_of_passing %}
+                {% if year_of_passing.1 %}
+                    {% if year_of_passing.0 == year_facet_selected %}
+                        <dd><a href="{{ request.get_full_path }}&amp;year_of_passing_facet={{ year_of_passing.0|urlencode }}">{{ year_of_passing.0 }}</a> ({{ year_of_passing.1 }}) -selected</dd>
+                    {% else %}
+                        <dd><a href="{{ request.get_full_path }}&amp;year_of_passing_facet={{ year_of_passing.0|urlencode }}">{{ year_of_passing.0 }}</a> ({{ year_of_passing.1 }})</dd>                      
+                    {% endif %}
+                {% else %}
+                    <dd>{{ year_of_passing.0 }}({{ year_of_passing.1 }})</dd>
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+    </dl>
+
+</div>
+<!-- End faceting -->
+<div style="float:left; width:80%; background:#9E9898">
+{% for result in results %}
+    <span>{{ result.name }}, &nbsp</span>
+{% empty %}
+    <p>Sorry, no results found.</p>
+{% endfor %}
+</div>
+<span class="cB"></span>
+</div>
