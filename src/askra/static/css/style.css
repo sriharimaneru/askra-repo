@@ -72,6 +72,10 @@ div#communication p, div#communication h1, div#communication h2, div#communicati
 	float: left;
 }
 
+.right{
+	float: right;
+}
+
 .db-footer-note{
 	font-size: 20px;
 	line-height: 38px;
@@ -415,6 +419,94 @@ div#search p, div#search label{
 	overflow-y: auto;
 	border: 1px solid;
 }
+
+
+div#search-content .section-title{
+	color: #6B9BB2;
+	text-shadow: none;
+}
+
+div#search-content label, div#search-content dd, div#search-content dt, div#search-content span, div#search-content p, div#search-content .section-subtitle{
+	color: #4D4D4D;
+	text-shadow: none;
+}
+
+div#search-content label, input{
+	display: block;
+}
+
+div#search-content label{
+	font-size: 12px;
+}
+
+form#search_form {
+	padding: 20px 0px;
+}
+
+div#search-content .fieldWrapper{
+	padding-right: 10px;
+}
+
+div#search-content select, div#search-content #id_name{
+	width: 200px;
+	height: 40px;
+}
+
+div#search-content input.search_submit{
+	width: 150px;
+	height: 40px;
+	background: #5BAD5B;
+	border: none;
+}
+
+div#search-content p.search_submit{
+	padding-top: 23px;
+}
+
+#facet-list{
+	width: 20%;
+}
+
+#search_results_panel{
+	width: 80%;
+}
+
+#search_results{
+	padding-left: 25px;
+}
+
+#name_div{
+	padding-left: 60px;
+}
+
+div#year_div{
+	padding-right: 20px;
+}
+
+div#facet-list a{
+	font-size: 15px;
+}
+
+#applied_facets .remove_facet{
+	padding-right: 20px;
+}
+
+.result_div{
+	width: 200px;
+	padding: 0px 16px;
+	background-color: #F1F1F1;
+	box-shadow: 0px 1px 3px #BEAFAF;
+	margin: 5px 5px;
+}
+
+#search_results_header{
+	margin-bottom: 20px;
+}
+
+div#facet-list .selected_facet{
+	color: #5BAD5B;
+}
+
 
 
 /******************End Search Page ***********************/

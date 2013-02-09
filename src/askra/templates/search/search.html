@@ -22,29 +22,32 @@
 {% endblock scripts %}
 
 {% block content %}
-<div style="background:#9E9898">
+<div id="search-content" class="section-content">
+<h2 class="section-title">We just started and this is a sample we are planning to do We just started and this is a sample of what we are planning to do</h2>    
 
-<form method="get" action="/search">
-    <table>
-        <tbody>
-            {{ form.as_p }}
-            <tr>
-                <td>&nbsp;</td>
-                <td><input type="submit" value="Search"></td>
-            </tr>
-        </tbody>
-    </table>
+<form id="search_form" action="/search" method="get">
+    {{ form.non_field_errors }}
+    <div id="name_div" class="fieldWrapper left">
+        {{ form.name.errors }}
+        <label for="id_name">Name</label>
+        {{ form.name }}
+    </div>
+    <div class="fieldWrapper left">
+        {{ form.branch.errors }}
+        <label for="id_branch">Branch</label>
+        {{ form.branch }}
+    </div>
+    <div id="year_div" class="fieldWrapper left">
+        {{ form.year_of_passing.errors }}
+        <label for="id_year_of_passing">Year of Passing</label>
+        {{ form.year_of_passing }}
+    </div>
+    <p class="search_submit"><input class="search_submit" class="left" type="submit" value="Search" /></p>
+    <span class="cB"></span>
+
 </form>
 
-{% if branch_facet_selected  %}
-<a href="{{ request.get_full_path }}&amp;branch_facet=">{{ branch_facet_selected }} X </a>
-{% endif %}
-<br>
-{% if year_facet_selected  %}
-<a href="{{ request.get_full_path }}&amp;year_of_passing_facet=">{{ year_facet_selected }} X </a>
-{% endif %}
-
-<div style="float:left; width:20%; background:#9E9898">
+<div id="facet-list" class="left">
     <dl id="branch_facet">
         {% if facets.fields.branch %}
             <dt>Branch</dt>
@@ -52,7 +55,7 @@
             {% for branch in facets.fields.branch %}
                 {% if branch.1 %}
                     {% if branch.0 == branch_facet_selected %}
-                        <dd><a href="{{ request.get_full_path }}&amp;branch_facet={{ branch.0|urlencode }}">{{ branch.0 }}</a> ({{ branch.1 }}) -- selected</dd>
+                        <dd><a class="selected_facet" href="{{ request.get_full_path }}&amp;branch_facet={{ branch.0|urlencode }}">{{ branch.0 }}</a> ({{ branch.1 }})</dd>
                     {% else %}
                         <dd><a href="{{ request.get_full_path }}&amp;branch_facet={{ branch.0|urlencode }}">{{ branch.0 }}</a> ({{ branch.1 }})</dd>                        
                     {% endif %}
@@ -69,7 +72,7 @@
             {% for year_of_passing in facets.fields.year_of_passing %}
                 {% if year_of_passing.1 %}
                     {% if year_of_passing.0 == year_facet_selected %}
-                        <dd><a href="{{ request.get_full_path }}&amp;year_of_passing_facet={{ year_of_passing.0|urlencode }}">{{ year_of_passing.0 }}</a> ({{ year_of_passing.1 }}) -selected</dd>
+                        <dd><a class="selected_facet" href="{{ request.get_full_path }}&amp;year_of_passing_facet={{ year_of_passing.0|urlencode }}">{{ year_of_passing.0 }}</a> ({{ year_of_passing.1 }})</dd>
                     {% else %}
                         <dd><a href="{{ request.get_full_path }}&amp;year_of_passing_facet={{ year_of_passing.0|urlencode }}">{{ year_of_passing.0 }}</a> ({{ year_of_passing.1 }})</dd>                      
                     {% endif %}
@@ -79,16 +82,36 @@
             {% endfor %}
         {% endif %}
     </dl>
+</div>
 
+<div id="search_results_panel" class="left">
+    <div id="search_results_header">
+        <div id="applied_facets" class="left">
+            {% if branch_facet_selected  %}
+                <a class="remove_facet" href="{{ request.get_full_path }}&amp;branch_facet=">{{ branch_facet_selected }} X </a>
+            {% endif %}
+            {% if year_facet_selected  %}
+                <a class="remove_facet" href="{{ request.get_full_path }}&amp;year_of_passing_facet=">{{ year_facet_selected }} X </a>
+            {% endif %}
+        </div>
+        <div id="num_results" class="right">
+            <p>Number of results : {{results.count}}</p>
+        </div>
+        <p class="cB"></p>
+    </div>
+    <div id="search_results">
+        {% for result in results %}
+            <div class="result_div left">
+            <h2 class="name section-subtitle">{{ result.name}}</h2>    
+            <p class="branch">{{ result.branch}}</p>    
+            <p class="year_of_passing">{{ result.year_of_passing}}</p>    
+            <p class="city">{{ result.branch}}</p>    
+            </div>
+        {% empty %}
+            <p>Sorry, no results found.</p>
+        {% endfor %}
+    </div>
 </div>
-<!-- End faceting -->
-<div style="float:left; width:80%; background:#9E9898">
-{% for result in results %}
-    <span>{{ result.name }}, &nbsp</span>
-{% empty %}
-    <p>Sorry, no results found.</p>
-{% endfor %}
 </div>
-<span class="cB"></span>
-</div>
+<p class="cB"></p>
 {% endblock content %}
