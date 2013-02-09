@@ -252,11 +252,36 @@ def search(request):
         context['city_facet_selected'] = ''        
 
     offsetvalue = int(offset)
-    results = sqs.order_by('name')[offsetvalue:offsetvalue+20]
+    results = sqs.order_by('name')
+    context['resultcount'] = results.count()
+    #results = results[offsetvalue:offsetvalue+20]
     context['results'] = results
 
-    querystring = request.get_full_path().split('?')[1]
+    #querystring = request.get_full_path()
+    #if('?' not in querystring):
+    #    querystring=''
+    #else:
+    #    querystring=querystring.split('?')[1]
+
+    '''
+    querystring=""
+    if(name!=''):
+        querystring+=('&name='+name)
+    if(branch!=''):
+        querystring+=('&branch='+branch)
+    if(year!=''):
+        querystring+=('&year_of_passing='+year)
+    
+    #querystring+='&offset='
+    
+    if(branch_facet!=''):
+        querystring+=('&branch_facet='+branch_facet)
+    if(year_facet!=''):
+        querystring+=('&year_facet='+year_facet)
+
+    print "Outgoing query string from search = [" +querystring+ "]"
     context['querystring'] = querystring
+    '''
     
     return render(request, "search/search.html", context)
 
@@ -278,14 +303,87 @@ def getsearchresults(request):
         sqs = sqs.auto_query(name + branch + year)
 
     results = sqs.auto_query(branch_facet + year_facet).order_by('name')[offsetvalue:offsetvalue+20]
+    print len(results)
 
     return results
 
 def ajaxresponse(request):
-    results = getsearchresults(request)
+    print "Incoming query to ajax = [" +request.get_full_path()+ "]"
+    #results = getsearchresults(request)
+
+    context = {}   
+    context['request'] = request
+        
+    name = request.GET.get("name", '')
+    branch = request.GET.get("branch", '')
+    year = request.GET.get("year_of_passing", '')
+    offset = request.GET.get("offset", '0')
+    
+    branch_facet = request.GET.get("branch_facet", '') 
+    year_facet = request.GET.get("year_of_passing_facet", '')    
+           
+    sqs = SearchQuerySet().facet('branch')
+    sqs = sqs.facet('year_of_passing')
+        
+    if name or branch or year:
+        context['form'] = ProfileSearchBasicForm(request.GET)
+        sqs = sqs.auto_query(name + branch + year)
+    else:
+        context['form'] = ProfileSearchBasicForm()
+    
+    context['facets'] = sqs.facet_counts()
+        
+    if branch_facet:
+        context['facets']['fields']['year_of_passing'] = sqs.auto_query(branch_facet).facet_counts()['fields']['year_of_passing']
+        context['branch_facet_selected'] = branch_facet
+    else:
+        context['branch_facet_selected'] = ''
+            
+    if year_facet:
+        context['facets']['fields']['branch'] = sqs.auto_query(year_facet).facet_counts()['fields']['branch']
+        context['year_facet_selected'] = year_facet
+    else:
+        context['year_facet_selected'] = ''
+
+    offsetvalue=0
+    if(offset!=''):
+        offsetvalue = int(offset)
+    results = sqs.auto_query(branch_facet + year_facet).order_by('name')
+    context['resultcount'] = results.count()
+    results = results[offsetvalue:offsetvalue+20]
+
+    querystring=""
+    if(name!=''):
+        querystring+=('&name='+name)
+    if(branch!=''):
+        querystring+=('&branch='+branch)
+    if(year!=''):
+        querystring+=('&year_of_passing='+year)
+
+    #querystring+=('&offset='+str(offsetvalue+20))
+    
+    if(branch_facet!=''):
+        querystring+=('&branch_facet='+branch_facet)
+    if(year_facet!=''):
+        querystring+=('&year_facet='+year_facet)
+
+    print "Outgoing query string from ajax = [" +querystring+ "]"
+    context['querystring'] = querystring
+
     html=""
-    for result in results:
-        html+="<span>" +result.name+ "</span><br><br>"
+    if not results:
+        html+="<p>Sorry, no results found.</p>\n"
+    else:
+        for result in results:
+            html+="<div class=\"result_div\">\n"
+            html+="<h2 class=\"name section-subtitle\">" +result.name+ "</h2>\n"
+            if(result.branch):
+                html+="<p class=\"branch\">" +result.branch+ "</p>\n"
+            if(result.year_of_passing):
+                html+="<p class=\"year_of_passing\">" +str(result.year_of_passing)+ "</p>\n"
+            if(result.branch):
+                html+="<p class=\"city\">" +result.branch+ "</p>\n"
+            html+="</div>\n"
     #print html
     return HttpResponse(html)
 
