@@ -187,32 +187,42 @@ def profile_bulk_upload(request,x):
     return render(request, "profile_bulk_upload.html", {'form':form, })
 
 def search(request):
-	
-	context = {}   
-	context['request'] = request
-		
-	name = request.GET.get("name", '')
-	branch = request.GET.get("branch", '')
-	year = request.GET.get("year_of_passing", '')
-
-	
-
-		
-	sqs = SearchQuerySet().facet('branch')
-	sqs = sqs.facet('year_of_passing')
-	
-#	import pdb; pdb.set_trace()
-
-	if name or branch or year:
-		context['form'] = ProfileSearchBasicForm(request.GET)
-		sqs = sqs.auto_query(name + branch + year)
-	else:
-		context['form'] = ProfileSearchBasicForm()	
-	
-	context['results'] = sqs
-	context['facets'] = sqs.facet_counts()
-	
-	return render(request, "search/search.html", context)
+    context = {}   
+    context['request'] = request
+        
+    name = request.GET.get("name", '')
+    branch = request.GET.get("branch", '')
+    year = request.GET.get("year_of_passing", '') 
+    
+    branch_facet = request.GET.get("branch_facet", '') 
+    year_facet = request.GET.get("year_of_passing_facet", '')    
+           
+    sqs = SearchQuerySet().facet('branch')
+    sqs = sqs.facet('year_of_passing')
+        
+    if name or branch or year:
+        context['form'] = ProfileSearchBasicForm(request.GET)
+        sqs = sqs.auto_query(name + branch + year)
+    else:
+        context['form'] = ProfileSearchBasicForm()
+    
+    context['facets'] = sqs.facet_counts()
+        
+    if branch_facet:
+        context['facets']['fields']['year_of_passing'] = sqs.auto_query(branch_facet).facet_counts()['fields']['year_of_passing']
+        context['branch_facet_selected'] = branch_facet
+    else:
+        context['branch_facet_selected'] = ''
+            
+    if year_facet:
+        context['facets']['fields']['branch'] = sqs.auto_query(year_facet).facet_counts()['fields']['branch']
+        context['year_facet_selected'] = year_facet
+    else:
+        context['year_facet_selected'] = ''
+        
+    context['results'] = sqs.auto_query(branch_facet + year_facet)
+    
+    return render(request, "search/search.html", context)
 
 def draw_charts(request, x):
     dict = {}
