@@ -50,7 +50,7 @@ class ProfileBulkUploadForm(forms.Form):
     
 class ProfileSearchBasicForm(forms.Form):
     name = forms.CharField(max_length=100, required=False)
-    branch = forms.CharField(max_length=100, required=False)
-    year_of_passing = forms.CharField(max_length=100, required=False)
-    
-    
+    branch = forms.ChoiceField(choices = [("", "All")] + [(branch.branch, branch.branch) for branch in Branch.objects.all()], required=False)
+    year_of_passing = forms.ChoiceField(choices = [("", "All")] + [(x,x) for x in range(1964, 2007)], required=False)
+
+
