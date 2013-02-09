@@ -1,7 +1,6 @@
 {% extends 'base.html' %}
 
 {% block scripts %}
-<script src="{{STATIC_URL}}js/jquery-latest.min.js"></script> 
 <!-- styles needed by jScrollPane -->
 <link type="text/css" href="{{STATIC_URL}}css/jquery.jscrollpane.css" rel="stylesheet" media="all" />
 
@@ -11,14 +10,24 @@
 <!-- the jScrollPane script -->
 <script type="text/javascript" src="{{STATIC_URL}}js/jquery.jscrollpane.min.js"></script>
 
+<script src="{{STATIC_URL}}js/jquery.masonry.min.js"></script>
+
 <LINK rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/style.css"></LINK>
 
 <script type="text/javascript">
     $(function()
     {
         $('.scroll-pane').jScrollPane();
+
+        $('#search_results').masonry({
+        // options
+            itemSelector : '.result_div',
+        });
+
     });
+
 </script>
+
 {% endblock scripts %}
 
 {% block content %}
@@ -101,11 +110,11 @@
     </div>
     <div id="search_results">
         {% for result in results %}
-            <div class="result_div left">
-            <h2 class="name section-subtitle">{{ result.name}}</h2>    
-            <p class="branch">{{ result.branch}}</p>    
-            <p class="year_of_passing">{{ result.year_of_passing}}</p>    
-            <p class="city">{{ result.branch}}</p>    
+            <div class="result_div">
+                <h2 class="name section-subtitle">{{ result.name}}</h2>    
+                <p class="branch">{{ result.branch}}</p>    
+                <p class="year_of_passing">{{ result.year_of_passing}}</p>    
+                <p class="city">{{ result.branch}}</p>    
             </div>
         {% empty %}
             <p>Sorry, no results found.</p>
