@@ -1,5 +1,6 @@
-<LINK rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/style.css"></LINK>
+{% extends 'base.html' %}
 
+{% block content %}
 <div style="background:#9E9898">
 
 <form method="get" action="/search">
@@ -69,3 +70,4 @@
 </div>
 <span class="cB"></span>
 </div>
+{% endblock content %}

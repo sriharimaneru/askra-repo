@@ -86,6 +86,9 @@ div#communication p, div#communication h1, div#communication h2, div#communicati
 	background-image: url(../img/bg_header.png);
 }
 
+#home-link {
+	text-decoration: none;
+}
 
 #logo {
 	padding-top: 25px;
