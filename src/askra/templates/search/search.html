@@ -17,38 +17,41 @@
 <script type="text/javascript">
     $(function()
     {
+        var offset=20
+
         $('.scroll-pane').jScrollPane();
 
-        $(window).scroll(function(){            
-            /*console.log("start")
+        /*$(window).scroll(function(){
+            console.log("start")
             console.log("scrolltop [" + $(window).scrollTop()+"]")
-            console.log("docscrollheight [" +document.body.scrollHeight+"]")
-            console.log("discrolltop [" +$('#searchresults').scrollTop()+ "]")
-            console.log("divheight [" +$('#searchresults').height()+ "]")
-            console.log("clHeight [" +document.documentElement.clientHeight+ "]")
-            //document.body.scrollHeight - $(this).scrollTop()  <= $(this).height()
-            console.log("end")*/
+            //console.log("docscrollheight [" +document.body.scrollHeight+"]")
+            console.log("divoffsettop [" +$('#search_results').offset().top+ "]")
+            console.log("divheight [" +$('#search_results').height()+ "]")
+            console.log("end")
         });
         
         $('#myButton').click(function()
         {
             $('div#loadmoreajaxloader').show();
             $.ajax({
-            url: "/ajaxsearch?{{querystring}}&offset=20",
+            url: "/ajaxsearch?{{querystring}}&offset="+offset.toString(),
             success: function(html)
             {
                 console.log(html);
                 if(html)
                 {
-                    $("#searchresults").append(html);
+                    $("#search_results").append(html);
                     $('div#loadmoreajaxloader').hide();
-                }else
+                    offset+=20
+                }
+                else
                 {
                     $('div#loadmoreajaxloader').html('<center>No more posts to show.</center>');
                 }
             }
             });
-        });
+        });*/
+
         $('#search_results').masonry({
         // options
             itemSelector : '.result_div',
@@ -133,7 +136,7 @@
             {% endif %}
         </div>
         <div id="num_results" class="right">
-            <p>Number of results : {{results.count}}</p>
+            <p>Number of results : {{resultcount}}</p>
         </div>
         <p class="cB"></p>
     </div>
@@ -149,8 +152,9 @@
             <p>Sorry, no results found.</p>
         {% endfor %}
     </div>
-    <div id="loadmoreajaxloader" style="display:none;"><center><img src="{{STATIC_URL}}img/ajax-loader.gif" /></center></div>
-    <button id="myButton">Click me</button>
 </div>
+<!--<div id="loadmoreajaxloader" style="display:none;"><center><img src="{{STATIC_URL}}img/ajax-loader.gif" /></center></div>
+<button id="myButton">Click me</button>-->
 </div>
+<p class="cB"></p>
 {% endblock content %}
