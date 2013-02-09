@@ -17,6 +17,37 @@
     $(function()
     {
         $('.scroll-pane').jScrollPane();
+
+        $(window).scroll(function(){            
+            /*console.log("start")
+            console.log("scrolltop [" + $(window).scrollTop()+"]")
+            console.log("docscrollheight [" +document.body.scrollHeight+"]")
+            console.log("discrolltop [" +$('#searchresults').scrollTop()+ "]")
+            console.log("divheight [" +$('#searchresults').height()+ "]")
+            console.log("clHeight [" +document.documentElement.clientHeight+ "]")
+            //document.body.scrollHeight - $(this).scrollTop()  <= $(this).height()
+            console.log("end")*/
+        });
+        
+        $('#myButton').click(function()
+        {
+            $('div#loadmoreajaxloader').show();
+            $.ajax({
+            url: "/ajaxsearch?{{querystring}}&offset=20",
+            success: function(html)
+            {
+                console.log(html);
+                if(html)
+                {
+                    $("#searchresults").append(html);
+                    $('div#loadmoreajaxloader').hide();
+                }else
+                {
+                    $('div#loadmoreajaxloader').html('<center>No more posts to show.</center>');
+                }
+            }
+            });
+        });
     });
 </script>
 {% endblock scripts %}
@@ -82,13 +113,15 @@
 
 </div>
 <!-- End faceting -->
-<div style="float:left; width:80%; background:#9E9898">
+<div id="searchresults" style="float:left; width:80%; background:#9E9898">
 {% for result in results %}
-    <span>{{ result.name }}, &nbsp</span>
+    <span>{{ result.name }}</span><br><br>
 {% empty %}
     <p>Sorry, no results found.</p>
 {% endfor %}
 </div>
+<div id="loadmoreajaxloader" style="display:none;"><center><img src="{{STATIC_URL}}img/ajax-loader.gif" /></center></div>
 <span class="cB"></span>
 </div>
+<button id="myButton">Click me</button>
 {% endblock content %}

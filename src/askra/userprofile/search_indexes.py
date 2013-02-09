@@ -6,7 +6,7 @@ from models import UserProfile, StudentSection
 
 class NoteIndex(SearchIndex):
     text = CharField(document=True)
-    name = CharField(indexed=False)
+    name = CharField(indexed=True)
     course = CharField(indexed=False)
     branch = CharField(indexed=False, faceted=True)
     year_of_passing = IntegerField(indexed=False, faceted=True) 

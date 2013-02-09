@@ -12,6 +12,7 @@ from models import *
 from forms import *
 from haystack.forms import SearchForm
 from forms import ProfileSearchBasicForm
+from django.http import HttpResponse
 
 def show_profile(request, profile_id):
     if not profile_id:
@@ -192,7 +193,8 @@ def search(request):
         
     name = request.GET.get("name", '')
     branch = request.GET.get("branch", '')
-    year = request.GET.get("year_of_passing", '') 
+    year = request.GET.get("year_of_passing", '')
+    offset = request.GET.get("offset", '0')
     
     branch_facet = request.GET.get("branch_facet", '') 
     year_facet = request.GET.get("year_of_passing_facet", '')    
@@ -219,10 +221,44 @@ def search(request):
         context['year_facet_selected'] = year_facet
     else:
         context['year_facet_selected'] = ''
-        
-    context['results'] = sqs.auto_query(branch_facet + year_facet)
+
+    offsetvalue = int(offset)
+    results = sqs.auto_query(branch_facet + year_facet).order_by('name')[offsetvalue:offsetvalue]
+    context['results'] = results
+
+    querystring = request.get_full_path().split('?')[1]
+    context['querystring'] = querystring
     
     return render(request, "search/search.html", context)
+
+def getsearchresults(request):
+        
+    name = request.GET.get("name", '')
+    branch = request.GET.get("branch", '')
+    year = request.GET.get("year_of_passing", '')
+    offset = request.GET.get("offset", '0')
+    branch_facet = request.GET.get("branch_facet", '') 
+    year_facet = request.GET.get("year_of_passing_facet", '')    
+
+    offsetvalue = int(offset)
+           
+    sqs = SearchQuerySet().facet('branch')
+    sqs = sqs.facet('year_of_passing')
+        
+    if name or branch or year:
+        sqs = sqs.auto_query(name + branch + year)
+
+    results = sqs.auto_query(branch_facet + year_facet).order_by('name')[offsetvalue:offsetvalue+20]
+
+    return results
+
+def ajaxresponse(request):
+    results = getsearchresults(request)
+    html=""
+    for result in results:
+        html+="<span>" +result.name+ "</span><br><br>"
+    #print html
+    return HttpResponse(html)
 
 def draw_charts(request, x):
     dict = {}
