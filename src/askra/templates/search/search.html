@@ -89,7 +89,6 @@
     <dl id="branch_facet">
         {% if facets.fields.branch %}
             <dt>Branch</dt>
-            {# Provide only the top 5 branchs #}
             {% for branch in facets.fields.branch %}
                 {% if branch.1 %}
                     {% if branch.0 == branch_facet_selected %}
@@ -106,7 +105,6 @@
     <dl id="yog_facet" class="scroll-pane">
         {% if facets.fields.year_of_passing %}
             <dt>year</dt>
-            {# Provide only the top 5 year_of_passings #}
             {% for year_of_passing in facets.fields.year_of_passing %}
                 {% if year_of_passing.1 %}
                     {% if year_of_passing.0 == year_facet_selected %}
@@ -116,6 +114,22 @@
                     {% endif %}
                 {% else %}
                     <dd>{{ year_of_passing.0 }}({{ year_of_passing.1 }})</dd>
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+    </dl>
+    <dl id="city_facet" class="scroll-pane">
+        {% if facets.fields.city %}
+            <dt>City</dt>
+            {% for city in facets.fields.city %}
+                {% if city.1 %}
+                    {% if city.0 == city_facet_selected %}
+                        <dd><a class="selected_facet" href="{{ request.get_full_path }}&amp;city_facet={{ city.0|urlencode }}">{{ city.0 }}</a> ({{ city.1 }})</dd>
+                    {% else %}
+                        <dd><a href="{{ request.get_full_path }}&amp;city_facet={{ city.0|urlencode }}">{{ city.0 }}</a> ({{ city.1 }})</dd>                      
+                    {% endif %}
+                {% else %}
+                    <dd>{{ city.0 }}({{ city.1 }})</dd>
                 {% endif %}
             {% endfor %}
         {% endif %}
@@ -131,6 +145,9 @@
             {% if year_facet_selected  %}
                 <a class="remove_facet" href="{{ request.get_full_path }}&amp;year_of_passing_facet=">{{ year_facet_selected }} X </a>
             {% endif %}
+            {% if city_facet_selected  %}
+                <a class="remove_facet" href="{{ request.get_full_path }}&amp;city_facet=">{{ city_facet_selected }} X </a>
+            {% endif %}
         </div>
         <div id="num_results" class="right">
             <p>Number of results : {{results.count}}</p>
@@ -143,7 +160,7 @@
                 <h2 class="name section-subtitle">{{ result.name}}</h2>    
                 <p class="branch">{{ result.branch}}</p>    
                 <p class="year_of_passing">{{ result.year_of_passing}}</p>    
-                <p class="city">{{ result.branch}}</p>    
+                <p class="city">{{ result.city}}</p>    
             </div>
         {% empty %}
             <p>Sorry, no results found.</p>
@@ -153,4 +170,5 @@
     <button id="myButton">Click me</button>
 </div>
 </div>
+<div class="cB"></div>
 {% endblock content %}

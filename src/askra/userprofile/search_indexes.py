@@ -10,6 +10,7 @@ class NoteIndex(SearchIndex):
     course = CharField(indexed=False)
     branch = CharField(indexed=False, faceted=True)
     year_of_passing = IntegerField(indexed=False, faceted=True) 
+    city = CharField(indexed=False, faceted=True)
 
     def index_queryset(self):
         """Used when the entire index for model is updated."""
@@ -40,6 +41,11 @@ class NoteIndex(SearchIndex):
             prepared_data['course'] = ""
             prepared_data['branch'] = ""
             prepared_data['year_of_passing'] = 0  
+            
+        if obj.city and obj.city.city:
+            prepared_data['city'] = obj.city.city
+        else:
+            prepared_data['city'] = ""
             
         prepared_data['text'] = "".join(searchable_text)
         return prepared_data            
