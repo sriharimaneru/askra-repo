@@ -1,5 +1,26 @@
 {% extends 'base.html' %}
 
+{% block scripts %}
+<script src="{{STATIC_URL}}js/jquery-latest.min.js"></script> 
+<!-- styles needed by jScrollPane -->
+<link type="text/css" href="{{STATIC_URL}}css/jquery.jscrollpane.css" rel="stylesheet" media="all" />
+
+<!-- the mousewheel plugin - optional to provide mousewheel support -->
+<script type="text/javascript" src="{{STATIC_URL}}js/jquery.mousewheel.js"></script>
+
+<!-- the jScrollPane script -->
+<script type="text/javascript" src="{{STATIC_URL}}js/jquery.jscrollpane.min.js"></script>
+
+<LINK rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/style.css"></LINK>
+
+<script type="text/javascript">
+    $(function()
+    {
+        $('.scroll-pane').jScrollPane();
+    });
+</script>
+{% endblock scripts %}
+
 {% block content %}
 <div style="background:#9E9898">
 
@@ -24,7 +45,7 @@
 {% endif %}
 
 <div style="float:left; width:20%; background:#9E9898">
-    <dl>
+    <dl id="branch_facet">
         {% if facets.fields.branch %}
             <dt>Branch</dt>
             {# Provide only the top 5 branchs #}
@@ -41,7 +62,7 @@
             {% endfor %}
         {% endif %}
     </dl>
-    <dl>
+    <dl id="yog_facet" class="scroll-pane">
         {% if facets.fields.year_of_passing %}
             <dt>year</dt>
             {# Provide only the top 5 year_of_passings #}
