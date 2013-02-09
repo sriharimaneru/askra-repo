@@ -18,6 +18,7 @@ urlpatterns = patterns('',
     url(r'^reg-step-2$', direct_to_template, {'template' : 'reg-step-2.html'}, name='reg-2'),  
     url(r'^reg-step-3$', direct_to_template, {'template' : 'reg-step-3.html'}, name='reg-3'),
     url(r'^search', 'userprofile.views.search', name='haystack_search'),
+    url(r'^ajaxsearch', 'userprofile.views.ajaxresponse', name='ajax_search'),
 
     # Uncomment the admin/doc line below to enable admin documentation:
     # url(r'^admin/doc/', include('django.contrib.admindocs.urls')),

@@ -19,11 +19,40 @@
     {
         $('.scroll-pane').jScrollPane();
 
+        $(window).scroll(function(){            
+            /*console.log("start")
+            console.log("scrolltop [" + $(window).scrollTop()+"]")
+            console.log("docscrollheight [" +document.body.scrollHeight+"]")
+            console.log("discrolltop [" +$('#searchresults').scrollTop()+ "]")
+            console.log("divheight [" +$('#searchresults').height()+ "]")
+            console.log("clHeight [" +document.documentElement.clientHeight+ "]")
+            //document.body.scrollHeight - $(this).scrollTop()  <= $(this).height()
+            console.log("end")*/
+        });
+        
+        $('#myButton').click(function()
+        {
+            $('div#loadmoreajaxloader').show();
+            $.ajax({
+            url: "/ajaxsearch?{{querystring}}&offset=20",
+            success: function(html)
+            {
+                console.log(html);
+                if(html)
+                {
+                    $("#searchresults").append(html);
+                    $('div#loadmoreajaxloader').hide();
+                }else
+                {
+                    $('div#loadmoreajaxloader').html('<center>No more posts to show.</center>');
+                }
+            }
+            });
+        });
         $('#search_results').masonry({
         // options
             itemSelector : '.result_div',
         });
-
     });
 
 </script>
@@ -120,7 +149,8 @@
             <p>Sorry, no results found.</p>
         {% endfor %}
     </div>
+    <div id="loadmoreajaxloader" style="display:none;"><center><img src="{{STATIC_URL}}img/ajax-loader.gif" /></center></div>
+    <button id="myButton">Click me</button>
 </div>
 </div>
-<p class="cB"></p>
 {% endblock content %}
