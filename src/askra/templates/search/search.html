@@ -66,8 +66,7 @@
 
 {% block content %}
 <div id="search-content" class="section-content">
-<h2 class="section-title">We just started and this is a sample we are planning to do We just started and this is a sample of what we are planning to do</h2>    
-
+<h2 class="section-title">The data below is a sample set from one excel sheet. We aim to collect basic data for 70% of the alumni by March, 2013.</h2>
 <form id="search_form" action="/search" method="get">
     {{ form.non_field_errors }}
     <div id="name_div" class="fieldWrapper left">
@@ -91,7 +90,7 @@
 </form>
 
 <div id="facet-list" class="left">
-    <dl id="branch_facet">
+    <dl id="branch_facet" class="facet">
         {% if facets.fields.branch %}
             <dt>Branch</dt>
             {% for branch in facets.fields.branch %}
@@ -107,7 +106,7 @@
             {% endfor %}
         {% endif %}
     </dl>
-    <dl id="yog_facet" class="scroll-pane">
+    <dl id="yog_facet" class="scroll-pane facet">
         {% if facets.fields.year_of_passing %}
             <dt>year</dt>
             {% for year_of_passing in facets.fields.year_of_passing %}
@@ -123,7 +122,7 @@
             {% endfor %}
         {% endif %}
     </dl>
-    <dl id="city_facet" class="scroll-pane">
+    <dl id="city_facet" class="scroll-pane facet">
         {% if facets.fields.city %}
             <dt>City</dt>
             {% for city in facets.fields.city %}

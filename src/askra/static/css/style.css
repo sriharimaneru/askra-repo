@@ -483,6 +483,11 @@ div#search-content p.search_submit{
 	width: 20%;
 }
 
+.facet dt{
+	background-color: #E6E6E6;
+	border-bottom: 1px solid #D6D6D6;
+}
+
 #search_results_panel{
 	width: 80%;
 }
