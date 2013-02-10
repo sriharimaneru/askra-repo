@@ -386,19 +386,3 @@ def ajaxresponse(request):
             html+="</div>\n"
     #print html
     return HttpResponse(html)
-
-def draw_charts(request, x):
-    dict = {}
-    for yog in StudentSection.objects.values('year_of_graduation').distinct():
-        year = yog["year_of_graduation"]
-        number = UserProfile.objects.filter(studentsection__year_of_graduation=year).count()
-        dict[str(year)] = number
-
-    totalalumcollected = UserProfile.objects.filter(role=0).count()
-    remainingalumdata = 30000 - totalalumcollected
-    percentalumdatacollected = 100*(totalalumcollected/30000.0)
-    percentalumdataremaining = 100 - percentalumdatacollected
-    
-    return render_to_response("reports.html", RequestContext(request, {'columnchartdata':dict, 'totalalumdata': totalalumcollected, 
-                              'remainingalumdata': remainingalumdata, 'percentalumdatacollected': percentalumdatacollected, 
-                              'percentalumdataremaining': percentalumdataremaining, }))

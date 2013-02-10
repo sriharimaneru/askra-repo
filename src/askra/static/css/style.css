@@ -263,6 +263,18 @@ div#data-building {
 }
 /************* END DATABASE BUILDING **************/
 
+/************* START REPORTS SECTION *************/
+.ui-widget-header {
+	background-color: #feeeef;
+	background-image: url(../img/fluid.jpeg);
+}
+.ui-widget-content {
+	background-color: #feeeef;
+	background-image: url(../img/water.png);
+}
+
+/************* END REPORTS SECTION *************/
+
 
 /************* START COMMUNICATION **************/
 

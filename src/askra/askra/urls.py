@@ -11,9 +11,9 @@ from django.conf.urls.defaults import *
 
 urlpatterns = patterns('',
     # Examples:
-    url(r'^$', direct_to_template, {'template' : 'index.html'}, name='home'),
+    url(r'^$', 'askra.views.index', name='home'),
     url(r'^profile/', include('userprofile.urls')),
-    url(r'^index$', direct_to_template, {'template' : 'index.html'}, name='home'), #temporarily. Will remove this @srihari
+    url(r'^index$', 'askra.views.index', name='index'), #temporarily. Will remove this @srihari
     url(r'^view_profile$', direct_to_template, {'template' : 'view_profile.html'}, name='view_profile'),    
     url(r'^reg-step-2$', direct_to_template, {'template' : 'reg-step-2.html'}, name='reg-2'),  
     url(r'^reg-step-3$', direct_to_template, {'template' : 'reg-step-3.html'}, name='reg-3'),
