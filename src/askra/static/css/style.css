@@ -263,6 +263,18 @@ div#data-building {
 }
 /************* END DATABASE BUILDING **************/
 
+/************* START REPORTS SECTION *************/
+.ui-widget-header {
+	background-color: #feeeef;
+	background-image: url(../img/fluid.jpeg);
+}
+.ui-widget-content {
+	background-color: #feeeef;
+	background-image: url(../img/water.png);
+}
+
+/************* END REPORTS SECTION *************/
+
 
 /************* START COMMUNICATION **************/
 
@@ -491,8 +503,32 @@ div#facet-list a{
 	font-size: 15px;
 }
 
-#applied_facets .remove_facet{
-	padding-right: 20px;
+#applied_facets {
+	padding-left: 30px;
+}
+
+#applied_facets .remove_facet {
+	text-decoration: none;
+	color: black;
+}
+
+.remove_facet_div {
+	padding: 2px 5px;
+	padding-left: 10px;
+	margin-left: 10px;
+	background-color: #F2F2F2;
+	float: left;
+}
+
+#selected_filters_text {
+	float: left;
+	padding-top: 2px;
+}
+
+.bold-X {
+	font-size: 16px;
+	font-weight: bold;
+	margin-left: 15px;
 }
 
 .result_div{

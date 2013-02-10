@@ -1,5 +1,52 @@
 {% extends 'base.html' %}
 
+{% block startscripts %}
+  <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.0/themes/base/jquery-ui.css" />
+{% endblock startscripts %}
+
+{% block scripts %}
+  <script src="http://code.jquery.com/ui/1.10.0/jquery-ui.js"></script>
+  <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+  <script src="{{STATIC_URL}}js/reports.js"></script>
+  <script type="text/javascript">
+
+    var collected = {
+      {% for k, v in columnchartdata.items %}
+      "{{ k }}": "{{ v }}"{% if not forloop.last %},{% endif %}
+      {% endfor %}
+    };
+
+    $(function(){      
+  
+      $('#progressbar').progressbar({
+        value:{{ percentalumdatacollected }},
+        max: 100
+      });
+
+      $('#mybutton').click(function() {
+        drawColumnChart(collected);
+      });
+
+      $(window).bind("scroll", function() {
+        var scroll = $(window).scrollTop();
+        var chartoffset = $('#column_chart').offset().top - $('#column_chart').height();
+        if(scroll>chartoffset)
+        {
+          //drawColumnChart();
+          $(window).unbind('scroll');
+        }
+      });
+
+    });
+
+    google.load("visualization", "1", {packages:['corechart', 'gauge']});
+    google.setOnLoadCallback(function() {
+      drawCharts(collected) 
+    });
+
+  </script>
+{% endblock scripts %}
+
 {% block content %}
 <!--[if lt IE 11]> 
 <img src="{{STATIC_URL}}/img/ie_not_supported.png" style="width:100%"/>
@@ -140,6 +187,9 @@
       </div>
     </div>
       <h2 class="section-subtitle db-footer-note cB">Building a complete alumni database is complicated owing to the large numbers and unavailability of structured data, but with the help of the above technology we can make it happen. Unlike data of alumni, accurate data of students, faculty and administration is available with college and will be regularly updated by the chosen data admins.</h2>
+
+      {% include "reports.html"%}
+
   </div>
   <img id= "facebook-band" src="{{STATIC_URL}}img/facebook_band.jpg">
 </div>
