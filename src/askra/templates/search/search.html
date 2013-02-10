@@ -14,8 +14,6 @@
 
 <script src="{{STATIC_URL}}js/jquery.masonry.min.js"></script>
 
-<LINK rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/style.css"></LINK>
-
 <script type="text/javascript">
     $(function()
     {
@@ -106,9 +104,10 @@
             {% endfor %}
         {% endif %}
     </dl>
-    <dl id="yog_facet" class="scroll-pane facet">
+    <dl id="yog_facet" class="facet">
         {% if facets.fields.year_of_passing %}
-            <dt>year</dt>
+            <dt>Year Of Graduation</dt>
+            <div class="scroll-pane">
             {% for year_of_passing in facets.fields.year_of_passing %}
                 {% if year_of_passing.1 %}
                     {% if year_of_passing.0 == year_facet_selected %}
@@ -120,11 +119,13 @@
                     <dd>{{ year_of_passing.0 }}({{ year_of_passing.1 }})</dd>
                 {% endif %}
             {% endfor %}
+            </div>
         {% endif %}
     </dl>
-    <dl id="city_facet" class="scroll-pane facet">
+    <dl id="city_facet" class="facet">
         {% if facets.fields.city %}
             <dt>City</dt>
+            <div class="scroll-pane">
             {% for city in facets.fields.city %}
                 {% if city.1 %}
                     {% if city.0 == city_facet_selected %}
@@ -136,6 +137,7 @@
                     <dd>{{ city.0 }}({{ city.1 }})</dd>
                 {% endif %}
             {% endfor %}
+            </div>
         {% endif %}
     </dl>
 </div>
@@ -169,17 +171,25 @@
             {% endif %}
         </div>
         <div id="num_results" class="right">
-            <p>Number of results : {{resultcount}}</p>
+            {% if resultcount > 0 %}
+                <p>Showing {{resultcount}} {% if resultcount = 1 %} profile {% else %} profiles {% endif %}</p>
+            {% endif %}
         </div>
         <p class="cB"></p>
     </div>
     <div id="search_results">
         {% for result in results %}
             <div class="result_div">
-                <h2 class="name section-subtitle">{{ result.name}}</h2>    
-                <p class="branch">{{ result.branch}}</p>    
-                <p class="year_of_passing">{{ result.year_of_passing}}</p>    
-                <p class="city">{{ result.city}}</p>    
+                <h2 class="name section-subtitle">{{ result.name }}</h2>    
+                {% if result.branch %}
+                    <p class="branch">{{ result.branch }}</p> 
+                {% endif %}  
+                {% if result.year_of_passing %}
+                    <p class="year_of_passing">{{ result.year_of_passing }}</p>    
+                {% endif %} 
+                {% if result.city %}
+                    <p class="city">{{ result.city }}</p>    
+                {% endif %} 
             </div>
         {% empty %}
             <p>Sorry, no results found.</p>
