@@ -151,21 +151,21 @@
             {% if branch_facet_selected  %}
                 <a class="remove_facet" href="{{ request.get_full_path|facet_url }}branch_facet=">
                     <div class="remove_facet_div">
-                        {{ branch_facet_selected }}<span class="bold-X">x</span>
+                        <span>{{ branch_facet_selected }}</span><span class="bold-X">x</span>
                     </div>
                 </a>
             {% endif %}
             {% if year_facet_selected  %}
                 <a class="remove_facet" href="{{ request.get_full_path|facet_url }}year_of_passing_facet=">
                     <div class="remove_facet_div">
-                        {{ year_facet_selected }}<span class="bold-X">x</span>
+                        <span>{{ year_facet_selected }}</span><span class="bold-X">x</span>
                     </div>
                 </a>
             {% endif %}
             {% if city_facet_selected  %}
                 <a class="remove_facet" href="{{ request.get_full_path|facet_url }}city_facet=">
                     <div class="remove_facet_div">
-                        {{ city_facet_selected }}<span class="bold-X">x</span>
+                        <span>{{ city_facet_selected }}</span><span class="bold-X">x</span>
                     </div>
                 </a>
             {% endif %}

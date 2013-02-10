@@ -494,6 +494,8 @@ div#search-content p.search_submit{
 .facet dt{
 	background-color: #E6E6E6;
 	border-bottom: 1px solid #D6D6D6;
+	font-weight: bolder;
+	padding: 4px 4px;
 }
 
 #search_results_panel{
@@ -514,7 +516,7 @@ div#year_div{
 
 div#facet-list a{
 	font-size: 15px;
-	color: #4D4D4D;
+	color: #004B91;
 }
 
 #applied_facets {
@@ -532,6 +534,10 @@ div#facet-list a{
 	margin-left: 10px;
 	background-color: #F2F2F2;
 	float: left;
+}
+
+.remove_facet_div:hover {
+	background-color: #BDBABA;
 }
 
 #selected_filters_text {
@@ -565,7 +571,7 @@ div#facet-list a{
 
 div#facet-list .selected_facet{
 	color: #E57300;
-	/*font-weight: bold;*/
+	font-weight: bolder;
 }
 
 
