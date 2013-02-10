@@ -142,14 +142,29 @@
 <div id="search_results_panel" class="left">
     <div id="search_results_header">
         <div id="applied_facets" class="left">
+            {% if branch_facet_selected or year_facet_selected or city_facet_selected %}
+                <span id="selected_filters_text">Selected filters:</span>
+            {% endif %}
             {% if branch_facet_selected  %}
-                <a class="remove_facet" href="{{ request.get_full_path }}&amp;branch_facet=">{{ branch_facet_selected }} X </a>
+                <a class="remove_facet" href="{{ request.get_full_path }}&amp;branch_facet=">
+                    <div class="remove_facet_div">
+                        {{ branch_facet_selected }}<span class="bold-X">x</span>
+                    </div>
+                </a>
             {% endif %}
             {% if year_facet_selected  %}
-                <a class="remove_facet" href="{{ request.get_full_path }}&amp;year_of_passing_facet=">{{ year_facet_selected }} X </a>
+                <a class="remove_facet" href="{{ request.get_full_path }}&amp;year_of_passing_facet=">
+                    <div class="remove_facet_div">
+                        {{ year_facet_selected }}<span class="bold-X">x</span>
+                    </div>
+                </a>
             {% endif %}
             {% if city_facet_selected  %}
-                <a class="remove_facet" href="{{ request.get_full_path }}&amp;city_facet=">{{ city_facet_selected }} X </a>
+                <a class="remove_facet" href="{{ request.get_full_path }}&amp;city_facet=">
+                    <div class="remove_facet_div">
+                        {{ city_facet_selected }}<span class="bold-X">x</span>
+                    </div>
+                </a>
             {% endif %}
         </div>
         <div id="num_results" class="right">
