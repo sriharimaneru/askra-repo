@@ -147,6 +147,7 @@ def edit_profile_employment(request, profile_id):
 
     return render(request, "edit_profile_employment.html", {'formset':formset, 'profile_id':profile_id, })
 
+
 def profile_bulk_upload(request,x):
     if request.method == 'POST':
         form = ProfileBulkUploadForm(request.POST, request.FILES)
@@ -186,6 +187,10 @@ def profile_bulk_upload(request,x):
     else:
         form = ProfileBulkUploadForm()
     return render(request, "profile_bulk_upload.html", {'form':form, })
+
+#Sort with in available options and then with in greyed out options
+def facet_sorting(facets):
+    return sorted([x for x in facets if x[1]], key=lambda x: x[0]) + sorted([x for x in facets if not x[1]], key=lambda x: x[0]) 
 
 def search(request):
     context = {}   
@@ -249,7 +254,14 @@ def search(request):
         sqs = sqs.filter(city_exact = city_facet)
         context['city_facet_selected'] = city_facet
     else:
-        context['city_facet_selected'] = ''        
+        context['city_facet_selected'] = '' 
+
+        
+        
+    context['facets']['fields']['year_of_passing'] = facet_sorting(context['facets']['fields']['year_of_passing'])
+    context['facets']['fields']['city'] = facet_sorting(context['facets']['fields']['city'])
+    context['facets']['fields']['branch'] = facet_sorting(context['facets']['fields']['branch'])
+           
 
     offsetvalue = int(offset)
     results = sqs.order_by('name')
@@ -286,7 +298,6 @@ def search(request):
     return render(request, "search/search.html", context)
 
 def getsearchresults(request):
-        
     name = request.GET.get("name", '')
     branch = request.GET.get("branch", '')
     year = request.GET.get("year_of_passing", '')

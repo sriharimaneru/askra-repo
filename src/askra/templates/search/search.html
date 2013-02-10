@@ -1,4 +1,6 @@
 {% extends 'base.html' %}
+{% load userprofile_tags %}
+
 
 {% block scripts %}
 <!-- styles needed by jScrollPane -->
@@ -95,9 +97,9 @@
             {% for branch in facets.fields.branch %}
                 {% if branch.1 %}
                     {% if branch.0 == branch_facet_selected %}
-                        <dd><a class="selected_facet" href="{{ request.get_full_path }}&amp;branch_facet={{ branch.0|urlencode }}">{{ branch.0 }}</a> ({{ branch.1 }})</dd>
+                        <dd><a class="selected_facet" href="{{ request.get_full_path|facet_url }}branch_facet={{ branch.0|urlencode }}">{{ branch.0 }}</a> ({{ branch.1 }})</dd>
                     {% else %}
-                        <dd><a href="{{ request.get_full_path }}&amp;branch_facet={{ branch.0|urlencode }}">{{ branch.0 }}</a> ({{ branch.1 }})</dd>                        
+                        <dd><a href="{{ request.get_full_path|facet_url }}branch_facet={{ branch.0|urlencode }}">{{ branch.0 }}</a> ({{ branch.1 }})</dd>                        
                     {% endif %}
                 {% else %}
                     <dd>{{ branch.0 }}({{ branch.1 }})</dd>
@@ -111,9 +113,9 @@
             {% for year_of_passing in facets.fields.year_of_passing %}
                 {% if year_of_passing.1 %}
                     {% if year_of_passing.0 == year_facet_selected %}
-                        <dd><a class="selected_facet" href="{{ request.get_full_path }}&amp;year_of_passing_facet={{ year_of_passing.0|urlencode }}">{{ year_of_passing.0 }}</a> ({{ year_of_passing.1 }})</dd>
+                        <dd><a class="selected_facet" href="{{ request.get_full_path|facet_url }}year_of_passing_facet={{ year_of_passing.0|urlencode }}">{{ year_of_passing.0 }}</a> ({{ year_of_passing.1 }})</dd>
                     {% else %}
-                        <dd><a href="{{ request.get_full_path }}&amp;year_of_passing_facet={{ year_of_passing.0|urlencode }}">{{ year_of_passing.0 }}</a> ({{ year_of_passing.1 }})</dd>                      
+                        <dd><a href="{{ request.get_full_path|facet_url }}year_of_passing_facet={{ year_of_passing.0|urlencode }}">{{ year_of_passing.0 }}</a> ({{ year_of_passing.1 }})</dd>                      
                     {% endif %}
                 {% else %}
                     <dd>{{ year_of_passing.0 }}({{ year_of_passing.1 }})</dd>
@@ -127,9 +129,9 @@
             {% for city in facets.fields.city %}
                 {% if city.1 %}
                     {% if city.0 == city_facet_selected %}
-                        <dd><a class="selected_facet" href="{{ request.get_full_path }}&amp;city_facet={{ city.0|urlencode }}">{{ city.0 }}</a> ({{ city.1 }})</dd>
+                        <dd><a class="selected_facet" href="{{ request.get_full_path|facet_url }}city_facet={{ city.0|urlencode }}">{{ city.0 }}</a> ({{ city.1 }})</dd>
                     {% else %}
-                        <dd><a href="{{ request.get_full_path }}&amp;city_facet={{ city.0|urlencode }}">{{ city.0 }}</a> ({{ city.1 }})</dd>                      
+                        <dd><a href="{{ request.get_full_path|facet_url }}city_facet={{ city.0|urlencode }}">{{ city.0 }}</a> ({{ city.1 }})</dd>                      
                     {% endif %}
                 {% else %}
                     <dd>{{ city.0 }}({{ city.1 }})</dd>
@@ -143,13 +145,13 @@
     <div id="search_results_header">
         <div id="applied_facets" class="left">
             {% if branch_facet_selected  %}
-                <a class="remove_facet" href="{{ request.get_full_path }}&amp;branch_facet=">{{ branch_facet_selected }} X </a>
+                <a class="remove_facet" href="{{ request.get_full_path|facet_url }}branch_facet=">{{ branch_facet_selected }} X </a>
             {% endif %}
             {% if year_facet_selected  %}
-                <a class="remove_facet" href="{{ request.get_full_path }}&amp;year_of_passing_facet=">{{ year_facet_selected }} X </a>
+                <a class="remove_facet" href="{{ request.get_full_path|facet_url }}year_of_passing_facet=">{{ year_facet_selected }} X </a>
             {% endif %}
             {% if city_facet_selected  %}
-                <a class="remove_facet" href="{{ request.get_full_path }}&amp;city_facet=">{{ city_facet_selected }} X </a>
+                <a class="remove_facet" href="{{ request.get_full_path|facet_url }}city_facet=">{{ city_facet_selected }} X </a>
             {% endif %}
         </div>
         <div id="num_results" class="right">
