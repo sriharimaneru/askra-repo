@@ -443,6 +443,11 @@ div#search-content label, div#search-content dd, div#search-content dt, div#sear
 	text-shadow: none;
 }
 
+div#search-content dd{
+	margin-left: 10px;
+}
+
+
 div#search-content label, input{
 	display: block;
 }
@@ -471,8 +476,11 @@ div#search-content #id_name{
 div#search-content input.search_submit{
 	width: 150px;
 	height: 40px;
-	background: #5BAD5B;
+	background: #F27521;
+	background-image: -webkit-linear-gradient(top,#F2A54D,#F27521);
 	border: none;
+	font-size: 16px;
+	color: white;
 }
 
 div#search-content p.search_submit{
@@ -501,6 +509,7 @@ div#year_div{
 
 div#facet-list a{
 	font-size: 15px;
+	color: #4D4D4D;
 }
 
 #applied_facets {
@@ -533,7 +542,7 @@ div#facet-list a{
 
 .result_div{
 	width: 200px;
-	padding: 0px 16px;
+	padding: 0px 16px 10px;
 	background-color: #F1F1F1;
 	box-shadow: 0px 1px 3px #BEAFAF;
 	margin: 5px 5px;
@@ -550,7 +559,8 @@ div#facet-list a{
 }
 
 div#facet-list .selected_facet{
-	color: #5BAD5B;
+	color: #E57300;
+	/*font-weight: bold;*/
 }
 
 
