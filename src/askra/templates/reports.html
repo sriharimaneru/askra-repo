@@ -1,12 +1,14 @@
 
-<!--<button id="mybutton">Draw again</button>-->
-<!--<div id="pie_chart" style="width: 450px; height: 250px; margin: auto;"></div>
-<div id="gauge" style="width: 250px; height: 250px; margin: auto;"></div>-->
-<div style="text-align: center; margin: auto; margin-top: 10px; font-family: Arial;">
-  <h4>Overall Alumni Data Collection Progress Bar</h4>
+<div id="reports">
+  	<h2 class="section-title">Overall Alumni Data Collection Progress</h4>
+	<div id="progressbar">
+	  <div class="right" style="width: {{percentalumdataremaining}}%">{{percentalumdataremaining}}% remaining</div>
+	</div>
+	<div id="column_chart" class="left"></div>
+	<div id="data_message">
+		<h2 class="section-subtitle">This data is a sample set from one excel sheet. We aim to collect basic data for 70% of the alumni by March, 2013.</h2>
+		<a href="/search">
+			<div>Browse profiles now!</div>
+		</a>
+	</div>
 </div>
-<div id="progressbar" style="width: 900px; margin: auto; margin-top: 10px;margin-bottom: 10px;">
-  <div style="float:left; width: {{ percentalumdatacollected }}%;text-align:center;padding-top:7px;">{{percentalumdatacollected}}%</div>
-  <div style="float:right;width: {{ percentalumdataremaining }}%;text-align:center;padding-top:7px;">{{percentalumdataremaining}}%</div>
-</div>
-<div id="column_chart" style="width: 900px; height: 500px; margin: auto; margin-bottom: 10px;"></div>

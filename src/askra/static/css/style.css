@@ -131,7 +131,7 @@ div#home-section {
 
 div.home-section-content {
 	padding-top: 52px;
-	padding-bottom: 65px;
+	padding-bottom: 40px;
 }
 
 .home-section-title {
@@ -144,7 +144,18 @@ div.home-section-content {
 	font-size: 22px;
 	line-height: 34px;
 	max-width: 550px;
-	padding-top: 53px;
+	padding-top: 26px;
+}
+
+.home-section-description a{
+	color: white;
+	text-decoration: none;
+	/*border-bottom: 1px solid;*/
+}
+
+#browse_link a{
+	font-size: 25px;
+	border-bottom: 1px solid;
 }
 
 #home-intro-links {
@@ -264,14 +275,66 @@ div#data-building {
 /************* END DATABASE BUILDING **************/
 
 /************* START REPORTS SECTION *************/
+#reports{
+	text-shadow:none;
+}
+
 .ui-widget-header {
 	background-color: #feeeef;
 	background-image: url(../img/fluid.jpeg);
 }
 .ui-widget-content {
-	background-color: #feeeef;
-	background-image: url(../img/water.png);
+	background-color: #ffffff;
+	/*background-image: url(../img/water.png);*/
 }
+
+#progressbar {
+	width: 600px; 
+	margin-top: 30px;
+	margin-bottom: 20px;	
+}
+
+#progressbar div {
+	text-align:center;
+	padding-top:7px;
+}
+
+#column_chart {
+	width: 600px;
+	height: 350px;
+	margin-bottom: 30px;
+}
+
+#reports h2.section-subtitle {
+	color: #6B9BB2;
+	padding-top: 0;
+}
+
+#reports #data_message {
+	padding-left: 620px;
+}
+
+#data_message div {
+	width: 320px;
+	height: 60px;
+	background: #F27521;
+	background-image: -webkit-linear-gradient(top,#F2A54D,#F27521);
+	border: none;
+	font-size: 25px;
+	color: white;
+	border-radius: 5px;
+	text-align: center;
+	padding-top: 25px;
+}
+
+#data_message div:hover {
+	background-image: -webkit-linear-gradient(top,#F27521,#F2A54D);
+}
+
+#data_message a{
+	text-decoration: none;
+}
+
 
 /************* END REPORTS SECTION *************/
 
@@ -473,7 +536,7 @@ div#search-content #id_name{
 	font-size: 16px;
 }
 
-div#search-content input.search_submit{
+input.search_submit{
 	width: 150px;
 	height: 40px;
 	background: #F27521;
@@ -481,6 +544,11 @@ div#search-content input.search_submit{
 	border: none;
 	font-size: 16px;
 	color: white;
+	cursor: pointer;
+}
+
+input.search_submit:hover{
+	background-image: -webkit-linear-gradient(top,#F27521,#F2A54D);
 }
 
 div#search-content p.search_submit{
