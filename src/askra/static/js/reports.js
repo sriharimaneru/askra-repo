@@ -10,13 +10,14 @@ function drawColumnChart(collected) {
   var options = {
     title: 'Alumni Data Collection by batch',
     titlePosition: 'out',
-    titleTextStyle: {color: 'black'},
-    hAxis: {title: 'Year of graduation', titleTextStyle: {color: 'red'}},
+    titleTextStyle: {color: '#4D4D4D'},
+    hAxis: {title: 'Year of graduation', titleTextStyle: {color: '#4D4D4D'}},
     animation: {duration: 2000, easing: 'out'},
     isStacked: true,
     bar: {groupWidth: '90%'},
-    chartArea: {width: '70%', height: '70%'},
-    backgroundColor: '#ffeeff',
+    chartArea: {width: '80%', height: '70%'},
+    backgroundColor: 'white',
+    legend: 'none',
     vAxis: {title: 'Number of profiles collected so far', minValue:0, maxValue:100}
   };
 
