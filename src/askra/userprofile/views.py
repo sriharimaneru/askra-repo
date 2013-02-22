@@ -209,7 +209,6 @@ def search(request):
     sqs = sqs.facet('year_of_passing')
     sqs = sqs.facet('city')
     
-    context['facets'] = sqs.facet_counts()
             
     if name or branch or year:
         context['form'] = ProfileSearchBasicForm(request.GET)
@@ -222,6 +221,7 @@ def search(request):
     else:
         context['form'] = ProfileSearchBasicForm()
     
+    context['facets'] = sqs.facet_counts()
     
         
     ##Horrible hardcoding - need to tweak it - By Srihari
