@@ -142,14 +142,16 @@
             <input id="year_facet_search" type="text" placeholder="Search year" />
             <div class="scroll-pane">
             {% for year_of_passing in facets.fields.year_of_passing %}
-                {% if year_of_passing.1 %}
-                    {% if year_of_passing.0 == year_facet_selected %}
-                        <dd class="year_facet_option"><a class="selected_facet" href="{{ request.get_full_path|facet_url }}year_of_passing_facet={{ year_of_passing.0|urlencode }}">{{ year_of_passing.0 }}</a> ({{ year_of_passing.1 }})</dd>
+                {% if year_of_passing.0 != '0' %}
+                    {% if year_of_passing.1 %}
+                        {% if year_of_passing.0 == year_facet_selected %}
+                            <dd class="year_facet_option"><a class="selected_facet" href="{{ request.get_full_path|facet_url }}year_of_passing_facet={{ year_of_passing.0|urlencode }}">{{ year_of_passing.0 }}</a> ({{ year_of_passing.1 }})</dd>
+                        {% else %}
+                            <dd class="year_facet_option"><a href="{{ request.get_full_path|facet_url }}year_of_passing_facet={{ year_of_passing.0|urlencode }}">{{ year_of_passing.0 }}</a> ({{ year_of_passing.1 }})</dd>                      
+                        {% endif %}
                     {% else %}
-                        <dd class="year_facet_option"><a href="{{ request.get_full_path|facet_url }}year_of_passing_facet={{ year_of_passing.0|urlencode }}">{{ year_of_passing.0 }}</a> ({{ year_of_passing.1 }})</dd>                      
+                        <dd class="year_facet_option">{{ year_of_passing.0 }}({{ year_of_passing.1 }})</dd>
                     {% endif %}
-                {% else %}
-                    <dd class="year_facet_option">{{ year_of_passing.0 }}({{ year_of_passing.1 }})</dd>
                 {% endif %}
             {% endfor %}
             </div>
