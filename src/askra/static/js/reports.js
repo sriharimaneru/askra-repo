@@ -18,7 +18,7 @@ function drawColumnChart(collected) {
     chartArea: {width: '80%', height: '70%'},
     backgroundColor: 'white',
     legend: 'none',
-    vAxis: {title: 'Number of profiles collected so far', minValue:0, maxValue:1000}
+    vAxis: {title: 'Number of profiles collected so far', minValue:0, maxValue:1600}
   };
 
   var chart = new google.visualization.ColumnChart(document.getElementById('column_chart'));
@@ -43,9 +43,9 @@ function drawColumnChart(collected) {
     row = 0, newvalue=0;
     for(var year in collected)
     {
-      newvalue = Math.round(parseInt(collected[year])*0.1*i); 
-      data.setValue(row, 1, newvalue);
-      row++;
+        newvalue = Math.round(parseInt(collected[year])*0.1*i); 
+        data.setValue(row, 1, newvalue);
+        row++;
     }
     chart.draw(data, options);
   }

@@ -214,19 +214,19 @@ class StudentSection(models.Model):
         return self.branch.get_full_name() + " " + str(self.year_of_graduation)
 
     def set_branch(self, branch, course, specialisation):
-        specialisation=specialisation.strip()
-        if(specialisation!=''):
-            branches=Branch.objects.filter(specialisation__iexact=specialisation)
-            if(branches):
-                self.branch=branches[0]
-            else:
-                synonyms=BranchSynonym.objects.filter(name__iexact=specialisation)
-                if(synonyms):
-                    self.branch=synonyms[0].branch
-                else:
-                    log.debug("Could not find specialisation [" + specialisation + "]. Therefore not setting the value")
-                    return False
-            return True
+#        specialisation=specialisation.strip()
+#        if(specialisation!=''):
+#            branches=Branch.objects.filter(specialisation__iexact=specialisation)
+#            if(branches):
+#                self.branch=branches[0]
+#            else:
+#                synonyms=BranchSynonym.objects.filter(name__iexact=specialisation)
+#                if(synonyms):
+#                    self.branch=synonyms[0].branch
+#                else:
+#                    log.debug("Could not find specialisation [" + specialisation + "]. Therefore not setting the value")
+#                    return False
+#            return True
         
         branch=branch.strip()
         if(branch!=''):
@@ -508,6 +508,10 @@ class XlsUpload(models.Model):
                                 yog = int(yogstr)
                         else:
                             yog=yogstr
+                        
+                    if yog==0:
+                        if(getYOGFromRoll(str(rollno))):
+                            yog = getYOGFromRoll(str(rollno))
                             
                     if(colIndex.get('dob') is not None):
                         dobtype = s.cell(row, colIndex['dob']).ctype

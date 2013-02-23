@@ -15,12 +15,13 @@ def index(request):
     dict = {}
     for yog in StudentSection.objects.values('year_of_graduation').distinct():
         year = yog["year_of_graduation"]
-        number = UserProfile.objects.filter(studentsection__year_of_graduation=year).count()
-        dict[str(year)] = number
+        if year>0:
+            number = UserProfile.objects.filter(studentsection__year_of_graduation=year).count()
+            dict[str(year)] = number
 
     totalalumcollected = UserProfile.objects.filter(role=0).count()
-    remainingalumdata = 30000 - totalalumcollected
-    percentalumdatacollected = int(100*(totalalumcollected/30000.0))
+    remainingalumdata = 40000 - totalalumcollected
+    percentalumdatacollected = int(100*(totalalumcollected/40000.0))
     percentalumdataremaining = 100 - percentalumdatacollected
     
     return render_to_response("index.html", RequestContext(request, {'columnchartdata':dict, 'totalalumdata': totalalumcollected, 

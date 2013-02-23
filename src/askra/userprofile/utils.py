@@ -18,7 +18,7 @@ def isValidRollNo(rollno): #checking for a 2 to 8 digit number only
         else:
             return True
 
-def getBatchFromRoll(roll_num):
+def getYOGFromRoll(roll_num):
     if len(roll_num) == 4 and roll_num[0:1] == "9":
         return 2013
     if len(roll_num) == 6:
