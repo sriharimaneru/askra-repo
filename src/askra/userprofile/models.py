@@ -5,11 +5,15 @@ from calendar import calendar
 import csv
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.exceptions import MultipleObjectsReturned
-from xlrd import open_workbook
+from xlrd import open_workbook, xldate_as_tuple, XL_CELL_TEXT, XL_CELL_DATE
+from xlrd import xldate_as_tuple
 from django.db.models import Q
 import logging
 from utils import *
 import pdb
+from datetime import datetime
+import codecs
+from django.utils.encoding import smart_str
 
 log = logging.getLogger('GROUPIFY')
 
@@ -51,7 +55,7 @@ ACTION_CHOICES = ((IGNORE, "Ignore"),
             
 
 class City(models.Model):
-    city = models.CharField(max_length=150,null=True, blank=True, unique=True)
+    city = models.CharField(max_length=150,null=True, blank=True)
     state = models.CharField(max_length=150,null=True, blank=True)
     country = models.CharField(max_length=150,null=True, blank=True)
     
@@ -80,8 +84,8 @@ class UserProfile(models.Model):
     last_name = models.CharField(max_length=150, null=True, blank=True)
     email = models.EmailField(max_length=75)
     gender = models.IntegerField(choices=GENDER_CHOICES, null=True, blank=True)
-    phone_number = models.CharField(max_length=35, null=True, blank=True)
-    address = models.CharField(max_length=300, null=True, blank=True)
+    phone_number = models.CharField(max_length=100, null=True, blank=True)
+    address = models.CharField(max_length=500, null=True, blank=True)
     photo = models.ImageField("Profile picture", upload_to="profile_pictures/", null=True, blank=True, default='{{STATIC_URL}}default_male_profile_picture.jpg')
     city = models.ForeignKey(City, null=True, blank=True)
     twitter_url = models.URLField(max_length=100, null=True, blank=True)
@@ -90,6 +94,7 @@ class UserProfile(models.Model):
     website_url = models.URLField(max_length=100, null=True, blank=True)
     profile_status = models.IntegerField(choices = PROFILE_STATUS, null=True, blank=True, default=UNLINKED)
     about = models.TextField(null=True, blank=True)
+    date_of_birth = models.DateField(null=True, blank=True)
 
     def __unicode__(self):
         return self.first_name + " " + self.last_name
@@ -111,9 +116,12 @@ class UserProfile(models.Model):
 
     def set_city(self, value):
         value=value.strip()
+        junkcity=''
         if(value):
             if('/' in value): #Multiple cities separated by '/'. We take the first one.
-                value = value.split('/')[0].strip()
+                (value, junkcity) = value.split('/',1)
+                value=value.strip()
+            
             cities=City.objects.filter(Q(city__iexact=value) | Q(state__iexact=value) | Q(country__iexact=value))
             if(cities):
                 self.city = cities[0]
@@ -123,6 +131,11 @@ class UserProfile(models.Model):
                     self.city = synonyms[0].city
                 else:
                     log.debug("IMPORTANT: City not added: [" + value + "]")
+                    junkcity=value
+
+            if junkcity!='':
+                junkdata = ProfileJunkData(userprofile=self, key='city', value=junkcity)
+                junkdata.save()
 
         return self
 
@@ -151,11 +164,24 @@ class UserProfile(models.Model):
             return ""
 
     get_year_of_graduation.short_description = "Graudation Year"
+    
+    def get_roll_num(self):
+        if(StudentSection.objects.filter(userprofile=self)):
+            return StudentSection.objects.filter(userprofile=self)[0].roll_num
+        else:
+            return 0
 
+    get_roll_num.short_description = "Roll No"
+
+class ProfileJunkData(models.Model):
+    userprofile = models.ForeignKey(UserProfile)
+    key = models.CharField(max_length=50)
+    value = models.CharField(max_length=500)
     
 class Branch(models.Model):
     branch = models.CharField(max_length=200, null=True, blank=True)
     course = models.CharField(max_length=200, null=True, blank=True)
+    specialisation = models.CharField(max_length=200, null=True, blank=True)
     
     def get_full_name(self):
         if(self.branch==''):
@@ -187,21 +213,36 @@ class StudentSection(models.Model):
     def get_full_qualification(self):
         return self.branch.get_full_name() + " " + str(self.year_of_graduation)
 
-    def set_branch(self, value):
-        value=value.strip()
-        if(value):
-            branches=Branch.objects.filter(branch__iexact=value)
+    def set_branch(self, branch, course, specialisation):
+        specialisation=specialisation.strip()
+        if(specialisation!=''):
+            branches=Branch.objects.filter(specialisation__iexact=specialisation)
             if(branches):
                 self.branch=branches[0]
             else:
-                synonyms=BranchSynonym.objects.filter(name__iexact=value)
+                synonyms=BranchSynonym.objects.filter(name__iexact=specialisation)
                 if(synonyms):
                     self.branch=synonyms[0].branch
                 else:
-                    log.debug("Could not find branch [" + value + "]. Therefore not setting the value")
-        return self
+                    log.debug("Could not find specialisation [" + specialisation + "]. Therefore not setting the value")
+                    return False
+            return True
+        
+        branch=branch.strip()
+        if(branch!=''):
+            branches=Branch.objects.filter(branch__iexact=branch)
+            if(branches):
+                self.branch=branches[0]
+            else:
+                synonyms=BranchSynonym.objects.filter(name__iexact=branch)
+                if(synonyms):
+                    self.branch=synonyms[0].branch
+                else:
+                    log.debug("Could not find branch [" + branch + "]. Therefore not setting the value")
+                    return False
+        
+        return True
 
-    
 class Employer(models.Model):
     name = models.CharField(max_length=200)
     
@@ -362,25 +403,32 @@ class XlsUpload(models.Model):
             for row in range(s.nrows):
                 if(row==0): #Header
                     for col in range(s.ncols):
-                        header = (str(s.cell(row,col).value)).lower()
+                        header = (unicode(s.cell(row,col).value)).lower()
                         colIndex[header] = col
-                    #log.debug("Resulting colIndex Map index : "+str(colIndex))
+                    log.debug("Resulting colIndex Map index : "+str(colIndex))
                 else: #Data
                     name, mobile, email, branch, city, address, yog, rollno = '','','','','','',0,0
                     first_name, last_name = '',''
+                    dob, specialisation, course, phone, offphone=None,'','','',''
+                    junk = {}
 
                     #Part 1: Extract all necessary values from the row.
                     #Add all fields here.
                     if(colIndex.get('email') is not None):
-                        email = str(s.cell(row,colIndex['email']).value).strip()
+                        email = unicode(s.cell(row,colIndex['email']).value).strip()
+                        if('/' in email): #Multiple email IDs separated by '/'
+                            (email, junk['email']) = email.split('/',1)
+                        if(',' in email): #Multiple email IDs separated by '/'
+                            (email, junk['email']) = email.split(',',1)
                         if(email!='' and (isValidEmailId(email) is False)):
-                            log.debug("The email ID [" + email + "] is invalid. Ignoring it.")
+                            log.debug("The email ID [" + email + "] is invalid. Putting it in junk.")
+                            junk['email'] = email
                             email='' #For invalid email ID treat it as if the email ID is not present
                     else:
                         log.debug("Email does not exist in the excel sheet")
 
                     if(colIndex.get('name') is not None):
-                        name = str(s.cell(row,colIndex['name']).value).strip()
+                        name = unicode(s.cell(row,colIndex['name']).value).strip()
                         if(name):
                             try:
                                 (first_name, last_name) = name.split(' ',1)
@@ -390,46 +438,98 @@ class XlsUpload(models.Model):
                     if(colIndex.get('mobile') is not None):
                         mobilestr = s.cell(row,colIndex['mobile']).value
                         if type(mobilestr) is float: #to remove a trailing .0 for float numbers
-                            mobile=str(int(mobilestr)).strip()
-                            log.debug("Mobile number is ["+mobile+ "]")
+                            mobile=unicode(int(mobilestr)).strip()
                         else:
-                            mobile = str(mobilestr).strip()
+                            mobile = unicode(mobilestr).strip()
+                    
+                    if(colIndex.get('phone') is not None):
+                        phonestr = s.cell(row,colIndex['phone']).value
+                        if type(phonestr) is float: #to remove a trailing .0 for float numbers
+                            phone=unicode(int(phonestr)).strip()
+                        else:
+                            phone=unicode(phonestr).strip()
+                        
+                        if phone!='':
+                            if (mobile!=''):
+                                mobile+=","+phone
+                            else:
+                                mobile=phone
+                    
+                    if(colIndex.get('office phone') is not None):
+                        offphonestr = s.cell(row,colIndex['office phone']).value
+                        if type(offphonestr) is float: #to remove a trailing .0 for float numbers
+                            offphone=","+unicode(int(offphonestr)).strip()
+                        else:
+                            offphone=","+unicode(offphonestr).strip()
+                        
+                        if offphone!='':
+                            if (mobile!=''):
+                                mobile+=","+offphone
+                            else:
+                                mobile=offphone
+                    
+                    log.debug("Mobile number is ["+mobile+ "]")
 
                     if(colIndex.get('branch') is not None):
-                        branch = str(s.cell(row,colIndex['branch']).value).strip()
+                        branch = unicode(s.cell(row,colIndex['branch']).value).strip()
 
                     if(colIndex.get('city') is not None):
-                        city = str(s.cell(row,colIndex['city']).value).strip()
+                        city = unicode(s.cell(row,colIndex['city']).value).strip()
 
                     if(colIndex.get('address') is not None):
-                        address = (str(s.cell(row,colIndex['address']).value)).strip()
+                        address = (unicode(s.cell(row,colIndex['address']).value)).strip()
                     
                     if(colIndex.get('rollno') is not None):
-                        rollnostr = s.cell(row,colIndex['rollno']).value.strip()
-                        if(rollnostr==''):
-                            rollno=0
-                        elif(isValidRollNo(rollnostr) is False):
-                            log.debug("The roll no [" +rollnostr+ "] is invalid. Ignoring it.")
-                            rollno=0
+                        rollnostr = s.cell(row,colIndex['rollno']).value
+                        if type(rollnostr) is str:
+                            if(rollnostr==''):
+                                rollno=0
+                            elif(isValidRollNo(rollnostr) is False):
+                                log.debug("The roll no [" +rollnostr+ "] is invalid. Ignoring it.")
+                                junk['rollno'] = rollnostr
+                                rollno=0
+                            else:
+                                rollno = int(rollnostr)
+                        elif type(rollnostr) is float:
+                            rollno=int(rollnostr)
                         else:
-                            rollno = int(rollnostr)
+                            rollno=rollnostr
 
                     if(colIndex.get('yog') is not None):
-                        yogstr = s.cell(row,colIndex['yog']).value.strip()
-                        if(yogstr==''):
-                            yog=0
-                        elif(isValidYOG(yogstr) is False):
-                            log.debug("The YOG [" +yogstr+ "] is invalid. Ignoring it.")
-                            yog=0
+                        yogstr = s.cell(row,colIndex['yog']).value
+                        if type(yogstr) is str:
+                            if(yogstr==''):
+                                yog=0
+                            elif(isValidYOG(yogstr) is False):
+                                log.debug("The YOG [" +yogstr+ "] is invalid. Ignoring it.")
+                                junk['yog'] = yogstr
+                                yog=0
+                            else:
+                                yog = int(yogstr)
                         else:
-                            yog = int(yogstr)
+                            yog=yogstr
+                            
+                    if(colIndex.get('dob') is not None):
+                        dobtype = s.cell(row, colIndex['dob']).ctype
+                        if dobtype == XL_CELL_TEXT:
+                            dob = None
+                        else:
+                            dobnum = s.cell(row, colIndex['dob']).value
+                            if dobnum!='':
+                                dob = datetime(*xldate_as_tuple(dobnum, wb.datemode))
+                            
+                    if(colIndex.get('course') is not None):
+                        course = unicode(s.cell(row,colIndex['course']).value).strip()
+                    
+                    if(colIndex.get('specialisation') is not None):
+                        specialisation = unicode(s.cell(row,colIndex['specialisation']).value).strip()
 
                     if(email=='' and name==''): #Currently email and name are being used as keys to check duplicates, so do not accept profile with blank email ID and name
                         log.debug("Email ID and name are empty, so profile is being ignored")
                         continue
 
                     log.debug("Details - First Name: ["+first_name+"], Last Name: ["+last_name+"], Email: ["+email+"], Branch: ["+branch+"]")
-                    #log.debug("Mobile: ["+mobile+"], City: ["+city+"], Address: ["+address+"], YOG: ["+ str(yog) +"], RollNo: ["+ str(rollno) + "]")
+                    #log.debug("Mobile: ["+mobile+"], City: ["+city+"], Address: ["+address+"], YOG: ["+ unicode(yog) +"], RollNo: ["+ unicode(rollno) + "]")
 
                     #Part 2: Set the values of UserProfile fields.
                     try:
@@ -448,25 +548,34 @@ class XlsUpload(models.Model):
                                 user_profile.phone_number = mobile
                             if address:
                                 user_profile.address = address
+                            if dob:
+                                user_profile.date_of_birth = dob
                     except ObjectDoesNotExist:
                         user_profile = UserProfile(first_name=first_name, 
                                                    last_name=last_name,
                                                    email=email,
                                                    phone_number=mobile,
                                                    address=address,
-                                                   role=ALUMNI)
+                                                   role=ALUMNI,
+                                                   date_of_birth=dob)
                         text = "Added new profile with email ID [" + email + "] and name [" + name + "]"
 
                     except MultipleObjectsReturned:
                         text = "Seems like multiple profiles exist for [" +name+ "], email [" +email+ "]. Ignoring this row."
-
+                        
+                    user_profile.save()
+                    log.debug(text)
+                    
                     #Part 3: Set the foreign key fields
                     if(user_profile):
                         #log.debug("Setting city for ["+user_profile.first_name+"] to ["+city+"]")
                         user_profile.set_city(city)
-
-                    user_profile.save()
-                    log.debug(text)
+                        user_profile.save()
+                    
+                    if junk:
+                        for key, value in junk.items():
+                            junkdata = ProfileJunkData(userprofile=user_profile, key=key, value=value)
+                            junkdata.save()
 
                     #Part 4: Set other objects that have a relation to UserProfile
                     try:
@@ -482,7 +591,11 @@ class XlsUpload(models.Model):
                                                          year_of_graduation=yog)
                         log.debug("Creating new student section for ["+ user_profile.first_name + "]")
                     
-                    student_section.set_branch(branch)
+                    setbranchsuccess = student_section.set_branch(branch, course, specialisation)
+                    if not setbranchsuccess:
+                        junkdata = ProfileJunkData(userprofile=user_profile, key='branch', value=branch+","+course+","+specialisation)
+                        junkdata.save()
+                    
                     student_section.save()
 
         log.debug("Bulk upload completed")

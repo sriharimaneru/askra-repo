@@ -5,7 +5,7 @@ from userprofile.models import UserProfile, City, Branch, StudentSection, \
                                Employer, JobDesignation, JobDomain, EmployementDetail, \
                                College, Degree, HigherEducationDetail, Department, \
                                FacultyDesignation, FacultySection, UserTag, HigherEducationBranch, CsvUpload, ErrorRow, \
-                               XlsUpload, CitySynonym, BranchSynonym
+                               XlsUpload, CitySynonym, BranchSynonym, ProfileJunkData
 
 class CityAdmin(admin.ModelAdmin):
     list_display = ('city', 'state', 'country')
@@ -13,9 +13,9 @@ class CityAdmin(admin.ModelAdmin):
     search_fields = ('city', 'state', 'country')
     
 class BranchAdmin(admin.ModelAdmin):
-    list_display = ('branch', 'course', )
-    list_filter = ('course', )
-    search_fields = ('branch', )    
+    list_display = ('branch', 'course', 'specialisation')
+    list_filter = ('branch', 'course', 'specialisation')
+    search_fields = ('branch', 'course', 'specialisation')
     
 class StudentSectionInline(admin.TabularInline):
     model = StudentSection
@@ -35,7 +35,11 @@ class FacultySectionInline(admin.TabularInline):
 
 class UserTagInline(admin.TabularInline):
     model = UserTag
-    extra=1   
+    extra=1
+
+class ProfileJunkDataInline(admin.TabularInline):
+    model = ProfileJunkData
+    extra=0   
 
               
 class YOGListFilter(admin.SimpleListFilter):
@@ -89,11 +93,11 @@ class UserProfileAdmin(admin.ModelAdmin):
                                                 ('email', 'phone_number',), ('photo', 'address', 'city',), ('about',),)}),
                  ("Website Urls", {"fields" : (('linked_url', 'facebook_url',), ('website_url', 'twitter_url'))}),]
     raw_id_fields = ('user',)
-    list_display = ('id', 'first_name', 'last_name', 'get_course', 'get_branch', 'get_year_of_graduation', 'email', 'phone_number', 'city', 'role', 'profile_status', )
+    list_display = ('id', 'first_name', 'last_name', 'get_roll_num', 'get_course', 'get_branch', 'get_year_of_graduation', 'email', 'phone_number', 'city', 'role', 'profile_status', )
     list_filter = ('role', 'profile_status', 'city', YOGListFilter, BranchListFilter)
     search_fields = ('first_name', 'last_name', 'email',)
     inlines = (StudentSectionInline, EmployementDetailInline, HigherEducationDetailInline, FacultySectionInline,
-               UserTagInline, )
+               UserTagInline, ProfileJunkDataInline, )
 
     change_list_template = "admin/change_list_filter_sidebar.html"
 
@@ -122,10 +126,3 @@ admin.site.register(CsvUpload, CsvUploadAdmin)
 admin.site.register(XlsUpload, XlsUploadAdmin)
 admin.site.register(CitySynonym)
 admin.site.register(BranchSynonym)
-
-
-
-
-
-
-
