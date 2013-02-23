@@ -642,6 +642,13 @@ div#facet-list .selected_facet{
 	font-weight: bolder;
 }
 
+#myButton {
+	text-align: center;
+	width: 400px;
+	height: 30px;
+	margin-left: 200px;
+}
+
 
 
 /******************End Search Page ***********************/
