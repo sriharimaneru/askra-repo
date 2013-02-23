@@ -20,7 +20,7 @@ def index(request):
 
     totalalumcollected = UserProfile.objects.filter(role=0).count()
     remainingalumdata = 30000 - totalalumcollected
-    percentalumdatacollected = 100*(totalalumcollected/30000.0)
+    percentalumdatacollected = int(100*(totalalumcollected/30000.0))
     percentalumdataremaining = 100 - percentalumdatacollected
     
     return render_to_response("index.html", RequestContext(request, {'columnchartdata':dict, 'totalalumdata': totalalumcollected, 

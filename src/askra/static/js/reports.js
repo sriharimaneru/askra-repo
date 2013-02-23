@@ -18,7 +18,7 @@ function drawColumnChart(collected) {
     chartArea: {width: '80%', height: '70%'},
     backgroundColor: 'white',
     legend: 'none',
-    vAxis: {title: 'Number of profiles collected so far', minValue:0, maxValue:100}
+    vAxis: {title: 'Number of profiles collected so far', minValue:0, maxValue:1000}
   };
 
   var chart = new google.visualization.ColumnChart(document.getElementById('column_chart'));
