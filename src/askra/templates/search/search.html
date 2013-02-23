@@ -213,9 +213,9 @@
     </div>
     <div id="search_results">
         {% for result in results %}
-            {% if result.name %}
+            {% if result.name.strip %}
                 <div class="result_div">
-                    <h2 class="name section-subtitle">{{ result.name }}</h2>    
+                    <h2 class="name section-subtitle">{{ result.name }}</h2>
                     {% if result.branch %}
                         <p class="branch">{{ result.branch }}</p> 
                     {% endif %}  
