@@ -274,7 +274,7 @@ def search(request):
     results = sqs.order_by('name')
     context['resultcount'] = results.count()
     #results = results[offsetvalue:offsetvalue+20]
-    context['results'] = results
+    context['results'] = results[:1000]
 
     #querystring = request.get_full_path()
     #if('?' not in querystring):

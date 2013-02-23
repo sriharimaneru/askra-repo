@@ -53,6 +53,6 @@ class ProfileSearchBasicForm(forms.Form):
     branches_list = [(branch.branch, branch.branch) for branch in Branch.objects.all() if branch.branch]
     branches_list = [("", "All")] + sorted(branches_list, key=lambda x: x[1])
     branch = forms.ChoiceField(choices = branches_list, required=False)
-    year_of_passing = forms.ChoiceField(choices = [("", "All")] + [(x,x) for x in range(1964, 2007)], required=False)
+    year_of_passing = forms.ChoiceField(choices = [("", "All")] + [(x,x) for x in range(1964, 2009)] + [("2011", "2011"), ("2013", "2013"), ("2014", "2014"), ("2015", "2015"), ("2016", "2016")], required=False)
 
 

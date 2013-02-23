@@ -213,18 +213,20 @@
     </div>
     <div id="search_results">
         {% for result in results %}
-            <div class="result_div">
-                <h2 class="name section-subtitle">{{ result.name }}</h2>    
-                {% if result.branch %}
-                    <p class="branch">{{ result.branch }}</p> 
-                {% endif %}  
-                {% if result.year_of_passing %}
-                    <p class="year_of_passing">{{ result.year_of_passing }}</p>    
-                {% endif %} 
-                {% if result.city %}
-                    <p class="city">{{ result.city }}</p>    
-                {% endif %} 
-            </div>
+            {% if result.name %}
+                <div class="result_div">
+                    <h2 class="name section-subtitle">{{ result.name }}</h2>    
+                    {% if result.branch %}
+                        <p class="branch">{{ result.branch }}</p> 
+                    {% endif %}  
+                    {% if result.year_of_passing %}
+                        <p class="year_of_passing">{{ result.year_of_passing }}</p>    
+                    {% endif %} 
+                    {% if result.city %}
+                        <p class="city">{{ result.city }}</p>    
+                    {% endif %} 
+                </div>
+            {% endif %}
         {% empty %}
             <p>Sorry, no results found.</p>
         {% endfor %}
