@@ -208,16 +208,23 @@ def search(request):
     sqs = SearchQuerySet().facet('branch')
     sqs = sqs.facet('year_of_passing')
     sqs = sqs.facet('city')
-        
+    
+            
     if name or branch or year:
         context['form'] = ProfileSearchBasicForm(request.GET)
-        sqs = sqs.auto_query(name + branch + year)
+        if name:
+            sqs = sqs.auto_query(name)
+        if branch:
+            sqs = sqs.filter(branch_exact = branch)
+        if year:
+            sqs = sqs.filter(year_of_passing_exact = year)
     else:
         context['form'] = ProfileSearchBasicForm()
     
     context['facets'] = sqs.facet_counts()
+    
         
-    ##Horrible hardcoading - need to tweak it - By Srihari
+    ##Horrible hardcoding - need to tweak it - By Srihari
     #To compute the facet counts
     
     if branch_facet:
