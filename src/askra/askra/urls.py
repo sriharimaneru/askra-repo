@@ -1,6 +1,6 @@
 from django.conf.urls import patterns, include, url
-from django.views.generic.simple import direct_to_template
 from django.conf import settings
+from django.views.generic import TemplateView
 
 
 # Uncomment the next two lines to enable the admin:
@@ -14,9 +14,9 @@ urlpatterns = patterns('',
     url(r'^$', 'askra.views.index', name='home'),
     url(r'^profile/', include('userprofile.urls')),
     url(r'^index$', 'askra.views.index', name='index'), #temporarily. Will remove this @srihari
-    url(r'^view_profile$', direct_to_template, {'template' : 'view_profile.html'}, name='view_profile'),    
-    url(r'^reg-step-2$', direct_to_template, {'template' : 'reg-step-2.html'}, name='reg-2'),  
-    url(r'^reg-step-3$', direct_to_template, {'template' : 'reg-step-3.html'}, name='reg-3'),
+    url(r'^view_profile$', TemplateView.as_view(template_name='view_profile.html'), name='view_profile'),    
+    url(r'^reg-step-2$', TemplateView.as_view(template_name='reg-step-2.html'), name='reg-2'),  
+    url(r'^reg-step-3$', TemplateView.as_view(template_name='reg-step-3.html'), name='reg-3'),
     url(r'^search', 'userprofile.views.search', name='haystack_search'),
     url(r'^ajaxsearch', 'userprofile.views.ajaxresponse', name='ajax_search'),
 
