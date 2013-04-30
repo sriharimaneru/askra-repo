@@ -100,7 +100,14 @@ class UserProfile(models.Model):
         return self.first_name + " " + self.last_name
 
     def get_full_name(self):
-        return self.first_name + " " + self.last_name
+        if self.first_name and self.last_name:
+            return self.first_name + " " + self.last_name
+        elif self.first_name:
+            return self.first_name
+        elif self.last_name:
+            return self.last_name
+        else:
+            return ""
 
     def set_gender(self, value):
         if(value):
@@ -211,7 +218,14 @@ class StudentSection(models.Model):
     branch = models.ForeignKey(Branch, null=True, blank=True)
 
     def get_full_qualification(self):
-        return self.branch.get_full_name() + " " + str(self.year_of_graduation)
+        if self.branch and self.year_of_graduation:
+            return self.branch.get_full_name() + " " + str(self.year_of_graduation)
+        elif self.branch:
+            return self.branch.get_full_name()
+        elif self.year_of_graduation:
+            return str(self.year_of_graduation)
+        else:
+            return ""
 
     def set_branch(self, branch, course, specialisation):
 #        specialisation=specialisation.strip()

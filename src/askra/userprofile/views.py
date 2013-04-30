@@ -42,30 +42,33 @@ def reg_step_3(request,x):
 
 def edit_profile_basic(request, profile_id):
     if not profile_id:
-       return render_to_response("error.html", RequestContext(request, {}))
+        return render_to_response("error.html", RequestContext(request, {}))
 
     user_profile=UserProfile.objects.get(id=profile_id)
     student_section=StudentSection.objects.filter(userprofile = user_profile)[0]
 
     if request.method=='POST':
-    	form = EditProfileBasicForm(request.POST, request.FILES)
-        print "indisde post"
-    	if form.is_valid():
+        form = EditProfileBasicForm(request.POST, request.FILES)
+        if form.is_valid():
             user_profile.first_name = form.cleaned_data['name'].split()[0]
             user_profile.last_name = form.cleaned_data['name'].split()[1]
             print form.cleaned_data['course']
             student_section.branch_id = form.cleaned_data['course']
             student_section.year_of_graduation = form.cleaned_data['year_of_graduation']
-            user_profile.city = City.objects.get(city=form.cleaned_data['city'])
+            if form.cleaned_data['city'] != '':
+                user_profile.city = City.objects.get(city=form.cleaned_data['city'])
             user_profile.about = form.cleaned_data['about']
 
             user_profile.save()
             student_section.save()
 
-    	    return HttpResponseRedirect('/profile/view/'+profile_id)
+            return HttpResponseRedirect('/profile/view/'+profile_id)
     else:
-        form = EditProfileBasicForm({'name':user_profile.get_full_name(), 'course':student_section.branch.id ,'year_of_graduation':student_section.year_of_graduation,
-         'city':user_profile.city, 'about':user_profile.about, 'branch':student_section.branch.id}, {'picture': ''})
+        branchid = None
+        if student_section.branch:
+            branchid = student_section.branch.id
+        form = EditProfileBasicForm({'name':user_profile.get_full_name(), 'course':branchid ,'year_of_graduation':student_section.year_of_graduation,
+         'city':user_profile.city, 'about':user_profile.about, 'branch':branchid}, {'picture': ''})
 
     return render(request, "edit_profile_basic.html", {'form': form, 'profile_id': profile_id,})
 

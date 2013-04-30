@@ -512,7 +512,7 @@ div#search-content dd{
 
 
 div#search-content label, input{
-	display: block;
+	display: inline-block;
 }
 
 div#search-content label{
@@ -652,3 +652,226 @@ div#facet-list .selected_facet{
 
 
 /******************End Search Page ***********************/
+
+
+
+/******************Start view profile page ***************/
+
+#main_content, #other_content, #related_profiles {
+	color: black;
+}
+
+
+#navigation_div {
+	margin-bottom: 20px;
+}
+
+#breadcrumb {
+	float: left;
+}
+
+#pic_div {
+	margin-top: 20px;
+	clear: both;
+	float: left;
+}
+
+#pic_div #edit_pic {
+	width: 200px;
+	border: 1px solid gray;
+	text-align: center;
+}
+
+#search_div {
+	float: right;
+}
+
+#basic_details_div {
+	margin-top: 20px;
+	float: left;
+	margin-left: 20px;
+}
+
+#social_media_links img {
+	padding-right: 5px;
+}
+
+#contact {
+	float: right;
+	margin-top: 20px; 
+}
+
+#contact_div {
+	margin-top: 20px;
+	border: thin solid gray;
+}
+
+#edit_profile {
+	background: gray;
+	text-align: center;
+}
+
+#edit_profile a {
+	color: black;
+	text-decoration: none;
+}
+
+#contact_div h3 {
+	padding-left: 10px;
+	padding-right: 30px;
+}
+
+#contact_div p {
+	padding-left: 25px;
+	padding-right: 25px;
+}
+
+#contact_div #mail, #contact_div #mobile {
+	padding-left: 50px;
+	padding-right: 30px;
+}
+
+#text_details {
+	float: left;
+	width: 70%;
+}
+
+#tags {
+	float: right;
+	width: 30%;
+}
+
+#tags img {
+	padding: 5px
+}
+
+#text_details .detail{
+	margin: 20px;
+}
+
+.detail {
+	color: black;
+}
+
+.detail_container {
+		border: 1px solid grey;
+}
+.detail .label {
+	padding-right: 5px;
+}
+
+.detail .value {
+	padding-left: 5px;
+	color: black;
+}
+
+.detail td {
+	padding: 5px;
+}
+
+.related_profile_container {
+	border: 1px solid gray;
+	float: left;
+	width: 160px;
+	margin-right: 10px;
+	margin-bottom: 20px;
+	padding: 5px;
+}
+
+#related_profiles {
+	border: 1px solid gray;
+	margin-top: 20px;	
+}
+/******************End view profile page ***************/
+
+
+/******************Start edit profile page ***************/
+
+#basic_details_form, #weblinks_form, #edit_education_form, #edit_employment_form {
+	width: 500px;
+	margin-top: 20px;
+	float: left;
+	margin-left: 5px;
+}
+
+#basic_section .selectBox select, #edit_education_form .selectBox select, #edit_employment_form .selectBox select {
+	height: 27px;
+	width: 144px;
+	margin-bottom: 10px;
+	margin-right: 5px;
+	padding-bottom: 0;
+	padding-right: 0;
+	color: black;
+	background-color: #f0f0f0;
+}
+
+#basic_section input[type=text], #weblinks_form input[type=text], #edit_education_form input[type=text], #edit_employment_form input[type=text] {
+	color: black;
+	margin-bottom: 0px;
+}
+
+#basic_details_form span, #edit_education_form span, #edit_employment_form span{
+	width: 150px;
+	float: left;
+	margin-top: 0px;
+}
+
+#basic_details_form input[type=submit], #edit_education_form input[type=submit], #edit_employment_form input[type=submit] {
+	margin-left: 0px;
+}
+
+#basic_details_form textarea {
+	width: 300px;
+	height: 200px;
+	border-radius: 5px;
+}
+
+#weblinks_form #web_links input[type=url] {
+	color: black;
+	width: 300px;
+}
+
+#weblinks_form #web_links input[type=text] {
+	color: black;
+	width: 300px;
+}
+
+#weblinks_form #web_links img {
+	height: 30px;
+	width: 30px;
+}
+
+#edit_education_form .edit_education, #edit_employment_form .edit_employment {
+	border: 1px solid gray;
+	padding: 5px;
+	margin: 15px;
+}
+
+#edit_education_form .edit_education p, #edit_employment_form .edit_employment p {
+	background: gray;
+	margin: 0px;
+	margin-bottom: 15px;
+	padding: 3px;
+}
+
+#tabs_nav ul {
+	list-style: none;
+	padding-left: 0px;
+}
+
+#tabs_nav ul li {
+	display: inline;
+}
+
+#tabs_nav ul li a {
+	background: gray;
+	color: white;
+	padding: 10px;
+	text-decoration: none;
+}
+
+#tabs_nav ul li.current a {
+	background: #0f0f0f;
+}
+
+/******************End edit profile page ***************/

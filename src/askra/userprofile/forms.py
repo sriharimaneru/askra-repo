@@ -3,13 +3,18 @@ from django.forms.formsets import formset_factory
 from userprofile.models import *
 
 class EditProfileBasicForm(forms.Form):
-    name = forms.CharField(max_length=100)
-    course = forms.ChoiceField(choices=[ (branch.id, branch.course) for branch in Branch.objects.all() ])    
-    branch = forms.ChoiceField(choices=[ (branch.id, branch.branch) for branch in Branch.objects.all() ])
-    year_of_graduation = forms.IntegerField(min_value=1900)
-    city = forms.CharField(max_length=50)
-    about = forms.CharField(widget=forms.Textarea)
-    picture = forms.ImageField("Profile picture")
+    name = forms.CharField(max_length=100, required=False)
+    course = forms.ChoiceField(choices=[(branch.id, branch.course) for branch in Branch.objects.all()], required=False)    
+    branch = forms.ChoiceField(choices=[(branch.id, branch.branch) for branch in Branch.objects.all()], required=False)
+    year_of_graduation = forms.IntegerField(min_value=1900, required=False)
+    city = forms.CharField(max_length=50, required=False)
+    about = forms.CharField(widget=forms.Textarea, required=False)
+    picture = forms.ImageField(label="Profile picture", required=False)
+    
+    def __init__(self, *args, **kwargs):
+        super(EditProfileBasicForm, self).__init__(*args, **kwargs)
+        self.fields['course'].choices.insert(0, ('','None'))
+        self.fields['branch'].choices.insert(0, ('','None'))
 
     #def __init__(self, curr_branch_course, *args, **kwargs):
     #    super(EditProfileBasicForm, self).__init__(*args, **kwargs)
