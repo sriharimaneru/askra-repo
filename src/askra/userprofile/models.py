@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
-from tag.models import Tag
+from tag.models import Tag, GENERIC
 from calendar import calendar
 import csv
 from django.core.exceptions import ObjectDoesNotExist
@@ -95,6 +95,7 @@ class UserProfile(models.Model):
     profile_status = models.IntegerField(choices = PROFILE_STATUS, null=True, blank=True, default=UNLINKED)
     about = models.TextField(null=True, blank=True)
     date_of_birth = models.DateField(null=True, blank=True)
+    tags = models.ManyToManyField(Tag, null=True, blank=True)
 
     def __unicode__(self):
         return self.first_name + " " + self.last_name

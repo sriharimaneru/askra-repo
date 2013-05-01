@@ -1,12 +1,61 @@
 {% extends "base.html" %}
 
 {% block scripts %}
+<link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/bootstrap.min.css"></link>
+<link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/bootstrap-tagmanager.css"></link>
+<script src="{{STATIC_URL}}js/bootstrap.min.js"></script>
+<script src="{{STATIC_URL}}js/bootstrap-tagmanager.js"></script>
 <script>
 	function filterBranches() {
 		var courses = document.getElementById('selectCourse')
-		
-
 	}
+
+	$(function() {
+
+		var prefilledTags = "{{form.tagList.value}}".split(",");
+		var tagsSource = JSON.parse("{{tags|escapejs}}");
+		// console.log(prefilledTags);
+
+		var tagMgrOptions = {
+			prefilled: prefilledTags,
+		    CapitalizeFirstLetter: true,
+		    preventSubmitOnEnter: true,
+		   	tagsContainer: '#currentTags',
+		    typeahead: true,
+		    typeaheadAjaxSource: null,
+		    typeaheadSource: tagsSource,
+		    delimeters: [13, 44, 188],
+		    backspace: [],
+		    hiddenTagListName: 'tagList',
+		    blinkBGColor_1: '#FFFF9C',
+		    blinkBGColor_2: '#CDE69C'
+		};
+
+		$(".tagManager").tagsManager(tagMgrOptions);
+
+		$('.tagManager').keypress(function(e)
+	    {
+	        code = (e.keyCode ? e.keyCode : e.which);
+	        if(code==13)
+	        {
+	        	pushTags($('.tagManager').val());
+	        }
+	    });
+
+		$('#addtag').click(function() {
+			pushTags($('.tagManager').val());
+			$('.tagManager').focus();
+		});
+
+		function pushTags(tags) {
+			var arr = tags.split(",");
+			for(var i=0; i<arr.length; i++)
+			{
+				$('.tagManager').tagsManager('pushTag',arr[i].trim());
+				console.log("["+arr[i].trim()+"]");
+			}			
+		}
+	});
 </script>
 {% endblock %}
 
@@ -47,6 +96,11 @@
 				<span>Year of Graduation:</span>{{ form.year_of_graduation }}<br><br>
 				<span>City:</span>{{ form.city }}<br><br>
 				<span>About:</span>{{ form.about }}<br><br>
+				<span id="tagslabel">Tags:</span><div id="currentTags"></div>
+				<div id="edit_tags">
+					<input type="text" name="tags" placeholder="Add Tags" class="tagManager"/>
+					<input type="button" id="addtag" value="Add" />
+				</div>
 			</div>
 
 			<input type="submit" name="submit" value="Save Changes"/>

@@ -733,12 +733,13 @@ div#facet-list .selected_facet{
 
 #text_details {
 	float: left;
-	width: 70%;
+	width: 69%;
 }
 
 #tags {
 	float: right;
 	width: 30%;
+	border: 1px solid black;
 }
 
 #tags img {
@@ -782,6 +783,32 @@ div#facet-list .selected_facet{
 	border: 1px solid gray;
 	margin-top: 20px;	
 }
+
+#tags>ul {
+	list-style: none;
+}
+
+#tags>ul li {
+	display: inline;
+}
+
+.usertag {
+	background-color: #CDE69C;
+    border: 1px solid #A5D24A;
+    border-radius: 3px 3px 3px 3px;
+    color: #638421;
+
+    margin-bottom: 5px;
+    margin-right: 5px;
+    padding: 6px 5px 5px 5px;
+    text-decoration: none;
+
+    vertical-align: middle;
+    line-height: 18px;
+    height:18px;
+    -moz-transition: border 0.2s linear 0s, box-shadow 0.2s linear 0s;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset;
+}
 /******************End view profile page ***************/
 
 
@@ -810,7 +837,7 @@ div#facet-list .selected_facet{
 	margin-bottom: 0px;
 }
 
-#basic_details_form span, #edit_education_form span, #edit_employment_form span{
+#basic_details_form #basic_section>span, #edit_education_form span, #edit_employment_form span{
 	width: 150px;
 	float: left;
 	margin-top: 0px;
@@ -872,6 +899,23 @@ div#facet-list .selected_facet{
 
 #tabs_nav ul li.current a {
 	background: #0f0f0f;
+}
+
+#basic_section span#tagslabel {
+	display: block;
+}
+
+#edit_tags {
+	margin-left: 150px;
+}
+
+#currentTags {
+	width: 400px;
+	height: 20px;
+}
+
+#currentTags>span {
+	display: block;
 }
 
 /******************End edit profile page ***************/

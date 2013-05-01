@@ -1,11 +1,14 @@
 {% extends "base.html" %}
 
 {% block scripts %}
-<script src="{{STATIC_URL}}js/jquery-latest.min.js"></script>
+
 <script>
-	$(".related_profile").click(function(){
-       window.location=$(this).find("a").attr("href"); 
-       return false;
+
+	$(function(){ 
+		$(".related_profile").click(function(){
+	       window.location=$(this).find("a").attr("href"); 
+	       return false;
+		});
 	});
 </script>
 {% endblock %}
@@ -128,11 +131,11 @@
 	</div>
 	<div id="tags">
 		<h3>Tags</h3>
-		<img src="{{STATIC_URL}}img/tag.jpg" width="150px" height="100px">
-		<img src="{{STATIC_URL}}img/tag.jpg" width="100px" height="100px">
-		<img src="{{STATIC_URL}}img/tag.jpg" width="250px" height="100px">
-		<img src="{{STATIC_URL}}img/tag.jpg" width="150px" height="50px">
-		<img src="{{STATIC_URL}}img/tag.jpg" width="75px" height="75px">
+		<ul>
+		{% for tag in tags %}
+			<li class="usertag"><span>{{tag.name}}</span></li>
+		{% endfor %}
+		</ul>
 	</div>
 </div>
 {% if other_profiles %}

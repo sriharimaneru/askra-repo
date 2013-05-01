@@ -10,6 +10,7 @@ class EditProfileBasicForm(forms.Form):
     city = forms.CharField(max_length=50, required=False)
     about = forms.CharField(widget=forms.Textarea, required=False)
     picture = forms.ImageField(label="Profile picture", required=False)
+    tagList = forms.CharField(max_length=400, required=False, widget=forms.HiddenInput())
     
     def __init__(self, *args, **kwargs):
         super(EditProfileBasicForm, self).__init__(*args, **kwargs)

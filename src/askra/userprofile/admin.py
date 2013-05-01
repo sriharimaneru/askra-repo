@@ -6,6 +6,7 @@ from userprofile.models import UserProfile, City, Branch, StudentSection, \
                                College, Degree, HigherEducationDetail, Department, \
                                FacultyDesignation, FacultySection, UserTag, HigherEducationBranch, CsvUpload, ErrorRow, \
                                XlsUpload, CitySynonym, BranchSynonym, ProfileJunkData
+from tag.models import Tag
 
 class CityAdmin(admin.ModelAdmin):
     list_display = ('city', 'state', 'country')
@@ -35,6 +36,10 @@ class FacultySectionInline(admin.TabularInline):
 
 class UserTagInline(admin.TabularInline):
     model = UserTag
+    extra=1
+
+class TagInline(admin.TabularInline):
+    model = Tag
     extra=1
 
 class ProfileJunkDataInline(admin.TabularInline):
@@ -91,13 +96,14 @@ class BranchListFilter(admin.SimpleListFilter):
 class UserProfileAdmin(admin.ModelAdmin):
     fieldsets = [("Basic Details", {"fields" : (('user', 'role', 'profile_status'), ('first_name','last_name', 'gender'), 
                                                 ('email', 'phone_number',), ('photo', 'address', 'city',), ('about',),)}),
-                 ("Website Urls", {"fields" : (('linked_url', 'facebook_url',), ('website_url', 'twitter_url'))}),]
+                 ("Website Urls", {"fields" : (('linked_url', 'facebook_url',), ('website_url', 'twitter_url'))}),
+                 ("Tags", {"fields": ('tags',)})]
     raw_id_fields = ('user',)
     list_display = ('id', 'first_name', 'last_name', 'get_roll_num', 'get_course', 'get_branch', 'get_year_of_graduation', 'email', 'phone_number', 'city', 'role', 'profile_status', )
     list_filter = ('role', 'profile_status', 'city', YOGListFilter, BranchListFilter)
     search_fields = ('first_name', 'last_name', 'email',)
     inlines = (StudentSectionInline, EmployementDetailInline, HigherEducationDetailInline, FacultySectionInline,
-               UserTagInline, ProfileJunkDataInline, )
+               ProfileJunkDataInline,)
 
     change_list_template = "admin/change_list_filter_sidebar.html"
 

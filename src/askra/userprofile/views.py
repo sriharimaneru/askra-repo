@@ -13,6 +13,7 @@ from forms import *
 from haystack.forms import SearchForm
 from forms import ProfileSearchBasicForm
 from django.http import HttpResponse
+import json
 
 def show_profile(request, profile_id):
     if not profile_id:
@@ -23,9 +24,10 @@ def show_profile(request, profile_id):
     education_details = HigherEducationDetail.objects.filter(userprofile = user_profile)
     employment_details = EmployementDetail.objects.filter(userprofile = user_profile)
     other_profiles = StudentSection.objects.exclude(id=student_section.id)[:5] #Change logic to show relevant profiles
+    tags = user_profile.tags.all()
     return render_to_response("view_profile.html", RequestContext(request, {'user_profile': user_profile,
     				 'student_section': student_section, 'education_details':education_details,
-    				 'employment_details': employment_details, 'other_profiles':other_profiles}))
+    				 'employment_details': employment_details, 'other_profiles':other_profiles, 'tags': tags,}))
 
 def reg_step_2(request,x):
     user_profiles = UserProfile.objects.filter(role=ALUMNI)
@@ -58,6 +60,18 @@ def edit_profile_basic(request, profile_id):
             if form.cleaned_data['city'] != '':
                 user_profile.city = City.objects.get(city=form.cleaned_data['city'])
             user_profile.about = form.cleaned_data['about']
+            
+            user_profile.tags.clear()
+            for tagstr in form.cleaned_data['tagList'].split(','):
+                if tagstr == '':
+                    continue
+                try:
+                    tag = Tag.objects.get(name=tagstr)
+                except ObjectDoesNotExist:
+                    tag= Tag(name=tagstr, category=GENERIC)
+                    tag.save()
+
+                user_profile.tags.add(tag)
 
             user_profile.save()
             student_section.save()
@@ -67,10 +81,14 @@ def edit_profile_basic(request, profile_id):
         branchid = None
         if student_section.branch:
             branchid = student_section.branch.id
+        
+        alltags = [tag.name for tag in Tag.objects.all()] 
+        taglist = ",".join([tag.name for tag in user_profile.tags.all()]) 
+            
         form = EditProfileBasicForm({'name':user_profile.get_full_name(), 'course':branchid ,'year_of_graduation':student_section.year_of_graduation,
-         'city':user_profile.city, 'about':user_profile.about, 'branch':branchid}, {'picture': ''})
+         'city':user_profile.city, 'about':user_profile.about, 'branch':branchid, 'tagList': taglist,}, {'picture': ''})
 
-    return render(request, "edit_profile_basic.html", {'form': form, 'profile_id': profile_id,})
+    return render(request, "edit_profile_basic.html", {'form': form, 'profile_id': profile_id,'tags': json.dumps(alltags), })
 
 def edit_profile_weblinks(request, profile_id):
     if not profile_id:
