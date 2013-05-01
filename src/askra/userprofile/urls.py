@@ -7,7 +7,7 @@ admin.autodiscover()
 urlpatterns = patterns('',
     # Examples:
     url(r'^view(/?)(?P<profile_id>.*)$', 'userprofile.views.show_profile', name='viewprofile'),
-    url(r'^edit(/)(?P<profile_id>.*)$', 'userprofile.views.edit_profile_basic', name='editprofilebasic'),
+    url(r'^edit(/)(?P<profile_id>.*)$', 'userprofile.views.edit_profile', name='editprofile'),
     url(r'^edit_basic(/?)(?P<profile_id>.*)$', 'userprofile.views.edit_profile_basic', name='editprofilebasic'),
     url(r'^edit_weblinks(/?)(?P<profile_id>.*)$', 'userprofile.views.edit_profile_weblinks', name='editprofileweblinks'),
     url(r'^edit_education(/?)(?P<profile_id>.*)$', 'userprofile.views.edit_profile_education', name='editprofileeducation'),

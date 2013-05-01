@@ -2,6 +2,17 @@ from django import forms
 from django.forms.formsets import formset_factory
 from userprofile.models import *
 
+class EditUserProfileForm(forms.ModelForm):
+    class Meta:
+        model = UserProfile
+        exclude = ('user', 'role', 'profile_status', )
+
+class EditStudentSectionForm(forms.ModelForm):
+    class Meta:
+        model = StudentSection
+        exclude = ('userprofile')
+
+
 class EditProfileBasicForm(forms.Form):
     name = forms.CharField(max_length=100, required=False)
     course = forms.ChoiceField(choices=[(branch.id, branch.course) for branch in Branch.objects.all()], required=False)    

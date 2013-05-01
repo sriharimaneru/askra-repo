@@ -11,9 +11,9 @@ from haystack.query import SearchQuerySet
 from models import *
 from forms import *
 from haystack.forms import SearchForm
-from forms import ProfileSearchBasicForm
 from django.http import HttpResponse
 import json
+from django.forms.models import modelformset_factory
 
 def show_profile(request, profile_id):
     if not profile_id:
@@ -28,6 +28,45 @@ def show_profile(request, profile_id):
     return render_to_response("view_profile.html", RequestContext(request, {'user_profile': user_profile,
     				 'student_section': student_section, 'education_details':education_details,
     				 'employment_details': employment_details, 'other_profiles':other_profiles, 'tags': tags,}))
+
+def edit_profile(request, profile_id):
+    if not profile_id:
+        return render_to_response("error.html", RequestContext(request, {}))
+    
+    try:
+        user_profile=UserProfile.objects.get(id=profile_id)
+    except ObjectDoesNotExist:
+        return render_to_response("error.html", RequestContext(request, {}))
+    
+    StudentFormSet = modelformset_factory(StudentSection, exclude=('userprofile'), extra=0, can_delete=True)
+    
+    if request.method == 'POST':
+        userprofileform = EditUserProfileForm(request.POST, instance=user_profile)
+        studentformset = StudentFormSet(request.POST, queryset=StudentSection.objects.filter(userprofile=user_profile))
+
+        if userprofileform.is_valid() and studentformset.is_valid():
+            userprofileform.save()
+            studentsections = studentformset.save(commit=False)
+            for studentsection in studentsections:
+                studentsection.userprofile = user_profile
+                studentsection.save()
+            
+            return HttpResponseRedirect('/profile/view/'+profile_id)
+        else:
+            print studentformset.errors
+            print userprofileform.errors
+            return render_to_response("edit_profile.html", RequestContext(request, 
+                                {'userprofileform': userprofileform,  
+                                 'studentformset': studentformset,
+                                 'profile_id': profile_id, }))
+    else:
+        userprofileform = EditUserProfileForm(instance=user_profile)
+        studentformset = StudentFormSet(queryset=StudentSection.objects.filter(userprofile=user_profile))
+    
+    return render_to_response("edit_profile.html", RequestContext(request, 
+                                {'userprofileform': userprofileform,  
+                                 'studentformset': studentformset, 
+                                 'profile_id': profile_id, }))
 
 def reg_step_2(request,x):
     user_profiles = UserProfile.objects.filter(role=ALUMNI)

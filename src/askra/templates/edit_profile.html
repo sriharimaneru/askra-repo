@@ -1,113 +1,163 @@
 {% extends "base.html" %}
+
+{% block scripts %}
+<link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/bootstrap.min.css"></link>
+<link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/bootstrap-tagmanager.css"></link>
+<script src="{{STATIC_URL}}js/bootstrap.min.js"></script>
+<script src="{{STATIC_URL}}js/bootstrap-tagmanager.js"></script>
+<script>
+	function filterBranches() {
+		var courses = document.getElementById('selectCourse')
+	}
+
+	$(function() {
+
+	    function updateElementIndex(el, prefix, ndx) {
+	        var id_regex = new RegExp('(' + prefix + '-\\d+-)');
+	        var replacement = prefix + '-' + ndx + '-';
+	        if ($(el).attr("for")) $(el).attr("for", $(el).attr("for").replace(id_regex,
+	        replacement));
+	        if (el.id) el.id = el.id.replace(id_regex, replacement);
+	        if (el.name) el.name = el.name.replace(id_regex, replacement);
+	    }
+
+	   	function markForDelete(btn, prefix) {
+	   		var formCount = parseInt($('#id_' + prefix + '-TOTAL_FORMS').val());
+	   		if(formCount > 1)
+	   		{
+				$(btn).parents('.studentsection').children().filter(function() {
+					   		return this.id.match("^.*DELETE.*$");
+					   	}).prop('checked', true);
+	   		}
+	   	}
+
+	    function deleteForm(btn, prefix) {
+	        var formCount = parseInt($('#id_' + prefix + '-TOTAL_FORMS').val());
+	        if (formCount > 1) {
+	            // Delete the item/form
+	            $(btn).parents('.studentsection').remove();
+	            var forms = $('.studentsection'); // Get all the forms  
+	            // Update the total number of forms (1 less than before)
+	            $('#id_' + prefix + '-TOTAL_FORMS').val(forms.length);
+	            var i = 0;
+	            // Go through the forms and set their indices, names and IDs
+	            for (formCount = forms.length; i < formCount; i++) {
+	                $(forms.get(i)).children().children().each(function () {
+	                	updateElementIndex(this, prefix, i);
+	                  //   if ($(this).attr('type') == 'text')
+	                  //   {
+	                  //    	updateElementIndex(this, prefix, i);
+	                 	// }
+	                });
+	            }
+	        } // End if
+	        return false;
+	    }
+
+	    function addForm(btn, prefix) {
+	        var formCount = parseInt($('#id_' + prefix + '-TOTAL_FORMS').val());
+	        // You can only submit a maximum of 10 todo items 
+	        if (formCount < 10) {
+	            // Clone a form (without event handlers) from the first form
+	            var row = $(".studentsection:first").clone(false).get(0);
+	            // Insert it after the last form
+	            $(row).removeAttr('id').hide().insertAfter(".studentsection:last").slideDown(300);
+
+	            // Remove the bits we don't want in the new row/form
+	            // e.g. error messages
+	            $(".errorlist", row).remove();
+	            $(row).children().removeClass("error");
+
+	            // Relabel or rename all the relevant bits
+	            $(row).children().children().each(function () {
+	                updateElementIndex(this, prefix, formCount);
+	                $(this).val("");
+	            });
+
+	            // Add an event handler for the delete item/form link 
+	            $(row).find(".delete").click(function () {
+	                return deleteForm(this, prefix);
+	            });
+	            // Update the total form count
+	            $("#id_" + prefix + "-TOTAL_FORMS").val(formCount + 1);
+	        } // End if
+	        else {
+	            alert("Sorry, you can only enter a maximum of ten items.");
+	        }
+	        return false;
+	    }
+
+
+	    // Register the click event handlers
+	    $(".add").click(function () {
+	        return addForm(this, "form");
+	    });
+
+	    $(".delete").click(function () {
+	    	// markForDelete(this, "form");
+	        return deleteForm(this, "form");
+	    });
+
+	});
+</script>
+{% endblock %}
+
 {% block content %}
 <div id = "main_content">
+
+	<div id="edit_profile_form">
+		<form action="/profile/edit/{{profile_id}}" method="post">{% csrf_token %}
+			<h2>Profile Information</h2>
+			{{ userprofileform.as_table }}
+			<h2>Student Sections</h2>
+			{{ studentformset.management_form }}
+			{% for stform in studentformset %}
+				<div class="studentsection">
+					<h5>New student section</h5>
+					{{ stform.as_p }}
+					<p><a class="delete" href="#">Delete</a></p>
+				</div>
+			{% endfor %}
+			<p><a class="add" href="#">Add another item</a></p>
+			<input type="submit" value="Submit" />
+			<a href="/profile/view/{{profile_id}}">Cancel</a>
+		</form>
+	</div>
 	
-	<div id="pic_div">
-		<img src="{{STATIC_URL}}img/pavan.jpg" width="200px" height="200px">
-		<br>
-		<div id="edit_pic">
-			<p>Edit picture</p>
-			<input type="file" name="picture" />
-		</div>
-	</div>
-	<div id="basic_details_div">
-		<h2>Venkat Chengavalli</h2>
-		<h4>B.Tech Chemical, 1975</h4>
-		<h4>Hyderabad</h4>
-		<div id = "social_media_links">
-			<a href="http://www.facebook.com/kalyanvarmak" target="blank"><img src="{{STATIC_URL}}img/facebook_icon.png" width="50px" height="50px"></a>
-			<a href="http://www.linkedin.com/in/kalyanvarma" target="blank"><img src="{{STATIC_URL}}img/linkedin_icon.png" width="50px" height="50px"></a>
-			<a href="http://twitter.com/kalyanvarmak" target="blank"><img src="{{STATIC_URL}}img/twitter_icon.png" width="50px" height="50px"></a>
-		</div>
-	</div>
+<!-- 	<div id="basic_details_form">
+		<form name="basic_details_form" method="post" action="/profile/edit_basic/{{profile_id}}" enctype="multipart/form-data">{% csrf_token %}
+			{{ form.non_field_errors }}
+			<div id="pic_div">
+			    {{ form.picture.errors }}
+				{{ form.picture }}
+				<br>
+			</div>
+			<div id="basic_section">
+				<span>Name:</span>{{ form.name }}<br>{{ form.name.errors }}<br>
+				<span>Course:</span>
+				<div class="selectBox">
+					{{ form.course }}
+				</div><br>
+				<span>Branch:</span>
+				<div class="selectBox">
+					{{ form.branch }}
+				</div><br>
+				<span>Year of Graduation:</span>{{ form.year_of_graduation }}<br><br>
+				<span>City:</span>{{ form.city }}<br><br>
+				<span>About:</span>{{ form.about }}<br><br>
+				<span id="tagslabel">Tags:</span><div id="currentTags"></div>
+				<div id="edit_tags">
+					<input type="text" name="tags" placeholder="Add Tags" class="tagManager"/>
+					<input type="button" id="addtag" value="Add" />
+				</div>
+			</div>
 
-	<div id="contact">
-		<div id="edit_profile">
-			<a href="edit_profile">Edit Profile</a>
-		</div>
+			<input type="submit" name="submit" value="Save Changes"/>
+			<a href="/profile/view/{{profile_id}}">Cancel</a>
 
-		<div id="contact_div">
-			<h3>Contact Venkat Chengavalli</h3>
-			<p>Email : </p>
-			<div id="mail"><button>Send Mail</button> to Venkat Chegavalli</div>
-			<p>Mobile Number :</p> 
-			<p id="mobile">+91 - 9972359354</p>
-		</div>
-	</div>
-	<br class = "cB">
-</div>
-<div id = "other_content">
-	<div id="text_details">
-		<h3>About</h3>
-		<p>asdfasdf sadf sadf sa df sadfsa df sadf sadf sa df sa fs af s df asdf sa fsaf sdf sad fsa12
-			sad fsa df sadf sa f sad fs adf sa f afds<a href="">asdfafdasf</a> a fs saf sa fdsd afd s
-			aasdfasdfas asdfasdfasdf asdfasdf</p>
-		<p>asdfasdf sadf sadf sa df sadfsa df sadf sadf sa df sa fs af s df asdf sa fsaf sdf sad fsa12
-			sad fsa df sadf sa f sad fs adf sa f afds<a href="">asdfafdasf</a> a fs saf sa fdsd afd s
-			aasdfasdfas asdfasdfasdf asdfasdf</p>
-		<h3>Education Details</h3>	
-			<div class="detail_container">
-				<table class="detail">
-					<tr>
-						<td><span class="label">College </span>:<span class="value">National institue of Technology, Warangal</span> </td>
-						<td><span class="label">Duration </span>:<span class="value">1970 - 1975</span> <br></td>
-					</tr>
-					<tr>
-						<td><span class="label">Course </span>:<span class="value">B.Tech</span></td>
-						<td><span class="label">Branch </span>:<span class="value">Chemical Engineering</span></td>
-					</tr>         
-				</table>
-			</div>
-			<br>
-			<div class="detail_container">
-				<table class="detail">
-					<tr>
-						<td><span class="label">College </span>:<span class="value">Indin Institute of Management, Ahmedabad</span> </td>
-						<td><span class="label">Duration </span>:<span class="value">1975 - 1977</span> <br></td>
-					</tr>
-					<tr>
-						<td><span class="label">Course </span>:<span class="value">MBA</span></td>
-						<td><span class="label">Branch </span>:<span class="value">Finance</span></td>
-					</tr>         
-				</table>
-			</div>
-		<h3>Employer Details</h3>
-			<div class="detail_container">
-				<table class="detail">
-					<tr>
-						<td><span class="label">Employer </span>:<span class="value">State Bank of Hyderabad</span> </td>
-						<td><span class="label">Designation </span>:<span class="value">Director</span> <br></td>
-					</tr>        
-				</table>
-			</div>
-			<br>
-			<div class="detail_container">
-				<table class="detail">
-					<tr>
-						<td><span class="label">Employer </span>:<span class="value">The Laksya Foundation</span> </td>
-						<td><span class="label">Designation </span>:<span class="value">Board of Advisor</span> <br></td>
-					</tr>        
-				</table>
-			</div>
-	</div>
-	<div id="tags">
-		<h3>Tags</h3>
-		<img src="{{STATIC_URL}}img/pavan.jpg" width="150px" height="100px">
-		<img src="{{STATIC_URL}}img/pavan.jpg" width="100px" height="100px">
-		<img src="{{STATIC_URL}}img/pavan.jpg" width="250px" height="100px">
-		<img src="{{STATIC_URL}}img/pavan.jpg" width="150px" height="50px">
-		<img src="{{STATIC_URL}}img/pavan.jpg" width="75px" height="75px">
-	</div>
-</div>
-<div id = "related_profiles" class="cB">
-	<h3>People who viewed this also viewed these profiles</h3>
-	<div class = "related_profile_container">
-		<div class = "related_profile">
-			<img src="{{STATIC_URL}}img/pavan.jpg" width="150px" height="150px"><br>
-			<p>Vasanth Roy</p>
-			<p>1980, Chemical</p>
-		</div>
-	</div>
-</div>
+
+		</form>
+	</div> -->
+	
 <br class = "cB">
 {% endblock %}
