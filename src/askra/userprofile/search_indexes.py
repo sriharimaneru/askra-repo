@@ -5,6 +5,7 @@ from models import UserProfile, StudentSection
 
 
 class NoteIndex(SearchIndex):
+    profile_id = IntegerField(indexed=False) #used for preparing url
     text = CharField(document=True)
     name = CharField(indexed=True)
     course = CharField(indexed=False)
@@ -19,6 +20,8 @@ class NoteIndex(SearchIndex):
     def prepare(self, obj):
         prepared_data = super(NoteIndex, self).prepare(obj)
         
+        prepared_data['profile_id'] = obj.id
+
         first_name = obj.first_name
         last_name = obj.last_name
         

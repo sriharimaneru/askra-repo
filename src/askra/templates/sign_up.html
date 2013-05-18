@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block meta %}
+<meta name="description" content="Enables effective communication and networking among stakeholders of educational institutions">
+<meta name="keywords" content="Alumni, Students, Faculty, College, Institution, Networking, Communication" />
+<title>Sign up for Groupify</title>
+{% endblock meta %}
+
+{% block header %}
+<div id="header_big" class="sign_up">
+	<p id="welcome_text">Welcome to</p> 
+	<div class="section-content"> 
+		<a id="home-link" href="/"><h1 id="logo-big">Groupify</h1></a>
+	</div>
+</div>
+{% endblock header %}
+
+{% block content %}
+<div id="sign_up_content" class="sign_up">
+<p class = "section-subtitle">Sign up to connect with NITW Community</p>
+<div id="sign_up_buttons_panel">
+	<div id="linkedin_div" class="left">
+		<a href="/login/linkedin" class="big_button"><span class="logo"></span>Linkedin</a>
+	</div>
+	<div id="facebook_div" class="left">
+		<a href="/login/facebook" class="big_button"><span class="logo"></span>Facebook</a>
+	</div>
+	<span class="cB"></span>
+</div>
+<p class="cB">If you already have an account, please <a href="/login">login</a></p>
+</div>
+{% endblock content %}
+
+
+{% block footer %}
+{% endblock footer %}

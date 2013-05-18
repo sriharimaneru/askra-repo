@@ -1,8 +1,11 @@
 <html>
 <head>
+
+{% block meta %}
 <meta name="description" content="Enables effective communication and networking among stakeholders of educational institutions">
 <meta name="keywords" content="Alumni, Students, Faculty, College, Institution, Networking, Communication" />
 <title>Groupify - NIT Warangal</title>
+{% endblock meta %}
 
 {% block startscripts %}
 {% endblock startscripts %}
@@ -36,8 +39,14 @@
 <div id="header">
 	<div class="section-content"> 
 		<a id="home-link" href="/"><h1 id="logo">Groupify</h1></a>
-  	<a href="/admin" id="sign-in">sign in</a>
-  	<p id="sign-in-note">(only admins, for now)</p>
+    <a href="/about" class="about-link header_link">About</a>
+    {% if request.user.is_authenticated %}
+    <a href="/logout" class="login header_link"> logout </a>
+    <span id="sign-in-note">({{request.user.first_name}})</span>
+    {% else %}
+  	<a href="/sign-up" class="sign-up header_link">Sign Up</a>
+    <a href="/login" class="login header_link">Login</a>
+    {% endif %}
 	</div>
 </div>
 {% endblock header %}

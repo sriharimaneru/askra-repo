@@ -325,7 +325,9 @@ def search(request):
     offset = request.GET.get("offset", '0')
     
     branch_facet = request.GET.get("branch_facet", '') 
-    year_facet = request.GET.get("year_of_passing_facet", '') 
+    year_facet = request.GET.get("year_of_passing_facet", '')
+    if year_facet:
+        year_facet = [int(x) for x in year_facet.split(",")] 
     city_facet = request.GET.get("city_facet", "")   
            
     sqs = SearchQuerySet().facet('branch')
@@ -357,13 +359,13 @@ def search(request):
         context['facets']['fields']['year_of_passing'] = sqs.filter(city_exact = city_facet).facet_counts()['fields']['year_of_passing']
             
     if year_facet:
-        temp = sqs.filter(year_of_passing_exact = year_facet)        
+        temp = sqs.filter(year_of_passing_exact__in = year_facet)        
         context['facets']['fields']['branch'] = temp.filter(city_exact = city_facet).facet_counts()['fields']['branch'] if city_facet else temp.facet_counts()['fields']['branch'] 
     elif city_facet:
         context['facets']['fields']['branch'] = sqs.filter(city_exact = city_facet).facet_counts()['fields']['branch']
         
     if year_facet:
-        temp = sqs.filter(year_of_passing_exact = year_facet)        
+        temp = sqs.filter(year_of_passing_exact__in = year_facet)        
         context['facets']['fields']['city'] = temp.filter(branch_exact = branch_facet).facet_counts()['fields']['city'] if branch_facet else temp.facet_counts()['fields']['city'] 
     elif branch_facet:
         context['facets']['fields']['city'] = sqs.filter(branch_exact = branch_facet).facet_counts()['fields']['city']
@@ -375,10 +377,10 @@ def search(request):
         context['branch_facet_selected'] = ''
             
     if year_facet:
-        sqs = sqs.filter(year_of_passing_exact = year_facet)
-        context['year_facet_selected'] = year_facet
+        sqs = sqs.filter(year_of_passing_exact__in = year_facet)
+        context['year_facets_selected'] = [str(x) for x in year_facet]
     else:
-        context['year_facet_selected'] = ''
+        context['year_facets_selected'] = ''
         
     if city_facet:
         sqs = sqs.filter(city_exact = city_facet)
@@ -387,7 +389,8 @@ def search(request):
         context['city_facet_selected'] = '' 
 
         
-        
+    print context['year_facets_selected']
+    
     context['facets']['fields']['year_of_passing'] = facet_sorting(context['facets']['fields']['year_of_passing'])
     context['facets']['fields']['city'] = facet_sorting(context['facets']['fields']['city'])
     context['facets']['fields']['branch'] = facet_sorting(context['facets']['fields']['branch'])
@@ -527,3 +530,8 @@ def ajaxresponse(request):
             html+="</div>\n"
     #print html
     return HttpResponse(html)
+
+def ajaxtest(request):
+
+    return render_to_response('ajaxtest.html', {'dummy' : 123})
+        

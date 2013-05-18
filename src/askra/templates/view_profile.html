@@ -14,32 +14,34 @@
 {% endblock %}
 
 {% block content %}
+<div id="view_profile_page">
 <div id = "main_content">
 	<div id="navigation_div">
 		<div id="breadcrumb">
-			<a href="#">All</a> >
-			<a href="#">{{ user_profile.get_role_display }}</a> >
-			<a href="#">{{ student_section.branch.course }}</a> >
-			<a href="#">{{ student_section.year_of_graduation }}</a> >
-			<a href="#">{{ student_section.branch.branch }}</a> > 
-			<span>{{ user_profile.get_full_name }}</span>
+			<a href="/">All</a>
+			{% if student_section.year_of_graduation %}
+				> <a href="/?year_of_passing_facet={{student_section.year_of_graduation}}">{{ student_section.year_of_graduation }}</a>
+			{% endif %}
+			{% if student_section.branch.branch %}
+				> <a href="/?branch_facet={{student_section.branch.branch}}">{{ student_section.branch.branch }}</a>
+			{% endif %}
+			<span>> {{ user_profile.get_full_name }}</span>
 		</div>
 		<div id="search_div">
-			<a href="#">back to search results</a>
+			<a href="/">back to search results</a>
 		</div>
 	</div>
 	<div id="pic_div">
-		{% if user_profile.photo.url and user_profile.photo.url != "" %}
+		{% if user_profile.photo and user_profile.photo.url %}
 		<img src="{{user_profile.photo.url}}" width="250px" height="250px">
 		{% else %}
-		<img src="{{STATIC_URL}}img/default_male_profile_picture.jpg" width="250px" height="250px" alt="No profile picture">
+		<img src="{{STATIC_URL}}img/no-image.jpg" width="250px" height="250px" alt="No profile picture">
 		{% endif %}
 	</div>
 	<div id="basic_details_div">
-		<h3>Profile ID: {{ user_profile.id}}</h3>
-		<h2>{{ user_profile.get_full_name }}</h2>
-		<h4>{{ student_section.get_full_qualification }}</h4>
-		<h4>{{ user_profile.city }}</h4>
+		<h2 class="section-title">{{ user_profile.get_full_name }}</h2>
+		<p>{{ student_section.get_full_qualification }}</p>
+		<p>{{ user_profile.city }}</p>
 		<div id = "social_media_links">
 			{% if user_profile.facebook_url %}
 			    <a href="{{ user_profile.facebook_url }}" target="blank"><img src="{{STATIC_URL}}img/facebook_icon.png" width="35px" height="35px"></a>
@@ -56,19 +58,24 @@
 	</div>
 
 	<div id="contact">
+		adsf
+		{{ request }}
+		{{ request.user }}
+		{{ request.user.is_authenticated }}
+		{% if request.user.is_authenticated %}
+		<a href="/profile/edit/{{user_profile.id}}">
 		<div id="edit_profile">
-			<a href="/profile/edit/{{user_profile.id}}">Edit Profile</a>
+			<p>Edit Profile</p>
 		</div>
-
+		</a>
+		{% else %}
+		<div id="edit_profile_disabled">
+			<p>Edit Profile</p>
+		</div>
+		<a href="/login">Login</a> / <a href="/sign-up">Sign up</a> to edit this profile.
+		{% endif %}
 		<div id="contact_div">
-			<h3>Contact {{ user_profile.get_full_name }}</h3>
-			<p><b>Email</b></p>
-			<div id="mail"><button>Send Mail</button> to {{ user_profile.get_full_name }}</div>
-
-			{% if user_profile.phone_number %}
-			<p><b>Mobile Number</b></p> 
-			<p id="mobile">{{ user_profile.phone_number }}</p>
-			{% endif %}
+			<p>Contacting {{ user_profile.get_full_name }} through Email/ Phone will be enabled in our next-release</p>
 		</div>
 	</div>
 	<br class = "cB">
@@ -80,77 +87,87 @@
 		<p>{{ user_profile.about|safe }}</p>
 		{% endif %}
 
-		<h3>Education Details</h3>	
+		<h3 class="section-subtitle">Education Details</h3>	
 			{% for education_detail in education_details %}
 			<div class="detail_container">
-				<table class="detail">
-					<tr>
-						<td><span class="label">College</span>: <span class="value">{{ education_detail.college }}</span> </td>
-						<td><span class="label">Year of Graduation</span>: <span class="value">{{ education_detail.year_of_graduation }}</span> <br></td>
-					</tr>
-					<tr>
-						<td><span class="label">Course</span>: <span class="value">{{ education_detail.degree }}</span></td>
-						<td><span class="label">Branch</span>: <span class="value">{{ education_detail.branch }}</span></td>
-					</tr>         
-				</table>
+				<p><b>{{ education_detail.college }}</b></p>
+				{% if student_section.branch.branch %}
+				<p>{{ student_section.branch.course }}, {{ student_section.branch.branch }}</p>
+				{% endif %}
+				{% if student_section.year_of_graduation %}
+				<p>Graduated in {{student_section.year_of_graduation}}</p>
+				{% endif %}
+				</br>
+				</br>
 			</div>
 			<br>
 			{% endfor %}
 			<div class="detail_container">
-				<table class="detail">
-					<tr>
-						<td><span class="label">College </span>: <span class="value">National institue of Technology, Warangal</span> </td>
-						<td><span class="label">Year of Graduation: </span>:<span class="value">{{ student_section.year_of_graduation }}</span> <br></td>
-					</tr>
-					<tr>
-						<td><span class="label">Course</span>: <span class="value">{{ student_section.branch.course }}</span></td>
-						<td><span class="label">Branch</span>: <span class="value">{{ student_section.branch.branch }}</span></td>
-					</tr>         
-				</table>
+				<p><b>National Insitute Of Technology, Warangal</b></p>
+				{% if student_section.branch.branch %}
+				<p>{{ student_section.branch.course }}, {{ student_section.branch.branch }}</p>
+				{% endif %}
+				{% if student_section.year_of_graduation %}
+				<p>Graduated in {{student_section.year_of_graduation}}</p>
+				{% endif %}
 			</div>
 			<br>
 
-		{% if employment_details %}			
-		<h3>Employer Details</h3>
+		<h3 class="section-subtitle">Employer Details</h3>
+			{% if employment_details %}
 			{% for employment_detail in employment_details %}
 			<div class="detail_container">
-				<table class="detail">
-					<tr>
-						<td><span class="label">Employer</span>:<span class="value">{{ employment_detail.employer.name }}</span> </td>
-						<td><span class="label">Domain </span>:<span class="value">{{ employment_detail.domain.name }}</span> <br></td>
-					</tr>        
-					<tr>
-						<td><span class="label">Designation </span>:<span class="value">{{ employment_detail.designation.name }}</span> </td>
-						<td><span class="label">Period:</span>:<span class="value">{{ employment_detail.get_employment_period }}</span><br></td>
-					</tr>
-				</table>
+				<p><b>{{ employment_detail.designation.name }}</b></p>
+				{% if employment_detail.employer.name %}
+				<p>{{ employment_detail.employer.name }}</p>
+				{% endif %}
+				{% if employment_detail.get_employment_period %}
+				<p>{{ employment_detail.get_employment_period }}</p>
+				{% endif %}
+			</br>
+			</br>
 			</div>
 			<br>
 			{% endfor %}
-		{% endif %}
+			{% else %}
+			<p>No details added yet</p>
+			{% endif%}
+
+
 	</div>
+	<h3 class="section-subtitle">Tags</h3>
 	<div id="tags">
-		<h3>Tags</h3>
 		<ul>
+		{% if tags %}
 		{% for tag in tags %}
 			<li class="usertag"><span>{{tag.name}}</span></li>
 		{% endfor %}
+		{% else %}
+		<p>No tags added yet</p>
+		{% endif %}
 		</ul>
 	</div>
 </div>
 {% if other_profiles %}
 <div id = "related_profiles" class="cB">
-	<h3>People who viewed this also viewed these profiles</h3>
+	<h2 class="section-subtitle">People who viewed this also viewed these profiles</h3>
 	{% for student_section in other_profiles %}
 	<div class = "related_profile_container">
-		<div class = "related_profile">
-			<img src="{{ student_section.userprofile.photo.url }}" width="150px" height="150px"><br>
-			<p><a href="/profile/view/{{ student_section.userprofile.id }}">{{ student_section.userprofile.get_full_name }}</a></p>
-			<p>{{ student_section.get_full_qualification }}</p>
-		</div>
+		<a href="/profile/view/{{ student_section.userprofile.id}}">
+			<div class = "related_profile">
+				{% if student_section.user_profile.photo and student_section.user_profile.photo.url %}
+				<img src="{{student_section.user_profile.photo.url}}" width="150px" height="150px">
+				{% else %}
+				<img src="{{STATIC_URL}}img/no-image.jpg" width="150px" height="150px" alt="No profile picture">
+				{% endif %}
+				<a href="/profile/view/{{ student_section.userprofile.id }}">{{ student_section.userprofile.get_full_name }}</a>
+				<p>{{ student_section.get_full_qualification }}</p>
+			</div>
+		</a>
 	</div>
 	{% endfor %}
 	<br class = "cB">
+</div>
 </div>
 {% endif %}
 {% endblock %}

@@ -90,6 +90,12 @@ div#communication p, div#communication h1, div#communication h2, div#communicati
 	background-image: url(../img/bg_header.png);
 }
 
+#header_big{
+	height: 200px;
+	background-image: url(../img/bg_header.png);
+	background-size: Auto 200px;
+}
+
 #home-link {
 	text-decoration: none;
 }
@@ -102,22 +108,47 @@ div#communication p, div#communication h1, div#communication h2, div#communicati
 	text-shadow: 0 2px 4px rgba(0, 0, 0, 0.75);
 }
 
-#sign-in {
+#logo-big{
+	padding-top: 25px;
+	color: white;
+	color: #FFEFEF; 
+	font: 55px 'LeagueGothicRegular';
+	text-shadow: 0 2px 4px rgba(0, 0, 0, 0.75);	
+}
+
+.header_link{
 	position: absolute;
-	top: 38px;
-	right: 62px;
 	height: 24px;
 	color: #E57300;
 	font-size: 14px;
 	text-shadow: 0 2px 4px rgba(0, 0, 0, 0.75);
 	text-transform: uppercase;
 	z-index:10;
+	text-decoration: none;
+}
+.header_link:hover{
+	text-decoration: underline;
+}
+
+.about-link {
+	top: 38px;
+	right: 250px;
+}
+
+.login {
+	top: 38px;
+	right: 62px;
+}
+
+.sign-up {
+	top: 38px;
+	right: 125px;
 }
 
 #sign-in-note {
 	position: absolute;
 	top: 45px;
-	right: 27px;
+	right: 82px;
 	height: 24px;
 	font-size: 11px;
 	padding-top: 10px;
@@ -528,7 +559,7 @@ div#search-content .fieldWrapper{
 }
 
 div#search-content select, div#search-content #id_name{
-	width: 200px;
+	width: 150px;
 	height: 40px;
 }
 
@@ -552,7 +583,7 @@ input.search_submit:hover{
 }
 
 div#search-content p.search_submit{
-	padding-top: 23px;
+	padding-top: 0px;
 }
 
 #facet-list{
@@ -633,6 +664,10 @@ div#facet-list a{
 	overflow: hidden;
 }
 
+.result_div:hover{
+	box-shadow: 2px 3px 3px #BEAFAF;
+}
+
 #search_results_header{
 	margin-bottom: 20px;
 }
@@ -657,8 +692,19 @@ div#facet-list .selected_facet{
 
 /******************Start view profile page ***************/
 
+#view_profile_page .section-subtitle, #view_profile_page a{
+	color: #6B9BB2;
+}
+
+#view_profile_page .section-subtitle{
+	font-size: 23;
+}
+
 #main_content, #other_content, #related_profiles {
 	color: black;
+	max-width: 964px;
+	margin: auto;
+	text-shadow: none;
 }
 
 
@@ -707,12 +753,28 @@ div#facet-list .selected_facet{
 }
 
 #edit_profile {
-	background: gray;
+	background: #F27521;
+	background-image: -webkit-linear-gradient(top,#F2A54D,#F27521);
 	text-align: center;
+	padding-top: 10px;
+	padding-bottom: 10px;
+	color: white;
+}
+
+#edit_profile_disabled {
+	background: grey;
+	text-align: center;
+	padding-top: 10px;
+	padding-bottom: 10px;
+	color: white;
+}
+
+#edit_profile:hover{
+	background-image: -webkit-linear-gradient(top,#F27521,#F2A54D);
 }
 
 #edit_profile a {
-	color: black;
+	color: white;
 	text-decoration: none;
 }
 
@@ -755,7 +817,8 @@ div#facet-list .selected_facet{
 }
 
 .detail_container {
-		border: 1px solid grey;
+	border: 1px solid grey;
+	padding: 15px;
 }
 .detail .label {
 	padding-right: 5px;
@@ -771,10 +834,9 @@ div#facet-list .selected_facet{
 }
 
 .related_profile_container {
-	border: 1px solid gray;
 	float: left;
 	width: 160px;
-	margin-right: 10px;
+	margin-left: 20px;
 	margin-bottom: 20px;
 	padding: 5px;
 }
@@ -782,7 +844,23 @@ div#facet-list .selected_facet{
 #related_profiles {
 	border: 1px solid gray;
 	margin-top: 20px;	
+	margin-bottom: 20px;
+	padding: 5px;
 }
+
+
+.related_profile a{
+	color: #004B91
+}
+
+.related_profile p{
+	font-size: 13px;
+}
+
+.related_profile_container:hover {
+	border: 1px solid #6B9BB2;
+}
+
 
 #tags>ul {
 	list-style: none;
@@ -933,3 +1011,69 @@ div#facet-list .selected_facet{
 }*/
 
 /******************End edit profile page ***************/
+
+
+/********************** Start Sign - Up **********************/
+.sign_up p, .sign_up h1, .sign_up a{
+	text-align: center;
+}
+
+.sign_up #welcome_text{
+	padding-top: 40px;
+}
+
+#sign_up_content p{
+	color: #333;
+	text-shadow: none;
+	padding-top: 40px;
+}
+
+.big_button{
+	-moz-border-radius: 8px;
+	-webkit-border-radius: 8px;
+	border-radius: 8px;
+	box-shadow: inset 0 1px rgba(255, 255, 255, .5), 0 2px white;
+	color: white;
+	display: inline-block;
+	font-size: 25px;
+	line-height: 1;
+	min-width: 160px;
+	padding: 20px 47px 20px 47px;
+	position: relative;
+	text-align: left;
+	text-decoration: none;
+	background: #3B5998;
+	border: 1px solid #09164A;
+	text-shadow: 0 -1px #28417A;
+}
+
+
+#sign_up_content .big_button:hover{
+	background: #4875B4	;
+}
+
+#sign_up_content .facebook {
+
+}
+
+#sign_up_content .linkedin {
+	background: #4875B4;
+	border: 1px solid #09164A;
+	text-shadow: 0 -1px #28417A;
+}
+
+#sign_up_buttons_panel{
+	padding-top: 40px;
+	padding-bottom: 80px;
+}
+
+#linkedin_div {
+	padding-left: 350px;
+}
+
+#facebook_div {
+	padding-left: 50px;
+}
+
+
+/********************** End Sign - Up **********************/

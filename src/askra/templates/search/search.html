@@ -67,6 +67,30 @@
             });
         }); //key up    
 
+        $.each($('.yog_check_select'), function() {
+            $(this).prop('checked', true);
+        });
+
+        $('.yog_check').change(function() {
+            var a = "";
+            $.each($('.yog_check'), function() {
+                if ($(this).is(':checked'))
+                {
+                    if (a!="") 
+                    {
+                        a = a + "," + $(this).attr('value');
+                    }
+                    else
+                    {
+                        a = $(this).attr('value');
+                    }
+                    
+                }
+            });
+            window.location.href = "{{ request.get_full_path|facet_url }}year_of_passing_facet=" + a;
+        });
+
+
         $('#city_facet_search').keyup(function () {
             $(".city_facet_option").show();
             val = $(this).val().toLowerCase();
@@ -88,6 +112,9 @@
         // options
             itemSelector : '.result_div',
         });
+
+
+
     });
 
 </script>
@@ -97,7 +124,7 @@
 {% block content %}
 <div id="search-content" class="section-content">
 <h2 class="section-title">We have basic data of more than 22,000 alumni from various excel sheets. We aim to collect and organize all the data by Sept 2013.</h2>
-<form id="search_form" action="/search" method="get">
+<form id="search_form" action="/" method="get">
     {{ form.non_field_errors }}
     <div id="name_div" class="fieldWrapper left">
         {{ form.name.errors }}
@@ -144,11 +171,7 @@
             {% for year_of_passing in facets.fields.year_of_passing %}
                 {% if year_of_passing.0 != '0' %}
                     {% if year_of_passing.1 %}
-                        {% if year_of_passing.0 == year_facet_selected %}
-                            <dd class="year_facet_option"><a class="selected_facet" href="{{ request.get_full_path|facet_url }}year_of_passing_facet={{ year_of_passing.0|urlencode }}">{{ year_of_passing.0 }}</a> ({{ year_of_passing.1 }})</dd>
-                        {% else %}
-                            <dd class="year_facet_option"><a href="{{ request.get_full_path|facet_url }}year_of_passing_facet={{ year_of_passing.0|urlencode }}">{{ year_of_passing.0 }}</a> ({{ year_of_passing.1 }})</dd>                      
-                        {% endif %}
+                        <input type="checkbox" class="yog_check {% if year_of_passing.0 in year_facets_selected %} yog_check_select {% endif %}" value="{{ year_of_passing.0 }}" style="display:inline"><span>{{ year_of_passing.0 }}({{ year_of_passing.1 }})</span><br>
                     {% else %}
                         <dd class="year_facet_option">{{ year_of_passing.0 }}({{ year_of_passing.1 }})</dd>
                     {% endif %}
@@ -157,6 +180,7 @@
             </div>
         {% endif %}
     </dl>
+
     <dl id="city_facet" class="facet">
         {% if facets.fields.city %}
             <dt>City</dt>
@@ -216,6 +240,7 @@
     <div id="search_results">
         {% for result in results %}
             {% if result.name.strip %}
+                <a href="/profile/view/{{result.profile_id}}">
                 <div class="result_div">
                     <h2 class="name section-subtitle">{{ result.name }}</h2>
                     {% if result.branch %}
@@ -228,6 +253,7 @@
                         <p class="city">{{ result.city }}</p>    
                     {% endif %} 
                 </div>
+                </a>
             {% endif %}
         {% empty %}
             <p>Sorry, no results found.</p>

@@ -1,29 +1,24 @@
 # Create your views here.
-from django.shortcuts import render_to_response, redirect, render, get_object_or_404
-from django.template import RequestContext
-from userprofile.models import *
+from django.shortcuts import render_to_response, render
+from django.template import RequestContext, context
 from userprofile.forms import *
-from django.http import HttpResponseRedirect, Http404
-import csv
-from django.forms.util import ErrorList
-from django.core.exceptions import ObjectDoesNotExist
-from haystack.query import SearchQuerySet
-from haystack.forms import SearchForm
-from django.http import HttpResponse
+from userprofile.models import StudentSection, UserProfile
 
-def index(request):
-    dict = {}
+def about(request):
+    chart_data = {}
     for yog in StudentSection.objects.values('year_of_graduation').distinct():
         year = yog["year_of_graduation"]
         if year>0:
             number = UserProfile.objects.filter(studentsection__year_of_graduation=year).count()
-            dict[str(year)] = number
+            chart_data[str(year)] = number
 
     totalalumcollected = UserProfile.objects.filter(role=0).count()
     remainingalumdata = 40000 - totalalumcollected
     percentalumdatacollected = int(100*(totalalumcollected/40000.0))
     percentalumdataremaining = 100 - percentalumdatacollected
     
-    return render_to_response("index.html", RequestContext(request, {'columnchartdata':dict, 'totalalumdata': totalalumcollected, 
+    context = {'columnchartdata':chart_data, 'totalalumdata': totalalumcollected, 
                               'remainingalumdata': remainingalumdata, 'percentalumdatacollected': percentalumdatacollected, 
-                              'percentalumdataremaining': percentalumdataremaining, }))
+                              'percentalumdataremaining': percentalumdataremaining,}
+    
+    return render(request, "search/search.html", context)

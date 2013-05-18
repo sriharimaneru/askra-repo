@@ -128,6 +128,16 @@ TEMPLATE_CONTEXT_PROCESSORS = ("django.contrib.auth.context_processors.auth",
                                 "django.contrib.messages.context_processors.messages",
                                 "askra.context_processors.google_analytics",)
 
+AUTHENTICATION_BACKENDS = (
+    'django.contrib.auth.backends.ModelBackend', # is required for admin login so, don't remove it :P
+    'social_auth.backends.twitter.TwitterBackend',
+    'social_auth.backends.facebook.FacebookBackend',
+    'social_auth.backends.google.GoogleOAuthBackend',
+    'social_auth.backends.google.GoogleOAuth2Backend',
+    'social_auth.backends.google.GoogleBackend',
+    'social_auth.backends.contrib.linkedin.LinkedinBackend',
+)
+
 INSTALLED_APPS = (
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -145,6 +155,8 @@ INSTALLED_APPS = (
     'userprofile',
     'south',
     'haystack',
+    'registration',
+    'social_auth',
 )
 
 # A sample logging configuration. The only tangible logging
@@ -219,6 +231,22 @@ HAYSTACK_SITECONF = 'askra.search_sites'
 HAYSTACK_SEARCH_ENGINE = 'solr'
 HAYSTACK_SOLR_URL = 'http://127.0.0.1:8983/solr'
 
+
+SOCIAL_AUTH_CREATE_USERS          = True
+SOCIAL_AUTH_FORCE_RANDOM_USERNAME = False
+SOCIAL_AUTH_DEFAULT_USERNAME      = 'socialauth_user'
+SOCIAL_AUTH_ERROR_KEY             = 'socialauth_error'
+SOCIAL_AUTH_LOGIN_REDIRECT_URL = '/'
+SOCIAL_AUTH_ERROR_KEY = 'social_errors'
+SOCIAL_AUTH_COMPLETE_URL_NAME  = 'socialauth_complete'
+SOCIAL_AUTH_ASSOCIATE_BY_MAIL = True
+SOCIAL_AUTH_SESSION_EXPIRATION = False # if False will disable social based expiration and session expiration will follow the default expiration (what ever is there for normal django user session)
+SOCIAL_AUTH_ERROR_KEY = 'social_errors'
+SOCIAL_AUTH_ENABLED_BACKENDS = ('facebook', 'google-oauth2',)
+
+FACEBOOK_AUTH_EXTRA_ARGUMENTS = {'scope':'email,read_stream,publish_stream'}
+
+ACCOUNT_ACTIVATION_DAYS = 7
 
 # Load the local settings
 # This should be at the end for overriding
