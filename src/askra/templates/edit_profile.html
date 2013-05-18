@@ -3,8 +3,10 @@
 {% block scripts %}
 <link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/bootstrap.min.css"></link>
 <link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/bootstrap-tagmanager.css"></link>
+<link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />
 <script src="{{STATIC_URL}}js/bootstrap.min.js"></script>
 <script src="{{STATIC_URL}}js/bootstrap-tagmanager.js"></script>
+<script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
 <script>
 	function filterBranches() {
 		var courses = document.getElementById('selectCourse')
@@ -13,89 +15,275 @@
 	$(function() {
 
 	    function updateElementIndex(el, prefix, ndx) {
-	        var id_regex = new RegExp('(' + prefix + '-\\d+-)');
-	        var replacement = prefix + '-' + ndx + '-';
-	        if ($(el).attr("for")) $(el).attr("for", $(el).attr("for").replace(id_regex,
-	        replacement));
-	        if (el.id) el.id = el.id.replace(id_regex, replacement);
-	        if (el.name) el.name = el.name.replace(id_regex, replacement);
+        var id_regex = new RegExp('(' + prefix + '-\\d+-)');
+        var replacement = prefix + '-' + ndx + '-';
+        if ($(el).attr("for")) $(el).attr("for", $(el).attr("for").replace(id_regex, replacement));
+        if (el.id) el.id = el.id.replace(id_regex, replacement);
+        if (el.name) el.name = el.name.replace(id_regex, replacement);
 	    }
 
-	   	function markForDelete(btn, prefix) {
-	   		var formCount = parseInt($('#id_' + prefix + '-TOTAL_FORMS').val());
-	   		if(formCount > 1)
-	   		{
-				$(btn).parents('.studentsection').children().filter(function() {
-					   		return this.id.match("^.*DELETE.*$");
-					   	}).prop('checked', true);
-	   		}
+	   	function hideForm(btn, divclass) {
+				$(btn).parents('li').siblings().find(":checkbox").prop('checked', true);	   		
+				$(btn).parents(divclass).hide();
 	   	}
 
-	    function deleteForm(btn, prefix) {
-	        var formCount = parseInt($('#id_' + prefix + '-TOTAL_FORMS').val());
-	        if (formCount > 1) {
-	            // Delete the item/form
-	            $(btn).parents('.studentsection').remove();
-	            var forms = $('.studentsection'); // Get all the forms  
-	            // Update the total number of forms (1 less than before)
-	            $('#id_' + prefix + '-TOTAL_FORMS').val(forms.length);
-	            var i = 0;
-	            // Go through the forms and set their indices, names and IDs
-	            for (formCount = forms.length; i < formCount; i++) {
-	                $(forms.get(i)).children().children().each(function () {
-	                	updateElementIndex(this, prefix, i);
-	                  //   if ($(this).attr('type') == 'text')
-	                  //   {
-	                  //    	updateElementIndex(this, prefix, i);
-	                 	// }
-	                });
-	            }
-	        } // End if
-	        return false;
+    	function deleteForm(btn, prefix, divclass) {
+        var formCount = parseInt($('#id_' + prefix + '-TOTAL_FORMS').val());
+        if (formCount > 1) {
+          // Delete the item/form
+          $(btn).parents(divclass).remove();
+
+          var forms = $(divclass); // Get all the forms  
+          // Update the total number of forms (1 less than before)
+          $('#id_' + prefix + '-TOTAL_FORMS').val(forms.length);
+          var i = 0;
+          // Go through the forms and set their indices, names and IDs
+          for (formCount = forms.length; i < formCount; i++) {
+            $(forms.get(i)).find('input, select').each(function () {
+            	updateElementIndex(this, prefix, i);
+            });
+          }
+        }
 	    }
 
-	    function addForm(btn, prefix) {
-	        var formCount = parseInt($('#id_' + prefix + '-TOTAL_FORMS').val());
-	        // You can only submit a maximum of 10 todo items 
-	        if (formCount < 10) {
-	            // Clone a form (without event handlers) from the first form
-	            var row = $(".studentsection:first").clone(false).get(0);
-	            // Insert it after the last form
-	            $(row).removeAttr('id').hide().insertAfter(".studentsection:last").slideDown(300);
+	  	function createEmptyStudentSectionForm() {
+	  		var html="<div class=\"student_section section related_forms\"> \
+							{{studentformset.empty_form.id|escapejs}} \
+							<ul> \
+								<li> \
+									<span>Branch</span> \
+									{{ studentformset.empty_form.branch|escapejs }} \
+								</li> \
+								<li> \
+									<span>Year of Graduation</span> \
+									{{ studentformset.empty_form.year_of_graduation|escapejs }} \
+								</li> \
+								<li> \
+									<span>Roll No</span> \
+									{{ studentformset.empty_form.roll_num|escapejs }} \
+								</li> \
+								<li> \
+									<a class=\"delete\" href=\"#student_sections\">Delete</a>	 \
+								</li> \
+								<li class=\"deletecheck\"> \
+									{{ studentformset.empty_form.DELETE|escapejs }} \
+								</li> \
+							</ul> \
+						</div>";
+	  		return html;
+	  	}
 
-	            // Remove the bits we don't want in the new row/form
-	            // e.g. error messages
-	            $(".errorlist", row).remove();
-	            $(row).children().removeClass("error");
+	  	function createEmptyEmploymentSectionForm() {
+	  		var html = '<div class="employment_section section related_forms"> \
+						{{employmentformset.empty_form.id|escapejs}} \
+						<ul> \
+							<li> \
+								<span>Employer</span> \
+								{{ employmentformset.empty_form.employer|escapejs}} \
+							</li> \
+							<li> \
+								<span>Designation</span> \
+								{{ employmentformset.empty_form.designation|escapejs}} \
+							</li> \
+							<li> \
+								<span>Company Domain</span> \
+								{{ employmentformset.empty_form.domain|escapejs}} \
+							</li> \
+							<li> \
+								<span>From</span> \
+								{{ employmentformset.empty_form.date_of_joining|escapejs}} \
+							</li> \
+							<li> \
+								<span>From</span> \
+								{{ employmentformset.empty_form.date_of_leaving|escapejs}} \
+							</li> \
+							<li> \
+								<a class="delete" href="#employment_sections">Delete</a>	 \
+							</li> \
+							<li class="deletecheck"> \
+								{{ employmentformset.empty_form.DELETE|escapejs}} \
+							</li> \
+						</ul> \
+					</div>';
+				return html;
+	  	}
 
-	            // Relabel or rename all the relevant bits
-	            $(row).children().children().each(function () {
-	                updateElementIndex(this, prefix, formCount);
-	                $(this).val("");
-	            });
+	  	function createEmptyHigherEduacationForm() {
+	  		var html='<div class="highereducation_section section related_forms"> \
+						{{higheredformset.empty_form.id|escapejs}} \
+						<ul> \
+							<li> \
+								<span>College</span> \
+								{{ higheredformset.empty_form.college|escapejs}} \
+							</li> \
+							<li> \
+								<span>Degree</span> \
+								{{ higheredformset.empty_form.degree|escapejs}} \
+							</li> \
+							<li> \
+								<span>Branch</span> \
+								{{ higheredformset.empty_form.branch|escapejs}} \
+							</li> \
+							<li> \
+								<span>Year of Graduation</span> \
+								{{ higheredformset.empty_form.year_of_graduation|escapejs}} \
+							</li> \
+							<li> \
+								<a class="delete" href="#highereducation_sections">Delete</a>	 \
+							</li> \
+							<li class="deletecheck"> \
+								{{ higheredformset.empty_form.DELETE|escapejs}} \
+							</li> \
+						</ul> \
+					</div>';
+	  		return html;
+	  	}
 
-	            // Add an event handler for the delete item/form link 
-	            $(row).find(".delete").click(function () {
-	                return deleteForm(this, prefix);
-	            });
-	            // Update the total form count
-	            $("#id_" + prefix + "-TOTAL_FORMS").val(formCount + 1);
-	        } // End if
-	        else {
-	            alert("Sorry, you can only enter a maximum of ten items.");
-	        }
-	        return false;
+	  	function createEmptyFacultySectionForm()
+	  	{
+	  		var html = '<div class="faculty_section section related_forms"> \
+						{{facultyformset.empty_form.id|escapejs}} \
+						<ul> \
+							<li> \
+								<span>Department</span> \
+								{{ facultyformset.empty_form.deparment|escapejs}} \
+							</li> \
+							<li> \
+								<span>Designation</span> \
+								{{ facultyformset.empty_form.designation|escapejs}} \
+							</li> \
+							<li> \
+								<a class="delete" href="#faculty_sections">Delete</a>	 \
+							</li> \
+							<li class="deletecheck"> \
+								{{ facultyformset.empty_form.DELETE|escapejs}} \
+							</li> \
+						</ul> \
+					</div>';
+	  		return html;
+	  	}
+
+	    function addForm(prefix, holderdiv, formclass)
+	    {
+	    	//{{ studentformset.prefix }}
+		    var form_count = $('#id_'+prefix+'-TOTAL_FORMS').val();
+		    var html = '';
+		    if(holderdiv == '#student_sections')
+		    {
+		    	html = createEmptyStudentSectionForm().replace(/__prefix__/g, form_count);
+		    }
+		    else if(holderdiv == '#employment_sections')
+		    {
+		    	html = createEmptyEmploymentSectionForm().replace(/__prefix__/g, form_count);
+		    }
+		    else if(holderdiv == '#highereducation_sections')
+		    {
+		    	html = createEmptyHigherEduacationForm().replace(/__prefix__/g, form_count);
+		    }
+		    else if(holderdiv == '#faculty_sections')
+		    {
+		    	html = createEmptyFacultySectionForm().replace(/__prefix__/g, form_count);
+		    }
+        
+        if(html!='')
+        {
+	        $(holderdiv).append(html);
+	        form_count++;
+	        $('#id_'+prefix+'-TOTAL_FORMS').val(form_count);
+	        $(holderdiv+ ' ' + formclass + ':last').find(".delete").click(function () {
+	          deleteForm(this, prefix, formclass);
+	        });
+        }
 	    }
 
+	    // function addForm(btn, prefix, divclass) {
+     //    var formCount = parseInt($('#id_' + prefix + '-TOTAL_FORMS').val());
+     //    // You can only submit a maximum of 10 forms in this formset
+     //    if (formCount < 10) {
+     //      // Clone a form (without event handlers) from the first form
+     //      var row = $(divclass+":first").clone(false, false).get(0);
+     //      // Insert it after the last form
+     //      $(row).removeAttr('id').hide().insertAfter(divclass+":last").slideDown(300);
 
-	    // Register the click event handlers
-	    $(".add").click(function () {
-	        return addForm(this, "form");
+     //      // Remove the bits we don't want in the new row/form
+     //      // e.g. error messages
+     //      $(".errorlist", row).remove();
+     //      $(row).children().removeClass("error");
+
+     //      // Relabel or rename all the relevant bits
+     //      $(row).find('input, select').each(function () {
+     //          updateElementIndex(this, prefix, formCount);
+     //          $(this).val("");
+     //      });
+
+     //      // Add an event handler for the delete item/form link 
+     //      $(row).find(".delete").click(function () {
+     //          deleteForm(this, prefix, divclass);
+     //      });
+     //      // Update the total form count
+     //      $("#id_" + prefix + "-TOTAL_FORMS").val(formCount + 1);
+     //    } // End if
+     //    else {
+     //        alert("Sorry, you can only enter a maximum of ten items.");
+     //    }
+	    // }
+
+	    $("#student_sections .add").click(function () {
+        addForm('{{ studentformset.prefix }}', '#student_sections', '.student_section');
 	    });
 
-	    $(".delete").click(function () {
-	    	// markForDelete(this, "form");
-	        return deleteForm(this, "form");
+	    $("#employment_sections .add").click(function () {
+        addForm('{{ employmentformset.prefix }}', '#employment_sections', '.employment_section');
+	    });
+
+	    $("#highereducation_sections .add").click(function () {
+        addForm('{{ higheredformset.prefix }}', '#highereducation_sections', '.highereducation_section');
+	    });
+
+	    $("#faculty_sections .add").click(function () {
+        addForm('{{ facultyformset.prefix }}', '#faculty_sections', '.faculty_section');
+	    });
+
+	    $("#student_sections .delete").click(function () {
+	    	hideForm(this, ".student_section");
+	    });
+
+	    $("#employment_sections .delete").click(function () {
+	    	hideForm(this, ".employment_section");
+	    });
+
+	    $("#highereducation_sections .delete").click(function () {
+	    	hideForm(this, ".highereducation_section");
+	    });
+
+	    $("#faculty_sections .delete").click(function () {
+	    	hideForm(this, ".faculty_section");
+	    });
+
+	    $("#id_date_of_birth").datepicker({
+	    	dateFormat: "dd/mm/yy",
+	    	changeMonth: true,
+	    	changeYear: true,
+	    	yearRange: "1930:2013"
+	    });
+
+	    $("id_date_of_joining").datepicker({
+	    	dateFormat: "dd/mm/yy",
+	    	changeMonth: true,
+	    	changeYear: true,
+	    	yearRange: "1930:2013"
+	    });
+
+	    $("id_date_of_leaving").datepicker({
+	    	dateFormat: "dd/mm/yy",
+	    	changeMonth: true,
+	    	changeYear: true,
+	    	yearRange: "1930:2013"
+	    });
+
+	    $('#edit_picture').click(function() {
+	    	$(this).siblings('input#id_photo').show();
+	    	$(this).hide();
 	    });
 
 	});
@@ -106,19 +294,220 @@
 <div id = "main_content">
 
 	<div id="edit_profile_form">
-		<form action="/profile/edit/{{profile_id}}" method="post">{% csrf_token %}
-			<h2>Profile Information</h2>
-			{{ userprofileform.as_table }}
-			<h2>Student Sections</h2>
-			{{ studentformset.management_form }}
-			{% for stform in studentformset %}
-				<div class="studentsection">
-					<h5>New student section</h5>
-					{{ stform.as_p }}
-					<p><a class="delete" href="#">Delete</a></p>
-				</div>
-			{% endfor %}
-			<p><a class="add" href="#">Add another item</a></p>
+		<form action="/profile/edit/{{profile_id}}" enctype="multipart/form-data" method="post">{% csrf_token %}
+			<div id="errors">
+				{{ userprofileform.errors }}
+			</div>
+			<h2 class="heading">Basic Details</h2>
+			<div id="picture_section" class="section">
+				<img src="{{ userprofileform.instance.photo.url }}">
+				<a href="#" id="edit_picture">Edit picture</a>
+				{{ userprofileform.photo }}
+			</div>
+			<div id="basic_section" class="section">
+				<table>
+					<tr>
+						<td>
+							<span>First Name</span>
+							{{ userprofileform.first_name }}
+						</td>
+						<td>
+							<span>Last Name</span>			
+							{{ userprofileform.last_name }}
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<span>Email</span>
+							{{ userprofileform.email }}
+						</td>
+						<td>
+							<span>Mobile</span>
+							{{ userprofileform.phone_number }}
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<span>Gender</span>
+							{{ userprofileform.gender }}
+						</td>
+						<td>
+							<span>City</span>
+							{{ userprofileform.city }}
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<span>Date Of Birth</span>
+							{{ userprofileform.date_of_birth }}
+						</td>
+						<td>
+							<span>Address</span>
+							{{ userprofileform.address }}
+						</td>
+					</tr>
+				</table>
+			</div>
+			<div class="cB"></div>
+
+			<div id="web_section" class="section">
+				<h2 class="heading">Web Details</h2>
+				<table>
+					<tr>
+						<td>
+							<span>Website URL</span>
+							{{ userprofileform.website_url }}
+						</td>
+						<td>
+							<span>LinkedIn URL</span>
+							{{ userprofileform.linked_url }}
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<span>Facebook URL</span>
+							{{ userprofileform.facebook_url }}
+						</td>
+						<td>
+							<span>Twitter URL</span>
+							{{ userprofileform.twitter_url }}
+						</td>
+					</tr>
+				</table>
+			</div>
+
+			<div id="student_sections" class="related_sections">
+				<h2 class="heading">Education Details</h2>
+				<a class="add" href="#student_sections"><img src="{{STATIC_URL}}img/plus.png"></a>
+				{{ studentformset.management_form }}
+				{% for stform in studentformset %}
+					<div class="student_section section related_forms">
+						{{stform.id}}
+						<ul>
+							<li>
+								<span>Branch</span>
+								{{ stform.branch }}
+							</li>
+							<li>
+								<span>Year of Graduation</span>
+								{{ stform.year_of_graduation }}
+							</li>
+							<li>
+								<span>Roll No</span>
+								{{ stform.roll_num }}
+							</li>
+							<li>
+								<a class="delete" href="#student_sections"><img src="{{STATIC_URL}}img/minus.png"></a>	
+							</li>
+							<li class="deletecheck">
+								{{ stform.DELETE }}
+							</li>
+						</ul>
+					</div>
+				{% endfor %}
+			</div>
+
+			<div id="employment_sections" class="related_sections">
+				<h2 class="heading">Employment Details</h2>
+				<a class="add" href="#employment_sections"><img src="{{STATIC_URL}}img/plus.png"></a>
+				{{ employmentformset.management_form }}
+				{% for empform in employmentformset %}
+					<div class="employment_section section related_forms">
+						{{empform.id}}
+						<ul>
+							<li>
+								<span>Employer</span>
+								{{ empform.employer }}
+							</li>
+							<li>
+								<span>Designation</span>
+								{{ empform.designation }}
+							</li>
+							<li>
+								<span>Company Domain</span>
+								{{ empform.domain }}
+							</li>
+							<li>
+								<span>From</span>
+								{{ empform.date_of_joining }}
+							</li>
+							<li>
+								<span>From</span>
+								{{ empform.date_of_leaving }}
+							</li>
+							<li>
+								<a class="delete" href="#employment_sections"><img src="{{STATIC_URL}}img/minus.png"></a>	
+							</li>
+							<li class="deletecheck">
+								{{ empform.DELETE }}
+							</li>
+						</ul>
+					</div>
+				{% endfor %}
+			</div>
+
+			<div id="highereducation_sections" class="related_sections">
+				<h2 class="heading">Higher Education Details</h2>
+				<a class="add" href="#highereducation_sections"><img src="{{STATIC_URL}}img/plus.png"></a>
+				{{ higheredformset.management_form }}
+				{% for higheredform in higheredformset %}
+					<div class="highereducation_section section related_forms">
+						{{higheredform.id}}
+						<ul>
+							<li>
+								<span>College</span>
+								{{ higheredform.college }}
+							</li>
+							<li>
+								<span>Degree</span>
+								{{ higheredform.degree }}
+							</li>
+							<li>
+								<span>Branch</span>
+								{{ higheredform.branch }}
+							</li>
+							<li>
+								<span>Year of Graduation</span>
+								{{ higheredform.year_of_graduation }}
+							</li>
+							<li>
+								<a class="delete" href="#highereducation_sections"><img src="{{STATIC_URL}}img/minus.png"></a>	
+							</li>
+							<li class="deletecheck">
+								{{ higheredform.DELETE }}
+							</li>
+						</ul>
+					</div>
+				{% endfor %}
+			</div>
+
+			<div id="faculty_sections" class="related_sections">
+				<h2 class="heading">Faculty Details</h2>
+				<a class="add" href="#faculty_sections"><img src="{{STATIC_URL}}img/plus.png"></a>
+				{{ facultyformset.management_form }}
+				{% for facultyform in facultyformset %}
+					<div class="faculty_section section related_forms">
+						{{facultyform.id}}
+						<ul>
+							<li>
+								<span>Department</span>
+								{{ facultyform.deparment }}
+							</li>
+							<li>
+								<span>Designation</span>
+								{{ facultyform.designation }}
+							</li>
+							<li>
+								<a class="delete" href="#faculty_sections"><img src="{{STATIC_URL}}img/minus.png"></a>	
+							</li>
+							<li class="deletecheck">
+								{{ facultyform.DELETE }}
+							</li>
+						</ul>
+					</div>
+				{% endfor %}
+			</div>
+
 			<input type="submit" value="Submit" />
 			<a href="/profile/view/{{profile_id}}">Cancel</a>
 		</form>

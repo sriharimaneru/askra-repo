@@ -39,33 +39,96 @@ def edit_profile(request, profile_id):
         return render_to_response("error.html", RequestContext(request, {}))
     
     StudentFormSet = modelformset_factory(StudentSection, exclude=('userprofile'), extra=0, can_delete=True)
+    EmploymentFormSet = modelformset_factory(EmployementDetail, exclude = ('userprofile'), extra=0, can_delete=True)
+    HigherEducationFormSet = modelformset_factory(HigherEducationDetail, exclude = ('userprofile'), extra=0, can_delete=True)
+    FacultyFormSet = modelformset_factory(FacultySection, exclude = ('userprofile'), extra=0, can_delete=True)
     
     if request.method == 'POST':
-        userprofileform = EditUserProfileForm(request.POST, instance=user_profile)
+        userprofileform = EditUserProfileForm(request.POST, request.FILES, instance=user_profile)
         studentformset = StudentFormSet(request.POST, queryset=StudentSection.objects.filter(userprofile=user_profile))
+        employmentformset = EmploymentFormSet(request.POST, queryset=EmployementDetail.objects.filter(userprofile=user_profile))
+        highereducationformset = HigherEducationFormSet(request.POST, queryset=HigherEducationDetail.objects.filter(userprofile=user_profile))
+        facultyformset = FacultyFormSet(request.POST, queryset=FacultySection.objects.filter(userprofile=user_profile))
 
-        if userprofileform.is_valid() and studentformset.is_valid():
+        if userprofileform.is_valid() and studentformset.is_valid() and employmentformset.is_valid() and highereducationformset.is_valid() and facultyformset.is_valid():
             userprofileform.save()
-            studentsections = studentformset.save(commit=False)
-            for studentsection in studentsections:
-                studentsection.userprofile = user_profile
-                studentsection.save()
+            
+            #Student Section
+            for stform in studentformset:
+                if stform not in studentformset.deleted_forms:
+                    studentsection = stform.instance
+                    if (studentsection.year_of_graduation is None or studentsection.year_of_graduation == '')\
+                     and (studentsection.roll_num is None or studentsection.roll_num == '')\
+                     and (studentsection.branch is None):
+                        continue
+                    studentsection.userprofile = user_profile
+                    studentsection.save()
+                
+            for stform in studentformset.deleted_forms:
+                studentsection = stform.instance
+                if studentsection.pk:
+                    studentsection.delete()
+            
+            #Employment Details
+            for empform in employmentformset:
+                if empform not in employmentformset.deleted_forms:
+                    employment = empform.instance
+                    employment.userprofile = user_profile
+                    employment.save()
+                
+            for empform in employmentformset.deleted_forms:
+                employment = empform.instance
+                if employment.pk:
+                    employment.delete()
+
+            #Higher Education Details
+            for edform in highereducationformset:
+                if edform not in highereducationformset.deleted_forms:
+                    highered = edform.instance
+                    highered.userprofile = user_profile
+                    highered.save()
+                
+            for edform in highereducationformset.deleted_forms:
+                highered = edform.instance
+                if highered.pk:
+                    highered.delete()
+            
+            #Faculty Section
+            for facultyform in facultyformset:
+                if facultyform not in facultyformset.deleted_forms:
+                    faculty = facultyform.instance
+                    faculty.userprofile = user_profile
+                    faculty.save()
+                
+            for facultyform in facultyformset.deleted_forms:
+                faculty = facultyform.instance
+                if faculty.pk:
+                    faculty.delete()            
             
             return HttpResponseRedirect('/profile/view/'+profile_id)
         else:
-            print studentformset.errors
-            print userprofileform.errors
+#            print studentformset.errors
+#            print userprofileform.errors
             return render_to_response("edit_profile.html", RequestContext(request, 
                                 {'userprofileform': userprofileform,  
                                  'studentformset': studentformset,
+                                 'employmentformset': employmentformset,
+                                 'higheredformset': highereducationformset,
+                                 'facultyformset': facultyformset,
                                  'profile_id': profile_id, }))
     else:
         userprofileform = EditUserProfileForm(instance=user_profile)
         studentformset = StudentFormSet(queryset=StudentSection.objects.filter(userprofile=user_profile))
+        employmentformset = EmploymentFormSet(queryset=EmployementDetail.objects.filter(userprofile=user_profile))
+        highereducationformset = HigherEducationFormSet(queryset=HigherEducationDetail.objects.filter(userprofile=user_profile))
+        facultyformset = FacultyFormSet(queryset=FacultySection.objects.filter(userprofile=user_profile))
     
     return render_to_response("edit_profile.html", RequestContext(request, 
                                 {'userprofileform': userprofileform,  
-                                 'studentformset': studentformset, 
+                                 'studentformset': studentformset,
+                                 'employmentformset': employmentformset,
+                                 'higheredformset': highereducationformset,
+                                 'facultyformset': facultyformset,
                                  'profile_id': profile_id, }))
 
 def reg_step_2(request,x):

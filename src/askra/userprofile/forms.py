@@ -1,18 +1,36 @@
 from django import forms
 from django.forms.formsets import formset_factory
 from userprofile.models import *
+from django.forms import widgets
+from django.template.loader import get_template
+from django.template import Context
 
 class EditUserProfileForm(forms.ModelForm):
+    date_of_birth = forms.DateField(input_formats=['%d/%m/%Y',], required=False,
+                                    widget = widgets.DateInput(format='%d/%m/%Y'))
+    photo = forms.ImageField(widget = widgets.FileInput())
+#    
+#    def __init__(self, *args, **kwargs):
+#        super(EditUserProfileForm, self).__init__(*args, **kwargs)
+ 
+    def clean(self):
+        super(forms.ModelForm, self).clean()
+        return self.cleaned_data
+    
     class Meta:
         model = UserProfile
         exclude = ('user', 'role', 'profile_status', )
+
 
 class EditStudentSectionForm(forms.ModelForm):
     class Meta:
         model = StudentSection
         exclude = ('userprofile')
-
-
+    
+    def as_custom(self):
+        t = get_template('student_section_form.html')
+        return t.render(Context({'stform': self},))
+    
 class EditProfileBasicForm(forms.Form):
     name = forms.CharField(max_length=100, required=False)
     course = forms.ChoiceField(choices=[(branch.id, branch.course) for branch in Branch.objects.all()], required=False)    

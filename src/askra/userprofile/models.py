@@ -15,6 +15,7 @@ from datetime import datetime
 import codecs
 from django.utils.encoding import smart_str
 
+
 log = logging.getLogger('GROUPIFY')
 
 ALUMNI = 0
@@ -86,7 +87,7 @@ class UserProfile(models.Model):
     gender = models.IntegerField(choices=GENDER_CHOICES, null=True, blank=True)
     phone_number = models.CharField(max_length=100, null=True, blank=True)
     address = models.CharField(max_length=500, null=True, blank=True)
-    photo = models.ImageField("Profile picture", upload_to="profile_pictures/", null=True, blank=True, default='{{STATIC_URL}}default_male_profile_picture.jpg')
+    photo = models.ImageField("Profile picture", upload_to="profile_pictures/", null=True, blank=True, default='{{STATIC_URL}}img/default_male_profile_picture.jpg')
     city = models.ForeignKey(City, null=True, blank=True)
     twitter_url = models.URLField(max_length=100, null=True, blank=True)
     facebook_url = models.URLField(max_length=100, null=True, blank=True)

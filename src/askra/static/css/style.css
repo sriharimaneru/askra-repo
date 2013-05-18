@@ -814,94 +814,108 @@ div#facet-list .selected_facet{
 
 /******************Start edit profile page ***************/
 
-#basic_details_form, #weblinks_form, #edit_education_form, #edit_employment_form {
-	width: 500px;
+#edit_profile_form {
 	margin-top: 20px;
+	margin-left: 5px;
+	text-shadow: none;
+}
+
+#edit_profile_form input[type=text] {
+	height: 30px;
+	width: 220px;	
+}
+
+#edit_profile_form select {
+	height: 30px;
+	width: 220px;
+}
+
+#edit_profile_form #picture_section {
 	float: left;
+	margin-left: 10px;
+}
+
+#edit_profile_form #picture_section img {
+	width: 200px;
+	display: block;
+	margin-bottom: 15px;
+}
+
+#edit_profile_form #picture_section input#id_photo {
+	display: none;
+}
+
+#edit_profile_form #picture_section #edit_picture {
+	margin-left: 50px;
+	color: black;
+	text-decoration: underline;
+}
+
+#edit_profile_form #basic_section {
+	float: left;
+	margin-left: 30px;
+}
+
+#edit_profile_form .section {
+	margin-left: 10px;
+	margin-bottom: 10px;
+}
+
+#web_section {
+	margin-bottom: 50px;
+}
+
+.section table tr {
+	line-height: 50px;
+}
+
+.section table td{
+	width: 400px;
+	text-align: left;
+}
+
+.section table td span {
+	width: 140px;
+	margin-right: 10px;
+	display: inline-block;
+}
+
+.related_forms ul {
+	list-style: none;
+	margin-left: 0;
+}
+
+.related_forms ul li {
+	display: inline-block;
+	margin: 0 10px 0 10px;
+}
+
+.related_forms ul li span {
+	margin-right: 5px;
+}
+
+.related_forms .deletecheck {
+	display: none;
+}
+
+#edit_profile_form .heading {
+	text-transform: uppercase;
+	font-size: 16px;
+	line-height: 20px;
+	margin-top: 0;
+	margin-bottom: 10px;
+	color: #4D4D4D;
+	display: inline-block;
+}
+
+.related_sections a.add img{
+	width: 20px;
+	margin-top: -7px;
 	margin-left: 5px;
 }
 
-#basic_section .selectBox select, #edit_education_form .selectBox select, #edit_employment_form .selectBox select {
-	height: 27px;
-	width: 144px;
-	margin-bottom: 10px;
-	margin-right: 5px;
-	padding-bottom: 0;
-	padding-right: 0;
-	color: black;
-	background-color: #f0f0f0;
-}
-
-#basic_section input[type=text], #weblinks_form input[type=text], #edit_education_form input[type=text], #edit_employment_form input[type=text] {
-	color: black;
-	margin-bottom: 0px;
-}
-
-#basic_details_form #basic_section>span, #edit_education_form span, #edit_employment_form span{
-	width: 150px;
-	float: left;
-	margin-top: 0px;
-}
-
-#basic_details_form input[type=submit], #edit_education_form input[type=submit], #edit_employment_form input[type=submit] {
-	margin-left: 0px;
-}
-
-#basic_details_form textarea {
-	width: 300px;
-	height: 200px;
-	border-radius: 5px;
-}
-
-#weblinks_form #web_links input[type=url] {
-	color: black;
-	width: 300px;
-}
-
-#weblinks_form #web_links input[type=text] {
-	color: black;
-	width: 300px;
-}
-
-#weblinks_form #web_links img {
-	height: 30px;
-	width: 30px;
-}
-
-#edit_education_form .edit_education, #edit_employment_form .edit_employment {
-	border: 1px solid gray;
-	padding: 5px;
-	margin: 15px;
-}
-
-#edit_education_form .edit_education p, #edit_employment_form .edit_employment p {
-	background: gray;
-	margin: 0px;
-	margin-bottom: 15px;
-	padding: 3px;
-}
-
-#tabs_nav ul {
-	list-style: none;
-	padding-left: 0px;
-}
-
-#tabs_nav ul li {
-	display: inline;
-}
-
-#tabs_nav ul li a {
-	background: gray;
-	color: white;
-	padding: 10px;
-	text-decoration: none;
-}
-
-#tabs_nav ul li.current a {
-	background: #0f0f0f;
-}
-
-#basic_section span#tagslabel {
+/*
+.section span#tagslabel {
 	display: block;
 }
 
@@ -916,6 +930,6 @@ div#facet-list .selected_facet{
 
 #currentTags>span {
 	display: block;
-}
+}*/
 
 /******************End edit profile page ***************/

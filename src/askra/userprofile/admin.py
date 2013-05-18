@@ -94,8 +94,8 @@ class BranchListFilter(admin.SimpleListFilter):
             return queryset
 
 class UserProfileAdmin(admin.ModelAdmin):
-    fieldsets = [("Basic Details", {"fields" : (('user', 'role', 'profile_status'), ('first_name','last_name', 'gender'), 
-                                                ('email', 'phone_number',), ('photo', 'address', 'city',), ('about',),)}),
+    fieldsets = [("Basic Details", {"fields" : (('user', 'role', 'profile_status'), ('first_name','last_name', 'gender',), 
+                                                ('email', 'phone_number','date_of_birth', ), ('photo', 'address', 'city',), ('about',),)}),
                  ("Website Urls", {"fields" : (('linked_url', 'facebook_url',), ('website_url', 'twitter_url'))}),
                  ("Tags", {"fields": ('tags',)})]
     raw_id_fields = ('user',)
