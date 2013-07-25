@@ -3,17 +3,18 @@ from django.conf import settings
 from django.contrib import admin
 from django.contrib.auth import views as auth_views
 from django.views.generic import TemplateView
-from django.views.generic.simple import direct_to_template
+from askra.views import AboutView
+from userprofile.views import SearchView
 
 admin.autodiscover()
 
 urlpatterns = patterns('',
                        
-    url(r'^$', 'userprofile.views.search', name='haystack_search'),
-    url(r'^about$', 'askra.views.about', name='about'),
-    url(r'^login$', direct_to_template, {'template' : 'login.html'},),
+    url(r'^$', SearchView.as_view(), name='haystack_search'),
+    url(r'^about$', AboutView.as_view(), name='about'),
+    url(r'^login$', TemplateView.as_view(template_name='login.html')),
     url(r'^logout$', auth_views.logout, {'next_page' : '/'},),
-    url(r'^sign-up$', direct_to_template, {'template' : 'sign_up.html'},),
+    url(r'^sign-up$', TemplateView.as_view(template_name='sign_up.html')),
     url(r'^profile/', include('userprofile.urls')),
     
 #    url(r'^index$', 'askra.views.index', name='index'), #temporarily. Will remove this @srihari
