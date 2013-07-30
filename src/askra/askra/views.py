@@ -21,4 +21,4 @@ def about(request):
                               'remainingalumdata': remainingalumdata, 'percentalumdatacollected': percentalumdatacollected, 
                               'percentalumdataremaining': percentalumdataremaining,}
     
-    return render(request, "search/search.html", context)
+    return render(request, "about.html", context)
