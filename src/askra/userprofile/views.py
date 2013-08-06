@@ -14,36 +14,97 @@ from haystack.forms import SearchForm
 from django.http import HttpResponse
 import json
 from django.forms.models import modelformset_factory
+from django.views.generic.base import TemplateView
 
-def show_profile(request, profile_id):
-    if not profile_id:
-        return render_to_response("error.html", RequestContext(request, {}))
+class ShowProfileView(TemplateView):
+    def get_template_names(self):
+        profile_id = self.kwargs['profile_id']
+        if not profile_id:
+            return "error.html"
+        else:
+            return "view_profile.html"
+    
+    def get_context_data(self, **kwargs):
+        context = TemplateView.get_context_data(self, **kwargs)
+        profile_id = self.kwargs['profile_id']
+        
+        if not profile_id:
+            return context
+    
+        try:
+            user_profile = UserProfile.objects.get(id=profile_id)
+            context['user_profile'] = user_profile
+        except UserProfile.DoesNotExist:
+            return context
+        
+        student_sections = StudentSection.objects.filter(userprofile = user_profile)
+        if student_sections:
+            context['student_section'] = student_sections[0]
+            context['other_profiles'] = StudentSection.objects.exclude(id=student_sections[0].id)[:5] #Change logic to show relevant profiles 
+            
+        context['education_details'] = HigherEducationDetail.objects.filter(userprofile = user_profile)
+        context['employment_details'] = EmployementDetail.objects.filter(userprofile = user_profile)
+        context['tags'] = user_profile.tags.all()
+        
+        return context
+    
+    def render_to_response(self, context, **response_kwargs):
+        print context
+        if 'user_profile' in context:
+            return TemplateView.render_to_response(self, context, **response_kwargs)
+        else:
+            raise Http404
+    
+class ErrorView(TemplateView):
+    template_name="error.html"
 
-    user_profile = get_object_or_404(UserProfile, id=profile_id)
-    student_section = StudentSection.objects.filter(userprofile = user_profile)[0]
-    education_details = HigherEducationDetail.objects.filter(userprofile = user_profile)
-    employment_details = EmployementDetail.objects.filter(userprofile = user_profile)
-    other_profiles = StudentSection.objects.exclude(id=student_section.id)[:5] #Change logic to show relevant profiles
-    tags = user_profile.tags.all()
-    return render_to_response("view_profile.html", RequestContext(request, {'user_profile': user_profile,
-    				 'student_section': student_section, 'education_details':education_details,
-    				 'employment_details': employment_details, 'other_profiles':other_profiles, 'tags': tags,}))
-
-def edit_profile(request, profile_id):
-    if not profile_id:
-        return render_to_response("error.html", RequestContext(request, {}))
+class EditProfileView(TemplateView):
+    def get_template_names(self):
+        profile_id = self.kwargs['profile_id']
+        if not profile_id:
+            return "error.html"
+        else:
+            return "edit_profile.html"
     
-    try:
-        user_profile=UserProfile.objects.get(id=profile_id)
-    except ObjectDoesNotExist:
-        return render_to_response("error.html", RequestContext(request, {}))
+    def get(self, request, *args, **kwargs):
+        profile_id = self.kwargs['profile_id']
+        
+        try:
+            user_profile=UserProfile.objects.get(id=profile_id)
+        except UserProfile.DoesNotExist:
+            raise Http404
+        
+        StudentFormSet = modelformset_factory(StudentSection, exclude=('userprofile'), extra=0, can_delete=True)
+        EmploymentFormSet = modelformset_factory(EmployementDetail, exclude = ('userprofile'), extra=0, can_delete=True)
+        HigherEducationFormSet = modelformset_factory(HigherEducationDetail, exclude = ('userprofile'), extra=0, can_delete=True)
+        FacultyFormSet = modelformset_factory(FacultySection, exclude = ('userprofile'), extra=0, can_delete=True)
+        
+        userprofileform = EditUserProfileForm(instance=user_profile)
+        studentformset = StudentFormSet(queryset=StudentSection.objects.filter(userprofile=user_profile))
+        employmentformset = EmploymentFormSet(queryset=EmployementDetail.objects.filter(userprofile=user_profile))
+        highereducationformset = HigherEducationFormSet(queryset=HigherEducationDetail.objects.filter(userprofile=user_profile))
+        facultyformset = FacultyFormSet(queryset=FacultySection.objects.filter(userprofile=user_profile))
     
-    StudentFormSet = modelformset_factory(StudentSection, exclude=('userprofile'), extra=0, can_delete=True)
-    EmploymentFormSet = modelformset_factory(EmployementDetail, exclude = ('userprofile'), extra=0, can_delete=True)
-    HigherEducationFormSet = modelformset_factory(HigherEducationDetail, exclude = ('userprofile'), extra=0, can_delete=True)
-    FacultyFormSet = modelformset_factory(FacultySection, exclude = ('userprofile'), extra=0, can_delete=True)
+        return render_to_response("edit_profile.html", RequestContext(self.request, 
+                                    {'userprofileform': userprofileform,  
+                                     'studentformset': studentformset,
+                                     'employmentformset': employmentformset,
+                                     'higheredformset': highereducationformset,
+                                     'facultyformset': facultyformset,
+                                     'profile_id': profile_id, }))
     
-    if request.method == 'POST':
+    def post(self, request, *args, **kwargs):
+        profile_id = self.kwargs['profile_id']
+        try:
+            user_profile=UserProfile.objects.get(id=profile_id)
+        except UserProfile.DoesNotExist:
+            raise Http404
+        
+        StudentFormSet = modelformset_factory(StudentSection, exclude=('userprofile'), extra=0, can_delete=True)
+        EmploymentFormSet = modelformset_factory(EmployementDetail, exclude = ('userprofile'), extra=0, can_delete=True)
+        HigherEducationFormSet = modelformset_factory(HigherEducationDetail, exclude = ('userprofile'), extra=0, can_delete=True)
+        FacultyFormSet = modelformset_factory(FacultySection, exclude = ('userprofile'), extra=0, can_delete=True)
+        
         userprofileform = EditUserProfileForm(request.POST, request.FILES, instance=user_profile)
         studentformset = StudentFormSet(request.POST, queryset=StudentSection.objects.filter(userprofile=user_profile))
         employmentformset = EmploymentFormSet(request.POST, queryset=EmployementDetail.objects.filter(userprofile=user_profile))
@@ -51,6 +112,7 @@ def edit_profile(request, profile_id):
         facultyformset = FacultyFormSet(request.POST, queryset=FacultySection.objects.filter(userprofile=user_profile))
 
         if userprofileform.is_valid() and studentformset.is_valid() and employmentformset.is_valid() and highereducationformset.is_valid() and facultyformset.is_valid():
+            
             userprofileform.save()
             
             #Student Section
@@ -109,27 +171,154 @@ def edit_profile(request, profile_id):
         else:
 #            print studentformset.errors
 #            print userprofileform.errors
-            return render_to_response("edit_profile.html", RequestContext(request, 
+            return render_to_response("edit_profile.html", RequestContext(self.request, 
                                 {'userprofileform': userprofileform,  
                                  'studentformset': studentformset,
                                  'employmentformset': employmentformset,
                                  'higheredformset': highereducationformset,
                                  'facultyformset': facultyformset,
                                  'profile_id': profile_id, }))
-    else:
-        userprofileform = EditUserProfileForm(instance=user_profile)
-        studentformset = StudentFormSet(queryset=StudentSection.objects.filter(userprofile=user_profile))
-        employmentformset = EmploymentFormSet(queryset=EmployementDetail.objects.filter(userprofile=user_profile))
-        highereducationformset = HigherEducationFormSet(queryset=HigherEducationDetail.objects.filter(userprofile=user_profile))
-        facultyformset = FacultyFormSet(queryset=FacultySection.objects.filter(userprofile=user_profile))
+
+
+class ProfileBulkUploadView(TemplateView):
+    def get(self, request, *args, **kwargs):
+        form = ProfileBulkUploadForm()
+        return render(request, "profile_bulk_upload.html", {'form':form, })
     
-    return render_to_response("edit_profile.html", RequestContext(request, 
-                                {'userprofileform': userprofileform,  
-                                 'studentformset': studentformset,
-                                 'employmentformset': employmentformset,
-                                 'higheredformset': highereducationformset,
-                                 'facultyformset': facultyformset,
-                                 'profile_id': profile_id, }))
+    def post(self, request, *args, **kwargs):
+        form = ProfileBulkUploadForm(request.POST, request.FILES)
+        if form.is_valid():
+            errors = form._errors.setdefault("uploaded_file", ErrorList())
+            reader = csv.DictReader(request.FILES['uploaded_file'])
+            for row in reader:
+                first_name = row['First Name']
+                last_name = row['Last Name']
+                phone_number = row['Phone Number']
+                email = row['Email']
+                gender = row['Gender']
+                role = row['User Role']
+                city = row['City']
+
+                try:
+                    user_profile=UserProfile.objects.get(email=email)
+                    text = "A profile with email ID [" + email + "] already exists. Updated the other fields."
+                    user_profile.first_name = first_name
+                    user_profile.last_name = last_name
+                    user_profile.phone_number = phone_number
+                    user_profile.email = email
+                except ObjectDoesNotExist:
+                    user_profile = UserProfile(first_name=first_name, 
+                                               last_name=first_name,
+                                               email=email,
+                                               phone_number=phone_number)
+                    text = "Added new profile with email ID [" + email + "]"
+
+                errors.append(text)
+                user_profile.set_gender(gender)
+                user_profile.set_role(role)
+                user_profile.set_city(city)
+                user_profile.save()
+                
+            errors.append("Bulk upload successful")
+        return render(request, "profile_bulk_upload.html", {'form':form, })
+
+class SearchView(TemplateView):
+    template_name="search/search.html"
+    
+    def get_context_data(self, **kwargs):
+        context = super(SearchView, self).get_context_data(**kwargs)
+        context['request'] = self.request
+        
+        name = self.request.GET.get("name", '')
+        branch = self.request.GET.get("branch", '')
+        year = self.request.GET.get("year_of_passing", '')
+        offset = self.request.GET.get("offset", '0')
+        
+        branch_facet = self.request.GET.get("branch_facet", '') 
+        year_facet = self.request.GET.get("year_of_passing_facet", '')
+        if year_facet:
+            year_facet = [int(x) for x in year_facet.split(",")] 
+        city_facet = self.request.GET.get("city_facet", "")   
+               
+        sqs = SearchQuerySet().facet('branch')
+        sqs = sqs.facet('year_of_passing')
+        sqs = sqs.facet('city')
+        
+                
+        if name or branch or year:
+            context['form'] = ProfileSearchBasicForm(self.request.GET)
+            if name:
+                sqs = sqs.auto_query(name)
+            if branch:
+                sqs = sqs.filter(branch_exact = branch)
+            if year:
+                sqs = sqs.filter(year_of_passing_exact = year)
+        else:
+            context['form'] = ProfileSearchBasicForm()
+        
+        context['facets'] = sqs.facet_counts()
+        
+            
+        ##Horrible hardcoding - need to tweak it - By Srihari
+        #To compute the facet counts
+        
+        if branch_facet:
+            temp = sqs.filter(branch_exact = branch_facet)
+            context['facets']['fields']['year_of_passing'] = temp.filter(city_exact = city_facet).facet_counts()['fields']['year_of_passing'] if city_facet else temp.facet_counts()['fields']['year_of_passing'] 
+        elif city_facet:
+            context['facets']['fields']['year_of_passing'] = sqs.filter(city_exact = city_facet).facet_counts()['fields']['year_of_passing']
+                
+        if year_facet:
+            temp = sqs.filter(year_of_passing_exact__in = year_facet)        
+            context['facets']['fields']['branch'] = temp.filter(city_exact = city_facet).facet_counts()['fields']['branch'] if city_facet else temp.facet_counts()['fields']['branch'] 
+        elif city_facet:
+            context['facets']['fields']['branch'] = sqs.filter(city_exact = city_facet).facet_counts()['fields']['branch']
+            
+        if year_facet:
+            temp = sqs.filter(year_of_passing_exact__in = year_facet)        
+            context['facets']['fields']['city'] = temp.filter(branch_exact = branch_facet).facet_counts()['fields']['city'] if branch_facet else temp.facet_counts()['fields']['city'] 
+        elif branch_facet:
+            context['facets']['fields']['city'] = sqs.filter(branch_exact = branch_facet).facet_counts()['fields']['city']
+               
+        if branch_facet:
+            sqs = sqs.filter(branch_exact = branch_facet)
+            context['branch_facet_selected'] = branch_facet
+        else:
+            context['branch_facet_selected'] = ''
+                
+        if year_facet:
+            sqs = sqs.filter(year_of_passing_exact__in = year_facet)
+            context['year_facets_selected'] = [str(x) for x in year_facet]
+        else:
+            context['year_facets_selected'] = ''
+            
+        if city_facet:
+            sqs = sqs.filter(city_exact = city_facet)
+            context['city_facet_selected'] = city_facet
+        else:
+            context['city_facet_selected'] = '' 
+    
+            
+        print context['year_facets_selected']
+        
+        context['facets']['fields']['year_of_passing'] = self.facet_sorting(context['facets']['fields']['year_of_passing'])
+        context['facets']['fields']['city'] = self.facet_sorting(context['facets']['fields']['city'])
+        context['facets']['fields']['branch'] = self.facet_sorting(context['facets']['fields']['branch'])
+               
+    
+        offsetvalue = int(offset)
+        results = sqs.order_by('name')
+        context['resultcount'] = results.count()
+        #results = results[offsetvalue:offsetvalue+20]
+        context['results'] = results[:1000]
+        
+        return context
+    
+    #Sort with in available options and then with in greyed out options
+    def facet_sorting(self, facets):
+        return sorted([x for x in facets if x[1]], key=lambda x: x[0]) + sorted([x for x in facets if not x[1]], key=lambda x: x[0])
+    
+
 
 def reg_step_2(request,x):
     user_profiles = UserProfile.objects.filter(role=ALUMNI)
@@ -194,7 +383,7 @@ def edit_profile_basic(request, profile_id):
 
 def edit_profile_weblinks(request, profile_id):
     if not profile_id:
-       return render_to_response("error.html", RequestContext(request, {}))
+        return render_to_response("error.html", RequestContext(request, {}))
 
     user_profile=UserProfile.objects.get(id=profile_id)
 
@@ -215,7 +404,7 @@ def edit_profile_weblinks(request, profile_id):
 
 def edit_profile_education(request, profile_id):
     if not profile_id:
-       return render_to_response("error.html", RequestContext(request, {}))
+        return render_to_response("error.html", RequestContext(request, {}))
 
     user_profile=UserProfile.objects.get(id=profile_id)
     #student_section = StudentSection.objects.filter(userprofile = user_profile)[0]
@@ -244,7 +433,7 @@ def edit_profile_education(request, profile_id):
 
 def edit_profile_employment(request, profile_id):
     if not profile_id:
-       return render_to_response("error.html", RequestContext(request, {}))
+        return render_to_response("error.html", RequestContext(request, {}))
 
     user_profile=UserProfile.objects.get(id=profile_id)
     employment_details = EmployementDetail.objects.filter(userprofile = user_profile)
@@ -271,164 +460,166 @@ def edit_profile_employment(request, profile_id):
     return render(request, "edit_profile_employment.html", {'formset':formset, 'profile_id':profile_id, })
 
 
-def profile_bulk_upload(request,x):
-    if request.method == 'POST':
-        form = ProfileBulkUploadForm(request.POST, request.FILES)
-        if form.is_valid():
-            errors = form._errors.setdefault("uploaded_file", ErrorList())
-            reader = csv.DictReader(request.FILES['uploaded_file'])
-            for row in reader:
-                first_name = row['First Name']
-                last_name = row['Last Name']
-                phone_number = row['Phone Number']
-                email = row['Email']
-                gender = row['Gender']
-                role = row['User Role']
-                city = row['City']
 
-                try:
-                    user_profile=UserProfile.objects.get(email=email)
-                    text = "A profile with email ID [" + email + "] already exists. Updated the other fields."
-                    user_profile.first_name = first_name
-                    user_profile.last_name = last_name
-                    user_profile.phone_number = phone_number
-                    user_profile.email = email
-                except ObjectDoesNotExist:
-                    user_profile = UserProfile(first_name=first_name, 
-                                               last_name=first_name,
-                                               email=email,
-                                               phone_number=phone_number)
-                    text = "Added new profile with email ID [" + email + "]"
+#def profile_bulk_upload(request,x):
+#    if request.method == 'POST':
+#        form = ProfileBulkUploadForm(request.POST, request.FILES)
+#        if form.is_valid():
+#            errors = form._errors.setdefault("uploaded_file", ErrorList())
+#            reader = csv.DictReader(request.FILES['uploaded_file'])
+#            for row in reader:
+#                first_name = row['First Name']
+#                last_name = row['Last Name']
+#                phone_number = row['Phone Number']
+#                email = row['Email']
+#                gender = row['Gender']
+#                role = row['User Role']
+#                city = row['City']
+#
+#                try:
+#                    user_profile=UserProfile.objects.get(email=email)
+#                    text = "A profile with email ID [" + email + "] already exists. Updated the other fields."
+#                    user_profile.first_name = first_name
+#                    user_profile.last_name = last_name
+#                    user_profile.phone_number = phone_number
+#                    user_profile.email = email
+#                except ObjectDoesNotExist:
+#                    user_profile = UserProfile(first_name=first_name, 
+#                                               last_name=first_name,
+#                                               email=email,
+#                                               phone_number=phone_number)
+#                    text = "Added new profile with email ID [" + email + "]"
+#
+#                errors.append(text)
+#                user_profile.set_gender(gender)
+#                user_profile.set_role(role)
+#                user_profile.set_city(city)
+#                user_profile.save()
+#                
+#            errors.append("Bulk upload successful")
+#    else:
+#        form = ProfileBulkUploadForm()
+#    return render(request, "profile_bulk_upload.html", {'form':form, })
 
-                errors.append(text)
-                user_profile.set_gender(gender)
-                user_profile.set_role(role)
-                user_profile.set_city(city)
-                user_profile.save()
-                
-            errors.append("Bulk upload successful")
-    else:
-        form = ProfileBulkUploadForm()
-    return render(request, "profile_bulk_upload.html", {'form':form, })
+##Sort with in available options and then with in greyed out options
+#def facet_sorting(facets):
+#    return sorted([x for x in facets if x[1]], key=lambda x: x[0]) + sorted([x for x in facets if not x[1]], key=lambda x: x[0]) 
 
-#Sort with in available options and then with in greyed out options
-def facet_sorting(facets):
-    return sorted([x for x in facets if x[1]], key=lambda x: x[0]) + sorted([x for x in facets if not x[1]], key=lambda x: x[0]) 
 
-def search(request):
-    context = {}   
-    context['request'] = request
-        
-    name = request.GET.get("name", '')
-    branch = request.GET.get("branch", '')
-    year = request.GET.get("year_of_passing", '')
-    offset = request.GET.get("offset", '0')
-    
-    branch_facet = request.GET.get("branch_facet", '') 
-    year_facet = request.GET.get("year_of_passing_facet", '')
-    if year_facet:
-        year_facet = [int(x) for x in year_facet.split(",")] 
-    city_facet = request.GET.get("city_facet", "")   
-           
-    sqs = SearchQuerySet().facet('branch')
-    sqs = sqs.facet('year_of_passing')
-    sqs = sqs.facet('city')
-    
-            
-    if name or branch or year:
-        context['form'] = ProfileSearchBasicForm(request.GET)
-        if name:
-            sqs = sqs.auto_query(name)
-        if branch:
-            sqs = sqs.filter(branch_exact = branch)
-        if year:
-            sqs = sqs.filter(year_of_passing_exact = year)
-    else:
-        context['form'] = ProfileSearchBasicForm()
-    
-    context['facets'] = sqs.facet_counts()
-    
-        
-    ##Horrible hardcoding - need to tweak it - By Srihari
-    #To compute the facet counts
-    
-    if branch_facet:
-        temp = sqs.filter(branch_exact = branch_facet)
-        context['facets']['fields']['year_of_passing'] = temp.filter(city_exact = city_facet).facet_counts()['fields']['year_of_passing'] if city_facet else temp.facet_counts()['fields']['year_of_passing'] 
-    elif city_facet:
-        context['facets']['fields']['year_of_passing'] = sqs.filter(city_exact = city_facet).facet_counts()['fields']['year_of_passing']
-            
-    if year_facet:
-        temp = sqs.filter(year_of_passing_exact__in = year_facet)        
-        context['facets']['fields']['branch'] = temp.filter(city_exact = city_facet).facet_counts()['fields']['branch'] if city_facet else temp.facet_counts()['fields']['branch'] 
-    elif city_facet:
-        context['facets']['fields']['branch'] = sqs.filter(city_exact = city_facet).facet_counts()['fields']['branch']
-        
-    if year_facet:
-        temp = sqs.filter(year_of_passing_exact__in = year_facet)        
-        context['facets']['fields']['city'] = temp.filter(branch_exact = branch_facet).facet_counts()['fields']['city'] if branch_facet else temp.facet_counts()['fields']['city'] 
-    elif branch_facet:
-        context['facets']['fields']['city'] = sqs.filter(branch_exact = branch_facet).facet_counts()['fields']['city']
-           
-    if branch_facet:
-        sqs = sqs.filter(branch_exact = branch_facet)
-        context['branch_facet_selected'] = branch_facet
-    else:
-        context['branch_facet_selected'] = ''
-            
-    if year_facet:
-        sqs = sqs.filter(year_of_passing_exact__in = year_facet)
-        context['year_facets_selected'] = [str(x) for x in year_facet]
-    else:
-        context['year_facets_selected'] = ''
-        
-    if city_facet:
-        sqs = sqs.filter(city_exact = city_facet)
-        context['city_facet_selected'] = city_facet
-    else:
-        context['city_facet_selected'] = '' 
-
-        
-    print context['year_facets_selected']
-    
-    context['facets']['fields']['year_of_passing'] = facet_sorting(context['facets']['fields']['year_of_passing'])
-    context['facets']['fields']['city'] = facet_sorting(context['facets']['fields']['city'])
-    context['facets']['fields']['branch'] = facet_sorting(context['facets']['fields']['branch'])
-           
-
-    offsetvalue = int(offset)
-    results = sqs.order_by('name')
-    context['resultcount'] = results.count()
-    #results = results[offsetvalue:offsetvalue+20]
-    context['results'] = results[:1000]
-
-    #querystring = request.get_full_path()
-    #if('?' not in querystring):
-    #    querystring=''
-    #else:
-    #    querystring=querystring.split('?')[1]
-
-    '''
-    querystring=""
-    if(name!=''):
-        querystring+=('&name='+name)
-    if(branch!=''):
-        querystring+=('&branch='+branch)
-    if(year!=''):
-        querystring+=('&year_of_passing='+year)
-    
-    #querystring+='&offset='
-    
-    if(branch_facet!=''):
-        querystring+=('&branch_facet='+branch_facet)
-    if(year_facet!=''):
-        querystring+=('&year_facet='+year_facet)
-
-    print "Outgoing query string from search = [" +querystring+ "]"
-    context['querystring'] = querystring
-    '''
-    
-    return render(request, "search/search.html", context)
+#def search(request):
+#    context = {}   
+#    context['request'] = request
+#        
+#    name = request.GET.get("name", '')
+#    branch = request.GET.get("branch", '')
+#    year = request.GET.get("year_of_passing", '')
+#    offset = request.GET.get("offset", '0')
+#    
+#    branch_facet = request.GET.get("branch_facet", '') 
+#    year_facet = request.GET.get("year_of_passing_facet", '')
+#    if year_facet:
+#        year_facet = [int(x) for x in year_facet.split(",")] 
+#    city_facet = request.GET.get("city_facet", "")   
+#           
+#    sqs = SearchQuerySet().facet('branch')
+#    sqs = sqs.facet('year_of_passing')
+#    sqs = sqs.facet('city')
+#    
+#            
+#    if name or branch or year:
+#        context['form'] = ProfileSearchBasicForm(request.GET)
+#        if name:
+#            sqs = sqs.auto_query(name)
+#        if branch:
+#            sqs = sqs.filter(branch_exact = branch)
+#        if year:
+#            sqs = sqs.filter(year_of_passing_exact = year)
+#    else:
+#        context['form'] = ProfileSearchBasicForm()
+#    
+#    context['facets'] = sqs.facet_counts()
+#    
+#        
+#    ##Horrible hardcoding - need to tweak it - By Srihari
+#    #To compute the facet counts
+#    
+#    if branch_facet:
+#        temp = sqs.filter(branch_exact = branch_facet)
+#        context['facets']['fields']['year_of_passing'] = temp.filter(city_exact = city_facet).facet_counts()['fields']['year_of_passing'] if city_facet else temp.facet_counts()['fields']['year_of_passing'] 
+#    elif city_facet:
+#        context['facets']['fields']['year_of_passing'] = sqs.filter(city_exact = city_facet).facet_counts()['fields']['year_of_passing']
+#            
+#    if year_facet:
+#        temp = sqs.filter(year_of_passing_exact__in = year_facet)        
+#        context['facets']['fields']['branch'] = temp.filter(city_exact = city_facet).facet_counts()['fields']['branch'] if city_facet else temp.facet_counts()['fields']['branch'] 
+#    elif city_facet:
+#        context['facets']['fields']['branch'] = sqs.filter(city_exact = city_facet).facet_counts()['fields']['branch']
+#        
+#    if year_facet:
+#        temp = sqs.filter(year_of_passing_exact__in = year_facet)        
+#        context['facets']['fields']['city'] = temp.filter(branch_exact = branch_facet).facet_counts()['fields']['city'] if branch_facet else temp.facet_counts()['fields']['city'] 
+#    elif branch_facet:
+#        context['facets']['fields']['city'] = sqs.filter(branch_exact = branch_facet).facet_counts()['fields']['city']
+#           
+#    if branch_facet:
+#        sqs = sqs.filter(branch_exact = branch_facet)
+#        context['branch_facet_selected'] = branch_facet
+#    else:
+#        context['branch_facet_selected'] = ''
+#            
+#    if year_facet:
+#        sqs = sqs.filter(year_of_passing_exact__in = year_facet)
+#        context['year_facets_selected'] = [str(x) for x in year_facet]
+#    else:
+#        context['year_facets_selected'] = ''
+#        
+#    if city_facet:
+#        sqs = sqs.filter(city_exact = city_facet)
+#        context['city_facet_selected'] = city_facet
+#    else:
+#        context['city_facet_selected'] = '' 
+#
+#        
+#    print context['year_facets_selected']
+#    
+#    context['facets']['fields']['year_of_passing'] = facet_sorting(context['facets']['fields']['year_of_passing'])
+#    context['facets']['fields']['city'] = facet_sorting(context['facets']['fields']['city'])
+#    context['facets']['fields']['branch'] = facet_sorting(context['facets']['fields']['branch'])
+#           
+#
+#    offsetvalue = int(offset)
+#    results = sqs.order_by('name')
+#    context['resultcount'] = results.count()
+#    #results = results[offsetvalue:offsetvalue+20]
+#    context['results'] = results[:1000]
+#
+#    #querystring = request.get_full_path()
+#    #if('?' not in querystring):
+#    #    querystring=''
+#    #else:
+#    #    querystring=querystring.split('?')[1]
+#
+#    '''
+#    querystring=""
+#    if(name!=''):
+#        querystring+=('&name='+name)
+#    if(branch!=''):
+#        querystring+=('&branch='+branch)
+#    if(year!=''):
+#        querystring+=('&year_of_passing='+year)
+#    
+#    #querystring+='&offset='
+#    
+#    if(branch_facet!=''):
+#        querystring+=('&branch_facet='+branch_facet)
+#    if(year_facet!=''):
+#        querystring+=('&year_facet='+year_facet)
+#
+#    print "Outgoing query string from search = [" +querystring+ "]"
+#    context['querystring'] = querystring
+#    '''
+#    
+#    return render(request, "search/search.html", context)
 
 def getsearchresults(request):
     name = request.GET.get("name", '')
@@ -535,3 +726,119 @@ def ajaxtest(request):
 
     return render_to_response('ajaxtest.html', {'dummy' : 123})
         
+#def show_profile(request, profile_id):
+#    if not profile_id:
+#        return render_to_response("error.html", RequestContext(request, {}))
+#
+#    user_profile = get_object_or_404(UserProfile, id=profile_id)
+#    student_section = StudentSection.objects.filter(userprofile = user_profile)[0]
+#    education_details = HigherEducationDetail.objects.filter(userprofile = user_profile)
+#    employment_details = EmployementDetail.objects.filter(userprofile = user_profile)
+#    other_profiles = StudentSection.objects.exclude(id=student_section.id)[:5] #Change logic to show relevant profiles
+#    tags = user_profile.tags.all()
+#    return render_to_response("view_profile.html", RequestContext(request, {'user_profile': user_profile,
+#                     'student_section': student_section, 'education_details':education_details,
+#                     'employment_details': employment_details, 'other_profiles':other_profiles, 'tags': tags,}))
+
+
+#def edit_profile(request, profile_id):
+#    if not profile_id:
+#        return render_to_response("error.html", RequestContext(request, {}))
+#    
+#    try:
+#        user_profile=UserProfile.objects.get(id=profile_id)
+#    except ObjectDoesNotExist:
+#        return render_to_response("error.html", RequestContext(request, {}))
+#    
+#    StudentFormSet = modelformset_factory(StudentSection, exclude=('userprofile'), extra=0, can_delete=True)
+#    EmploymentFormSet = modelformset_factory(EmployementDetail, exclude = ('userprofile'), extra=0, can_delete=True)
+#    HigherEducationFormSet = modelformset_factory(HigherEducationDetail, exclude = ('userprofile'), extra=0, can_delete=True)
+#    FacultyFormSet = modelformset_factory(FacultySection, exclude = ('userprofile'), extra=0, can_delete=True)
+#    
+#    if request.method == 'POST':
+#        userprofileform = EditUserProfileForm(request.POST, request.FILES, instance=user_profile)
+#        studentformset = StudentFormSet(request.POST, queryset=StudentSection.objects.filter(userprofile=user_profile))
+#        employmentformset = EmploymentFormSet(request.POST, queryset=EmployementDetail.objects.filter(userprofile=user_profile))
+#        highereducationformset = HigherEducationFormSet(request.POST, queryset=HigherEducationDetail.objects.filter(userprofile=user_profile))
+#        facultyformset = FacultyFormSet(request.POST, queryset=FacultySection.objects.filter(userprofile=user_profile))
+#
+#        if userprofileform.is_valid() and studentformset.is_valid() and employmentformset.is_valid() and highereducationformset.is_valid() and facultyformset.is_valid():
+#            userprofileform.save()
+#            
+#            #Student Section
+#            for stform in studentformset:
+#                if stform not in studentformset.deleted_forms:
+#                    studentsection = stform.instance
+#                    if (studentsection.year_of_graduation is None or studentsection.year_of_graduation == '')\
+#                     and (studentsection.roll_num is None or studentsection.roll_num == '')\
+#                     and (studentsection.branch is None):
+#                        continue
+#                    studentsection.userprofile = user_profile
+#                    studentsection.save()
+#                
+#            for stform in studentformset.deleted_forms:
+#                studentsection = stform.instance
+#                if studentsection.pk:
+#                    studentsection.delete()
+#            
+#            #Employment Details
+#            for empform in employmentformset:
+#                if empform not in employmentformset.deleted_forms:
+#                    employment = empform.instance
+#                    employment.userprofile = user_profile
+#                    employment.save()
+#                
+#            for empform in employmentformset.deleted_forms:
+#                employment = empform.instance
+#                if employment.pk:
+#                    employment.delete()
+#
+#            #Higher Education Details
+#            for edform in highereducationformset:
+#                if edform not in highereducationformset.deleted_forms:
+#                    highered = edform.instance
+#                    highered.userprofile = user_profile
+#                    highered.save()
+#                
+#            for edform in highereducationformset.deleted_forms:
+#                highered = edform.instance
+#                if highered.pk:
+#                    highered.delete()
+#            
+#            #Faculty Section
+#            for facultyform in facultyformset:
+#                if facultyform not in facultyformset.deleted_forms:
+#                    faculty = facultyform.instance
+#                    faculty.userprofile = user_profile
+#                    faculty.save()
+#                
+#            for facultyform in facultyformset.deleted_forms:
+#                faculty = facultyform.instance
+#                if faculty.pk:
+#                    faculty.delete()            
+#            
+#            return HttpResponseRedirect('/profile/view/'+profile_id)
+#        else:
+##            print studentformset.errors
+##            print userprofileform.errors
+#            return render_to_response("edit_profile.html", RequestContext(request, 
+#                                {'userprofileform': userprofileform,  
+#                                 'studentformset': studentformset,
+#                                 'employmentformset': employmentformset,
+#                                 'higheredformset': highereducationformset,
+#                                 'facultyformset': facultyformset,
+#                                 'profile_id': profile_id, }))
+#    else:
+#        userprofileform = EditUserProfileForm(instance=user_profile)
+#        studentformset = StudentFormSet(queryset=StudentSection.objects.filter(userprofile=user_profile))
+#        employmentformset = EmploymentFormSet(queryset=EmployementDetail.objects.filter(userprofile=user_profile))
+#        highereducationformset = HigherEducationFormSet(queryset=HigherEducationDetail.objects.filter(userprofile=user_profile))
+#        facultyformset = FacultyFormSet(queryset=FacultySection.objects.filter(userprofile=user_profile))
+#    
+#    return render_to_response("edit_profile.html", RequestContext(request, 
+#                                {'userprofileform': userprofileform,  
+#                                 'studentformset': studentformset,
+#                                 'employmentformset': employmentformset,
+#                                 'higheredformset': highereducationformset,
+#                                 'facultyformset': facultyformset,
+#                                 'profile_id': profile_id, }))
