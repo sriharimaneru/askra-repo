@@ -141,6 +141,12 @@
                 });
             }
         }, { offset:'bottom-in-view'});
+        
+        $('#pagetop').click(function() {
+            $(document.body).animate({ scrollTop: 0 }, "fast");
+        });
+
+
     });
 
 </script>
@@ -291,4 +297,7 @@
 <button id="myButton">Click me</button>-->
 </div>
 <p class="cB"></p>
+<div id="pagetop">
+    <img src="{{STATIC_URL}}img/page_top.png"/>
+</div>
 {% endblock content %}

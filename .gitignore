@@ -25,3 +25,9 @@ pip-log.txt
 
 #Mr Developer
 .mr.developer.cfg
+
+
+src/askra/media/*
+src/askra/.project
+src/askra/.pydevproject
+src/askra/logfile

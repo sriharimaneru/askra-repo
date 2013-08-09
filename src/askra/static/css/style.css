@@ -683,6 +683,17 @@ div.loading {
 	text-align: center;
 }
 
+div#pagetop {
+	position: fixed;
+	bottom: 40px;
+	right: 0;
+	cursor: pointer;
+}
+
+div#pagetop img {
+	width: 80px;
+}
+
 
 /******************End Search Page ***********************/
 

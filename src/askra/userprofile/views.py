@@ -4,18 +4,18 @@ from django.template import RequestContext
 from userprofile.models import *
 from userprofile.forms import *
 from django.http import HttpResponseRedirect, Http404
-import csv
 from django.forms.util import ErrorList
 from django.core.exceptions import ObjectDoesNotExist
 from haystack.query import SearchQuerySet
 from models import *
 from forms import *
-from haystack.forms import SearchForm
 from django.http import HttpResponse
 import json
 from django.forms.models import modelformset_factory
 from django.views.generic.base import TemplateView, View
 
+#Number of results loaded on search page initially. Same number of results are loaded further
+# with each AJAX call after that.
 INITIAL_RESULTS_COUNT = 40
 
 class ShowProfileView(TemplateView):
