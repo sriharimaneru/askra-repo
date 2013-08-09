@@ -329,7 +329,13 @@ class SearchView(BaseSearchView, TemplateView):
                 
         if year_facet:
             sqs = sqs.filter(year_of_passing_exact__in = year_facet)
-            context['year_facets_selected'] = [str(x) for x in year_facet]
+            year_facet_string = None
+            for year in year_facet:
+                if not year_facet_string:
+                    year_facet_string = str(year)
+                else:
+                    year_facet_string = year_facet_string + "," + str(year)
+            context['year_facets_selected'] = year_facet_string
         else:
             context['year_facets_selected'] = ''
             

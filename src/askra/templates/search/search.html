@@ -91,7 +91,7 @@
             {
                 $('.loading').show();
                 var getdata = {'name':"{{name_selected}}", 'branch':"{{branch_selected}}", 'year':"{{year_selected}}", 'offset':offset, 
-                                'branch_facet':"{{branch_facet_selected}}", 'year_facet':"{{year_facet_selected}}", 'city_facet':"{{city_facet_selected}}"};
+                                'branch_facet':"{{branch_facet_selected}}", 'year_facet':"{{year_facets_selected}}", 'city_facet':"{{city_facet_selected}}"};
                 $.ajax({
                     url: "/searchajax",
                     data: getdata,
