@@ -110,6 +110,14 @@ class UserProfile(models.Model):
             return self.last_name
         else:
             return ""
+    
+    def get_short_name(self):
+        if self.first_name:
+            return self.first_name
+        elif self.last_name:
+            return self.last_name
+        else:
+            return ""
 
     def set_gender(self, value):
         if(value):
@@ -287,10 +295,14 @@ class EmployementDetail(models.Model):
     date_of_leaving = models.DateField(null=True, blank=True)
 
     def get_employment_period(self):
-        if(self.date_of_joining is None or self.date_of_leaving is None or self.date_of_joining=="" or self.date_of_leaving==""):
+        if((self.date_of_joining is None and self.date_of_leaving is None) or (self.date_of_joining=="" and self.date_of_leaving=="")):
             return ""
+        elif(self.date_of_leaving is None):
+            return str(self.date_of_joining.strftime("%b %Y")) + " - Current"
+        elif(self.date_of_joining is None):
+            return " - " + str(self.date_of_leaving.strftime("%b %Y"))
         else:
-            return str(self.date_of_joining.strftime("%b")) + ", " + str(self.date_of_joining.year)+ " - " + str(self.date_of_leaving.strftime("%b")) + ", " + str(self.date_of_leaving.year)
+            return str(self.date_of_joining.strftime("%b %Y")) + " - " + str(self.date_of_joining.year)+ " - " + str(self.date_of_leaving.strftime("%b")) + ", " + str(self.date_of_leaving.year)
 
 class College(models.Model):
     name = models.CharField(max_length=200)

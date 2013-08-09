@@ -9,6 +9,10 @@
 	       window.location=$(this).find("a").attr("href"); 
 	       return false;
 		});
+
+		$('#contact_email').click(function() {
+			$('#contact_div').show("slow");
+		});
 	});
 </script>
 {% endblock %}
@@ -33,52 +37,61 @@
 	</div>
 	<div id="pic_div">
 		{% if user_profile.photo and user_profile.photo.url %}
-		<img src="{{user_profile.photo.url}}" width="250px" height="250px">
+		<img src="{{user_profile.photo.url}}" width="200px" height="200px">
 		{% else %}
-		<img src="{{STATIC_URL}}img/no-image.jpg" width="250px" height="250px" alt="No profile picture">
+		<img src="{{STATIC_URL}}img/default_profile.png" width="200px" height="200px" alt="No profile picture">
 		{% endif %}
 	</div>
 	<div id="basic_details_div">
-		<h2 class="section-title">{{ user_profile.get_full_name }}</h2>
+		<h2>{{ user_profile.get_full_name }}</h2>
 		<p>{{ student_section.get_full_qualification }}</p>
-		<p>{{ user_profile.city }}</p>
-		<div id = "social_media_links">
-			{% if user_profile.facebook_url %}
-			    <a href="{{ user_profile.facebook_url }}" target="blank"><img src="{{STATIC_URL}}img/facebook_icon.png" width="35px" height="35px"></a>
-			{% endif %}
-
-			{% if user_profile.linked_url %}
-			<a href="{{ user_profile.linked_url }}" target="blank"><img src="{{STATIC_URL}}img/linkedin_icon.png" width="35px" height="35px"></a>
-			{% endif %}
-
-			{% if user_profile.twitter_url %}
-			<a href="{{ user_profile.twitter_url }}" target="blank"><img src="{{STATIC_URL}}img/twitter_icon.png" width="35px" height="35px"></a>
-			{% endif %}
-		</div>
+		{% if user_profile.city %}
+			<p>{{ user_profile.city }}</p>
+		{% endif %}
+		<a href="/profile/edit/{{user_profile.id}}">
+			<div id="edit_profile">
+				<p>Edit Profile</p>
+			</div>
+		</a>
 	</div>
 
 	<div id="contact">
-		adsf
-		{{ request }}
-		{{ request.user }}
-		{{ request.user.is_authenticated }}
-		{% if request.user.is_authenticated %}
-		<a href="/profile/edit/{{user_profile.id}}">
-		<div id="edit_profile">
-			<p>Edit Profile</p>
+		<p id="contact_header">Contact {{user_profile.get_short_name}}</p>
+		<div id="contact_email">
+			<p>Send Email</p>
 		</div>
-		</a>
-		{% else %}
-		<div id="edit_profile_disabled">
-			<p>Edit Profile</p>
-		</div>
-		<a href="/login">Login</a> / <a href="/sign-up">Sign up</a> to edit this profile.
-		{% endif %}
 		<div id="contact_div">
-			<p>Contacting {{ user_profile.get_full_name }} through Email/ Phone will be enabled in our next-release</p>
+			<p>Contacting {{ user_profile.get_full_name }} through Email/Phone will be enabled soon</p>
+		</div>
+		<div id = "social_media_links">
+			<div>
+				<img class="social-media-small-icon" src="{{STATIC_URL}}img/facebook_icon.png" width="35px" height="35px">
+				{% if user_profile.facebook_url %}
+				    <a href="{{ user_profile.facebook_url }}" target="blank">{{ user_profile.facebook_url }}</a>
+				{% else %}
+					<span>No URL</span>
+				{% endif %}
+			</div>
+
+			<div>
+				<img src="{{STATIC_URL}}img/linkedin_icon.png" width="35px" height="35px">
+				{% if user_profile.linked_url %}
+					<a href="{{ user_profile.linked_url }}" target="blank">{{ user_profile.linked_url }}</a>
+				{% else %}
+					<span>No URL</span>
+				{% endif %}
+			</div>
+
+			<div>
+				<img src="{{STATIC_URL}}img/twitter_icon.png" width="35px" height="35px">
+				{% if user_profile.twitter_url %}
+				<a href="{{ user_profile.twitter_url }}" target="blank">{{ user_profile.twitter_url }}</a>
+				{% else %}
+					<span>No URL</span>
+				{% endif %}
+			</div>
 		</div>
 	</div>
-	<br class = "cB">
 </div>
 <div id = "other_content">
 	<div id="text_details">
@@ -88,33 +101,41 @@
 		{% endif %}
 
 		<h3 class="section-subtitle">Education Details</h3>	
-			{% for education_detail in education_details %}
-			<div class="detail_container">
-				<p><b>{{ education_detail.college }}</b></p>
-				{% if student_section.branch.branch %}
-				<p>{{ student_section.branch.course }}, {{ student_section.branch.branch }}</p>
-				{% endif %}
-				{% if student_section.year_of_graduation %}
-				<p>Graduated in {{student_section.year_of_graduation}}</p>
-				{% endif %}
-				</br>
-				</br>
-			</div>
-			<br>
-			{% endfor %}
-			<div class="detail_container">
-				<p><b>National Insitute Of Technology, Warangal</b></p>
-				{% if student_section.branch.branch %}
-				<p>{{ student_section.branch.course }}, {{ student_section.branch.branch }}</p>
-				{% endif %}
-				{% if student_section.year_of_graduation %}
-				<p>Graduated in {{student_section.year_of_graduation}}</p>
-				{% endif %}
-			</div>
-			<br>
+		<div class="detail_container">
+			<p><b>National Insitute Of Technology, Warangal</b></p>
+			{% if student_section.branch.branch %}
+			<p>{{ student_section.branch.course }}, {{ student_section.branch.branch }}</p>
+			{% endif %}
+			{% if student_section.year_of_graduation %}
+			<p>Graduated in {{student_section.year_of_graduation}}</p>
+			{% endif %}
+		</div>
 
-		<h3 class="section-subtitle">Employer Details</h3>
-			{% if employment_details %}
+		{% if education_details %}
+			<h3 class="section-subtitle">Higher Education Details</h3>
+			{% for education_detail in education_details %}
+				<div class="detail_container">
+					{% if education_detail.college %}
+					<p><b>{{ education_detail.college.name }}</b></p>
+					{% endif %}
+
+					{% if education_detail.degree %}
+						<p>{{ education_detail.degree.name }}</p>
+					{% endif %}
+
+					{% if education_detail.branch %}
+						<p>{{ education_detail.branch.name }}</p>
+					{% endif %}
+
+					{% if education_detail.year_of_graduation %}
+						<p>Graduated in {{education_detail.year_of_graduation}}</p>
+					{% endif %}
+				</div>
+			{% endfor %}
+		{% endif %}
+
+		{% if employment_details %}
+			<h3 class="section-subtitle">Employment Details</h3>
 			{% for employment_detail in employment_details %}
 			<div class="detail_container">
 				<p><b>{{ employment_detail.designation.name }}</b></p>
@@ -124,50 +145,48 @@
 				{% if employment_detail.get_employment_period %}
 				<p>{{ employment_detail.get_employment_period }}</p>
 				{% endif %}
-			</br>
-			</br>
 			</div>
-			<br>
+			{% endfor %}
+		{% endif %}
+
+
+	</div>
+
+	<div id="tags_container">
+		<h3 class="section-subtitle">Tags</h3>
+		<div id="tags">
+			<ul>
+			{% if tags %}
+			{% for tag in tags %}
+				<li class="usertag"><span>{{tag.name}}</span></li>
 			{% endfor %}
 			{% else %}
-			<p>No details added yet</p>
-			{% endif%}
-
-
+			<p>No tags added yet</p>
+			{% endif %}
+			</ul>
+		</div>
 	</div>
-	<h3 class="section-subtitle">Tags</h3>
-	<div id="tags">
-		<ul>
-		{% if tags %}
-		{% for tag in tags %}
-			<li class="usertag"><span>{{tag.name}}</span></li>
-		{% endfor %}
-		{% else %}
-		<p>No tags added yet</p>
-		{% endif %}
-		</ul>
-	</div>
+
+	<div class="cB"></div>
 </div>
+
 {% if other_profiles %}
-<div id = "related_profiles" class="cB">
-	<h2 class="section-subtitle">People who viewed this also viewed these profiles</h3>
+<div id = "related_profiles">
+	<h2 class="section-subtitle">{{user_profile.get_short_name}}'s Classmates</h3>
 	{% for student_section in other_profiles %}
 	<div class = "related_profile_container">
-		<a href="/profile/view/{{ student_section.userprofile.id}}">
-			<div class = "related_profile">
-				{% if student_section.user_profile.photo and student_section.user_profile.photo.url %}
-				<img src="{{student_section.user_profile.photo.url}}" width="150px" height="150px">
-				{% else %}
-				<img src="{{STATIC_URL}}img/no-image.jpg" width="150px" height="150px" alt="No profile picture">
-				{% endif %}
-				<a href="/profile/view/{{ student_section.userprofile.id }}">{{ student_section.userprofile.get_full_name }}</a>
-				<p>{{ student_section.get_full_qualification }}</p>
-			</div>
-		</a>
+		<div class = "related_profile">
+			{% if student_section.user_profile.photo and student_section.user_profile.photo.url %}
+			<img src="{{student_section.user_profile.photo.url}}" width="150px" height="150px">
+			{% else %}
+			<img src="{{STATIC_URL}}img/default_profile.png" width="150px" height="150px" alt="No profile picture">
+			{% endif %}
+			<a href="/profile/view/{{ student_section.userprofile.id }}">{{ student_section.userprofile.get_full_name }}</a>
+			<p>{{ student_section.get_full_qualification }}</p>
+		</div>
 	</div>
 	{% endfor %}
-	<br class = "cB">
-</div>
+	<div class = "cB"></div>
 </div>
 {% endif %}
 {% endblock %}

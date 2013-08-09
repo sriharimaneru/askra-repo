@@ -8,7 +8,7 @@ from django.template import Context
 class EditUserProfileForm(forms.ModelForm):
     date_of_birth = forms.DateField(input_formats=['%d/%m/%Y',], required=False,
                                     widget = widgets.DateInput(format='%d/%m/%Y'))
-    photo = forms.ImageField(widget = widgets.FileInput())
+    photo = forms.ImageField(widget = widgets.FileInput(), required=False)
 #    
 #    def __init__(self, *args, **kwargs):
 #        super(EditUserProfileForm, self).__init__(*args, **kwargs)

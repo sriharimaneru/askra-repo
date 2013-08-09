@@ -39,8 +39,15 @@ class ShowProfileView(TemplateView):
         
         student_sections = StudentSection.objects.filter(userprofile = user_profile)
         if student_sections:
-            context['student_section'] = student_sections[0]
-            context['other_profiles'] = StudentSection.objects.exclude(id=student_sections[0].id)[:5] #Change logic to show relevant profiles 
+            student_section = student_sections[0]
+            context['student_section'] = student_section
+            
+            if student_section.branch:
+                related_profiles = StudentSection.objects.filter(branch=student_section.branch, year_of_graduation=student_section.year_of_graduation).exclude(id=student_section.id)[:5]
+            else:
+                related_profiles = StudentSection.objects.filter(year_of_graduation=student_section.year_of_graduation).exclude(id=student_section.id)[:5]
+            
+            context['other_profiles'] = related_profiles 
             
         context['education_details'] = HigherEducationDetail.objects.filter(userprofile = user_profile)
         context['employment_details'] = EmployementDetail.objects.filter(userprofile = user_profile)
@@ -49,7 +56,6 @@ class ShowProfileView(TemplateView):
         return context
     
     def render_to_response(self, context, **response_kwargs):
-        print context
         if 'user_profile' in context:
             return TemplateView.render_to_response(self, context, **response_kwargs)
         else:

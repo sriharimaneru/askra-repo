@@ -300,7 +300,11 @@
 			</div>
 			<h2 class="heading">Basic Details</h2>
 			<div id="picture_section" class="section">
-				<img src="{{ userprofileform.instance.photo.url }}">
+				{% if userprofileform.instance.photo %}
+					<img src="{{ userprofileform.instance.photo.url }}">
+				{% else %}
+					<img src="{{STATIC_URL}}img/default_profile.png">
+				{% endif %}
 				<a href="#" id="edit_picture">Edit picture</a>
 				{{ userprofileform.photo }}
 			</div>

@@ -439,12 +439,6 @@ div#about {
 	background: #667780;
 }
 
-div#contact {
-	width: 350px;
-	text-align: center;
-	padding-top: 60px;
-}
-
 div#team_description {
 	width: 550px;
 	padding-bottom: 30px;
@@ -483,13 +477,12 @@ div.member-details {
 	color: white;
 }
 
-#contact a {
-	text-decoration: none;
-	color: rgba(255, 255, 255, 0.4);
-}
-
 #about a:hover{
 	text-decoration: underline;
+}
+
+#about #contact a{
+	text-shadow: none;
 }
 
 /************* END COMMUNICATION **************/
@@ -692,12 +685,17 @@ div#facet-list .selected_facet{
 
 /******************Start view profile page ***************/
 
-#view_profile_page .section-subtitle, #view_profile_page a{
+#view_profile_page .section-subtitle {
 	color: #6B9BB2;
+}
+
+#view_profile a{
+	color: #004B91;
 }
 
 #view_profile_page .section-subtitle{
 	font-size: 23;
+	padding-bottom: 5px;
 }
 
 #main_content, #other_content, #related_profiles {
@@ -716,8 +714,13 @@ div#facet-list .selected_facet{
 	float: left;
 }
 
+#breadcrumb a {
+	padding-left: 5px;
+	padding-right: 5px;
+}
+
 #pic_div {
-	margin-top: 20px;
+	margin-top: 40px;
 	clear: both;
 	float: left;
 }
@@ -733,28 +736,77 @@ div#facet-list .selected_facet{
 }
 
 #basic_details_div {
-	margin-top: 20px;
+	margin-top: 40px;
 	float: left;
 	margin-left: 20px;
 }
 
-#social_media_links img {
-	padding-right: 5px;
+#basic_details_div > h2 {
+	font-family: 'Open Sans',Helvetica,Arial,sans-serif;
+	font-weight: normal;
+	font-size: 32px;
+	margin-bottom: 15px;
+	margin-top: 10px;
+}
+
+#basic_details_div>p {
+	font-size: 20px;
+	margin-bottom: 10px;
+}
+
+#basic_details_div a{
+	text-decoration: none;
+	color: rgba(255, 255, 255, 0.4);
 }
 
 #contact {
 	float: right;
-	margin-top: 20px; 
+	margin-top: 40px; 
+	width: 300px;
+	/*text-align: center;*/
+	padding: 20px 5px 10px 5px;
+	border: 1px solid grey;
+	height: 300px;
+}
+
+#contact p#contact_header {
+	font-size: 22px;
+	text-align: center;
+	text-decoration: underline;
+	font-weight: bold;
+}
+
+#contact #contact_email {
+	margin: 15px 20px;
+	height: 20px;
+	line-height: 20px;
+	background-color: #dddddd;
+	border: 1px solid black;
+	padding: 10px;
+	text-align: center;
+	cursor: pointer;
+}
+
+#social_media_links {
+	margin-top: 10px;
+	margin-left: 20px;
+}
+
+#social_media_links img.social-media-small-icon {
+	padding-right: 5px;
 }
 
 #contact_div {
-	margin-top: 20px;
-	border: thin solid gray;
+	margin-top: 10px;
+	font-size: 12px;
+	display: none;
+	/*border: thin solid gray;*/
 }
 
 #edit_profile {
 	background: #F27521;
 	background-image: -webkit-linear-gradient(top,#F2A54D,#F27521);
+	background-image: -moz-linear-gradient(top,#F2A54D,#F27521);
 	text-align: center;
 	padding-top: 10px;
 	padding-bottom: 10px;
@@ -771,6 +823,7 @@ div#facet-list .selected_facet{
 
 #edit_profile:hover{
 	background-image: -webkit-linear-gradient(top,#F27521,#F2A54D);
+	background-image: -moz-linear-gradient(top,#F27521,#F2A54D);
 }
 
 #edit_profile a {
@@ -795,13 +848,19 @@ div#facet-list .selected_facet{
 
 #text_details {
 	float: left;
-	width: 69%;
+	width: 67%;
+	margin-top: 20px;
+}
+
+#tags_container
+{
+	float: right;
+	width: 32%;
 }
 
 #tags {
-	float: right;
-	width: 30%;
-	border: 1px solid black;
+	border: 1px solid grey;
+	height: 250px;
 }
 
 #tags img {
@@ -819,6 +878,7 @@ div#facet-list .selected_facet{
 .detail_container {
 	border: 1px solid grey;
 	padding: 15px;
+	margin-bottom: 5px;
 }
 .detail .label {
 	padding-right: 5px;
@@ -848,9 +908,13 @@ div#facet-list .selected_facet{
 	padding: 5px;
 }
 
+.related_profile {
+	cursor: pointer;
+}
 
 .related_profile a{
-	color: #004B91
+	color: #004B91;
+	overflow:hidden;
 }
 
 .related_profile p{
@@ -858,23 +922,25 @@ div#facet-list .selected_facet{
 }
 
 .related_profile_container:hover {
-	border: 1px solid #6B9BB2;
+	border-bottom: 1px solid #6B9BB2;
 }
 
 
 #tags>ul {
 	list-style: none;
+	padding-left: 0;
 }
 
 #tags>ul li {
-	display: inline;
+	display: block;
+	margin: 25px 20px;
 }
 
 .usertag {
-	background-color: #CDE69C;
-    border: 1px solid #A5D24A;
+	background-color: #dddddd;
+    border: 1px solid black;
     border-radius: 3px 3px 3px 3px;
-    color: #638421;
+    color: black;
 
     margin-bottom: 5px;
     margin-right: 5px;
