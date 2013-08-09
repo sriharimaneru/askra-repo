@@ -13,43 +13,15 @@
 <script type="text/javascript" src="{{STATIC_URL}}js/jquery.jscrollpane.min.js"></script>
 
 <script src="{{STATIC_URL}}js/jquery.masonry.min.js"></script>
+<script src="{{STATIC_URL}}js/waypoints.min.js"></script>
 
 <script type="text/javascript">
+
     $(function()
     {
-        var offset=20
+        var offset={{initialoffset}};
+        var gotallresults = false;
         $('.scroll-pane').jScrollPane();
-
-        /*$(window).scroll(function(){
-            console.log("start")
-            console.log("scrolltop [" + $(window).scrollTop()+"]")
-            //console.log("docscrollheight [" +document.body.scrollHeight+"]")
-            console.log("divoffsettop [" +$('#search_results').offset().top+ "]")
-            console.log("divheight [" +$('#search_results').height()+ "]")
-            console.log("end")
-        });
-        
-        $('#myButton').click(function()
-        {
-            $('div#loadmoreajaxloader').show();
-            $.ajax({
-            url: "/ajaxsearch?{{querystring}}&offset="+offset.toString(),
-            success: function(html)
-            {
-                console.log(html);
-                if(html)
-                {
-                    $("#search_results").append(html);
-                    $('div#loadmoreajaxloader').hide();
-                    offset+=20
-                }
-                else
-                {
-                    $('div#loadmoreajaxloader').html('<center>No more posts to show.</center>');
-                }
-            }
-            });
-        });*/
 
         $('#year_facet_search').keyup(function () {
             $(".year_facet_option").show();
@@ -106,15 +78,69 @@
                 }
 
             });
-        }); //key up    
+        }); //key up
 
         $('#search_results').masonry({
         // options
             itemSelector : '.result_div',
         });
 
+        //Gets fired when the bottom of the search_results div hits the bottom of the viewport
+        $('#search_results').waypoint(function(direction){
+            if(gotallresults==false && direction == 'down')
+            {
+                $('.loading').show();
+                var getdata = {'name':"{{name_selected}}", 'branch':"{{branch_selected}}", 'year':"{{year_selected}}", 'offset':offset, 
+                                'branch_facet':"{{branch_facet_selected}}", 'year_facet':"{{year_facet_selected}}", 'city_facet':"{{city_facet_selected}}"};
+                $.ajax({
+                    url: "/searchajax",
+                    data: getdata,
+                    success: function(data)
+                    {
+                      var retdata = JSON.parse(data);
+                      if(retdata['success'] == 'true')
+                      {
+                        if(retdata['data'].length == 0)
+                        {
+                            gotallresults = true;
+                        }
+                        else
+                        {
+                            html='';
+                            for(var i=0; i<retdata['data'].length; i++)
+                            {
+                                var result = retdata['data'][i];
+                                html+='<a href="/profile/view/' + result['profile_id'] + '">';
+                                html+='<div class="result_div">'
+                                html+='<h2 class="name section-subtitle">' + result['name'] + '</h2>';
+                                if(result['branch'])
+                                {
+                                    html+='<p class="branch">' + result['branch'] + '</p>';
+                                }
+                                if(result['year_of_passing'])
+                                {
+                                    html+='<p class="year_of_passing">' + result['year_of_passing'] + '</p>';
+                                }
+                                if(result['city'])
+                                {
+                                    html+='<p class="city">' + result['city'] + '</p>';
+                                }
+                                html+='</div></a>';
+                            }
+                            $('#search_results').append(html).masonry('reload');
+                            $.waypoints('refresh');
 
-
+                        }
+                        offset = retdata['latestoffset'];
+                      }
+                    },
+                    complete: function()
+                    {
+                        $('.loading').hide();
+                    }
+                });
+            }
+        }, { offset:'bottom-in-view'});
     });
 
 </script>
@@ -259,6 +285,7 @@
             <p>Sorry, no results found.</p>
         {% endfor %}
     </div>
+    <div class="loading"><span>Loading more profiles...</span><img src="{{STATIC_URL}}img/loading.gif"/></div>
 </div>
 <!--<div id="loadmoreajaxloader" style="display:none;"><center><img src="{{STATIC_URL}}img/ajax-loader.gif" /></center></div>
 <button id="myButton">Click me</button>-->

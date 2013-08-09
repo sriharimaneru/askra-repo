@@ -14,7 +14,9 @@ from haystack.forms import SearchForm
 from django.http import HttpResponse
 import json
 from django.forms.models import modelformset_factory
-from django.views.generic.base import TemplateView
+from django.views.generic.base import TemplateView, View
+
+INITIAL_RESULTS_COUNT = 40
 
 class ShowProfileView(TemplateView):
     def get_template_names(self):
@@ -228,7 +230,36 @@ class ProfileBulkUploadView(TemplateView):
             errors.append("Bulk upload successful")
         return render(request, "profile_bulk_upload.html", {'form':form, })
 
-class SearchView(TemplateView):
+
+class BaseSearchView():
+    def get_results(self, name, branch, year, offset, branch_facet, year_facet, city_facet):
+        if year_facet:
+            year_facet = [int(x) for x in year_facet.split(",")]
+        
+        sqs = SearchQuerySet().facet('branch')
+        sqs = sqs.facet('year_of_passing')
+        sqs = sqs.facet('city')
+    
+        if name:
+            sqs = sqs.auto_query(name)
+        if branch:
+            sqs = sqs.filter(branch_exact = branch)
+        if year:
+            sqs = sqs.filter(year_of_passing_exact = year)
+        if branch_facet:
+            sqs = sqs.filter(branch_exact = branch_facet)
+        if year_facet:
+            sqs = sqs.filter(year_of_passing_exact__in = year_facet)
+        if city_facet:
+            sqs = sqs.filter(city_exact = city_facet)
+        
+        offsetvalue = int(offset)
+        results = sqs.order_by('name')[offsetvalue:offsetvalue+INITIAL_RESULTS_COUNT]
+        resultcount = len(results)
+        
+        return results, resultcount
+    
+class SearchView(BaseSearchView, TemplateView):
     template_name="search/search.html"
     
     def get_context_data(self, **kwargs):
@@ -238,10 +269,11 @@ class SearchView(TemplateView):
         name = self.request.GET.get("name", '')
         branch = self.request.GET.get("branch", '')
         year = self.request.GET.get("year_of_passing", '')
-        offset = self.request.GET.get("offset", '0')
         
         branch_facet = self.request.GET.get("branch_facet", '') 
         year_facet = self.request.GET.get("year_of_passing_facet", '')
+        
+#        results = self.get_results(name, branch, year, offset, branch_facet, year_facet)
         if year_facet:
             year_facet = [int(x) for x in year_facet.split(",")] 
         city_facet = self.request.GET.get("city_facet", "")   
@@ -255,10 +287,13 @@ class SearchView(TemplateView):
             context['form'] = ProfileSearchBasicForm(self.request.GET)
             if name:
                 sqs = sqs.auto_query(name)
+                context['name_selected'] = name
             if branch:
                 sqs = sqs.filter(branch_exact = branch)
+                context['branch_selected'] = branch
             if year:
                 sqs = sqs.filter(year_of_passing_exact = year)
+                context['year_selected'] = year
         else:
             context['form'] = ProfileSearchBasicForm()
         
@@ -303,20 +338,16 @@ class SearchView(TemplateView):
             context['city_facet_selected'] = city_facet
         else:
             context['city_facet_selected'] = '' 
-    
-            
-        print context['year_facets_selected']
         
         context['facets']['fields']['year_of_passing'] = self.facet_sorting(context['facets']['fields']['year_of_passing'])
         context['facets']['fields']['city'] = self.facet_sorting(context['facets']['fields']['city'])
         context['facets']['fields']['branch'] = self.facet_sorting(context['facets']['fields']['branch'])
-               
-    
-        offsetvalue = int(offset)
-        results = sqs.order_by('name')
-        context['resultcount'] = results.count()
-        #results = results[offsetvalue:offsetvalue+20]
-        context['results'] = results[:1000]
+        
+        results = sqs.order_by('name')[0:INITIAL_RESULTS_COUNT]
+        resultcount = sqs.count()
+        context['resultcount'] = resultcount
+        context['initialoffset'] = INITIAL_RESULTS_COUNT
+        context['results'] = results
         
         return context
     
@@ -325,6 +356,30 @@ class SearchView(TemplateView):
         return sorted([x for x in facets if x[1]], key=lambda x: x[0]) + sorted([x for x in facets if not x[1]], key=lambda x: x[0])
     
 
+class SearchAjaxView(BaseSearchView, View):
+    def dispatch(self, request):
+        response = {}
+        if request.method=='GET':
+            offset =  int(request.GET.get('offset',0))
+            results, resultcount = self.get_results(request.GET.get('name',''), request.GET.get('branch',''), request.GET.get('year',''), offset,
+                                       request.GET.get('branch_facet',''), request.GET.get('year_facet',''), request.GET.get('city_facet',''))
+            response['success'] = 'true'
+            resultdata = []
+            if results:
+                for result in results:
+                    resultobj = {}
+                    resultobj['profile_id'] = result.profile_id
+                    resultobj['name'] = result.name
+                    resultobj['branch'] = result.branch
+                    resultobj['year_of_passing'] = result.year_of_passing
+                    resultobj['city'] = result.city
+                    resultdata.append(resultobj)
+                
+            response['data'] = resultdata
+            response['latestoffset'] = offset + resultcount;
+            
+        return HttpResponse(json.dumps(response))
+    
 
 def reg_step_2(request,x):
     user_profiles = UserProfile.objects.filter(role=ALUMNI)

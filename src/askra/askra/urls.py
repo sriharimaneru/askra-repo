@@ -4,7 +4,7 @@ from django.contrib import admin
 from django.contrib.auth import views as auth_views
 from django.views.generic import TemplateView
 from askra.views import AboutView
-from userprofile.views import SearchView
+from userprofile.views import SearchView, SearchAjaxView
 
 admin.autodiscover()
 
@@ -15,6 +15,7 @@ urlpatterns = patterns('',
     url(r'^login$', TemplateView.as_view(template_name='login.html')),
     url(r'^logout$', auth_views.logout, {'next_page' : '/'},),
     url(r'^sign-up$', TemplateView.as_view(template_name='sign_up.html')),
+    url(r'^searchajax/?$', SearchAjaxView.as_view(), name='haystack_search_ajax'),
     url(r'^profile/', include('userprofile.urls')),
     
 #    url(r'^index$', 'askra.views.index', name='index'), #temporarily. Will remove this @srihari

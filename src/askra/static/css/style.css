@@ -678,6 +678,10 @@ div#facet-list .selected_facet{
 	margin-left: 200px;
 }
 
+div.loading {
+	display: none;
+	text-align: center;
+}
 
 
 /******************End Search Page ***********************/
@@ -701,7 +705,7 @@ div#facet-list .selected_facet{
 
 #main_content, #other_content, #related_profiles {
 	color: black;
-	max-width: 964px;
+	max-width: 980px;
 	margin: auto;
 	text-shadow: none;
 }
@@ -740,6 +744,7 @@ div#facet-list .selected_facet{
 	margin-top: 40px;
 	float: left;
 	margin-left: 20px;
+	width: 420px;
 }
 
 #basic_details_div > h2 {
@@ -748,6 +753,7 @@ div#facet-list .selected_facet{
 	font-size: 32px;
 	margin-bottom: 15px;
 	margin-top: 10px;
+	line-height:35px;
 }
 
 #basic_details_div>p {
@@ -812,6 +818,7 @@ div#facet-list .selected_facet{
 	padding-top: 10px;
 	padding-bottom: 10px;
 	color: white;
+	width: 250px;
 }
 
 #edit_profile_disabled {
