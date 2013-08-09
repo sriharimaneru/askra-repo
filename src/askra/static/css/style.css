@@ -1010,16 +1010,16 @@ div#facet-list .selected_facet{
 }
 
 .section table tr {
-	line-height: 50px;
+	line-height: 35px;
 }
 
 .section table td{
-	width: 400px;
+	width: 350px;
 	text-align: left;
 }
 
 .section table td span {
-	width: 140px;
+	width: 120px;
 	margin-right: 10px;
 	display: inline-block;
 }
@@ -1031,11 +1031,12 @@ div#facet-list .selected_facet{
 
 .related_forms ul li {
 	display: inline-block;
-	margin: 0 10px 0 10px;
+	margin: 0 10px 5px 0;
 }
 
 .related_forms ul li span {
 	margin-right: 5px;
+	font-size: 16px;
 }
 
 .related_forms .deletecheck {
@@ -1043,13 +1044,24 @@ div#facet-list .selected_facet{
 }
 
 #edit_profile_form .heading {
-	text-transform: uppercase;
-	font-size: 16px;
-	line-height: 20px;
+	/*text-transform: uppercase;*/
+	font-size: 20px;
+	line-height: 24px;
 	margin-top: 0;
 	margin-bottom: 10px;
 	color: #4D4D4D;
 	display: inline-block;
+}
+
+.section{
+	padding: 6px;
+	margin-bottom: 20px;
+	border: 1px solid #dddddd;
+}
+
+.related_sections .section {
+	border-bottom: 1px solid #dddddd;
+	margin-top: 20px;
 }
 
 .related_sections a.add img{
@@ -1057,6 +1069,46 @@ div#facet-list .selected_facet{
 	margin-top: -7px;
 	margin-left: 5px;
 }
+
+#student_sections input[type=text] {
+	width: 150px;
+}
+
+#student_sections select {
+	width: 180px;
+}
+
+#employment_sections select {
+	width: 160px;
+}
+
+#employment_sections ul li {
+	margin-right: 45px;
+}
+
+#edit_profile_form .delete{
+	width:15px;
+}
+
+#edit_profile_form .add {
+	margin-left: 20px;
+}
+
+#edit_profile_submit {
+	margin-top: 40px;
+}
+
+#edit_profile_submit input[type=submit] {
+	height: 40px;
+	width: 100px;
+	text-align: center;
+	background-color: #aaaaaa;
+}
+
+#edit_profile_submit a {
+	margin-left: 20px;
+}
+
 
 /*
 .section span#tagslabel {
