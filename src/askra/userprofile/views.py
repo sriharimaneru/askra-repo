@@ -67,6 +67,12 @@ class ErrorView(TemplateView):
     template_name="error.html"
 
 class EditProfileView(TemplateView):
+    
+    StudentFormSet = modelformset_factory(StudentSection, exclude=('userprofile'), extra=0, can_delete=True)
+    EmploymentFormSet = modelformset_factory(EmployementDetail, exclude = ('userprofile'), extra=0, can_delete=True)
+    HigherEducationFormSet = modelformset_factory(HigherEducationDetail, exclude = ('userprofile'), extra=0, can_delete=True)
+    FacultyFormSet = modelformset_factory(FacultySection, exclude = ('userprofile'), extra=0, can_delete=True)
+    
     def get_template_names(self):
         profile_id = self.kwargs['profile_id']
         if not profile_id:
@@ -82,16 +88,11 @@ class EditProfileView(TemplateView):
         except UserProfile.DoesNotExist:
             raise Http404
         
-        StudentFormSet = modelformset_factory(StudentSection, exclude=('userprofile'), extra=0, can_delete=True)
-        EmploymentFormSet = modelformset_factory(EmployementDetail, exclude = ('userprofile'), extra=0, can_delete=True)
-        HigherEducationFormSet = modelformset_factory(HigherEducationDetail, exclude = ('userprofile'), extra=0, can_delete=True)
-        FacultyFormSet = modelformset_factory(FacultySection, exclude = ('userprofile'), extra=0, can_delete=True)
-        
         userprofileform = EditUserProfileForm(instance=user_profile)
-        studentformset = StudentFormSet(queryset=StudentSection.objects.filter(userprofile=user_profile))
-        employmentformset = EmploymentFormSet(queryset=EmployementDetail.objects.filter(userprofile=user_profile))
-        highereducationformset = HigherEducationFormSet(queryset=HigherEducationDetail.objects.filter(userprofile=user_profile))
-        facultyformset = FacultyFormSet(queryset=FacultySection.objects.filter(userprofile=user_profile))
+        studentformset = self.StudentFormSet(queryset=StudentSection.objects.filter(userprofile=user_profile), prefix='student')
+        employmentformset = self.EmploymentFormSet(queryset=EmployementDetail.objects.filter(userprofile=user_profile), prefix='employment')
+        highereducationformset = self.HigherEducationFormSet(queryset=HigherEducationDetail.objects.filter(userprofile=user_profile), prefix='highereducation')
+        facultyformset = self.FacultyFormSet(queryset=FacultySection.objects.filter(userprofile=user_profile), prefix='faculty')
     
         return render_to_response("edit_profile.html", RequestContext(self.request, 
                                     {'userprofileform': userprofileform,  
@@ -108,16 +109,13 @@ class EditProfileView(TemplateView):
         except UserProfile.DoesNotExist:
             raise Http404
         
-        StudentFormSet = modelformset_factory(StudentSection, exclude=('userprofile'), extra=0, can_delete=True)
-        EmploymentFormSet = modelformset_factory(EmployementDetail, exclude = ('userprofile'), extra=0, can_delete=True)
-        HigherEducationFormSet = modelformset_factory(HigherEducationDetail, exclude = ('userprofile'), extra=0, can_delete=True)
-        FacultyFormSet = modelformset_factory(FacultySection, exclude = ('userprofile'), extra=0, can_delete=True)
+
         
         userprofileform = EditUserProfileForm(request.POST, request.FILES, instance=user_profile)
-        studentformset = StudentFormSet(request.POST, queryset=StudentSection.objects.filter(userprofile=user_profile))
-        employmentformset = EmploymentFormSet(request.POST, queryset=EmployementDetail.objects.filter(userprofile=user_profile))
-        highereducationformset = HigherEducationFormSet(request.POST, queryset=HigherEducationDetail.objects.filter(userprofile=user_profile))
-        facultyformset = FacultyFormSet(request.POST, queryset=FacultySection.objects.filter(userprofile=user_profile))
+        studentformset = self.StudentFormSet(request.POST, queryset=StudentSection.objects.filter(userprofile=user_profile), prefix='student')
+        employmentformset = self.EmploymentFormSet(request.POST, queryset=EmployementDetail.objects.filter(userprofile=user_profile), prefix='employment')
+        highereducationformset = self.HigherEducationFormSet(request.POST, queryset=HigherEducationDetail.objects.filter(userprofile=user_profile), prefix='highereducation')
+        facultyformset = self.FacultyFormSet(request.POST, queryset=FacultySection.objects.filter(userprofile=user_profile), prefix='faculty')
 
         if userprofileform.is_valid() and studentformset.is_valid() and employmentformset.is_valid() and highereducationformset.is_valid() and facultyformset.is_valid():
             
@@ -143,8 +141,9 @@ class EditProfileView(TemplateView):
             for empform in employmentformset:
                 if empform not in employmentformset.deleted_forms:
                     employment = empform.instance
-                    employment.userprofile = user_profile
-                    employment.save()
+                    if employment.pk:
+                        employment.userprofile = user_profile
+                        employment.save()
                 
             for empform in employmentformset.deleted_forms:
                 employment = empform.instance
@@ -155,8 +154,9 @@ class EditProfileView(TemplateView):
             for edform in highereducationformset:
                 if edform not in highereducationformset.deleted_forms:
                     highered = edform.instance
-                    highered.userprofile = user_profile
-                    highered.save()
+                    if highered.pk:
+                        highered.userprofile = user_profile
+                        highered.save()
                 
             for edform in highereducationformset.deleted_forms:
                 highered = edform.instance
@@ -167,8 +167,9 @@ class EditProfileView(TemplateView):
             for facultyform in facultyformset:
                 if facultyform not in facultyformset.deleted_forms:
                     faculty = facultyform.instance
-                    faculty.userprofile = user_profile
-                    faculty.save()
+                    if faculty.pk:
+                        faculty.userprofile = user_profile
+                        faculty.save()
                 
             for facultyform in facultyformset.deleted_forms:
                 faculty = facultyform.instance

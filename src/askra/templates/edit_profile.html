@@ -185,48 +185,16 @@
 		    	html = createEmptyFacultySectionForm().replace(/__prefix__/g, form_count);
 		    }
         
-        if(html!='')
-        {
-	        $(holderdiv).append(html);
-	        form_count++;
-	        $('#id_'+prefix+'-TOTAL_FORMS').val(form_count);
-	        $(holderdiv+ ' ' + formclass + ':last').find(".delete").click(function () {
-	          deleteForm(this, prefix, formclass);
-	        });
-        }
+	        if(html!='')
+	        {
+		        $(holderdiv).append(html);
+		        form_count++;
+		        $('#id_'+prefix+'-TOTAL_FORMS').val(form_count);
+		        $(holderdiv+ ' ' + formclass + ':last').find(".delete").click(function () {
+		          deleteForm(this, prefix, formclass);
+		        });
+	        }
 	    }
-
-	    // function addForm(btn, prefix, divclass) {
-     //    var formCount = parseInt($('#id_' + prefix + '-TOTAL_FORMS').val());
-     //    // You can only submit a maximum of 10 forms in this formset
-     //    if (formCount < 10) {
-     //      // Clone a form (without event handlers) from the first form
-     //      var row = $(divclass+":first").clone(false, false).get(0);
-     //      // Insert it after the last form
-     //      $(row).removeAttr('id').hide().insertAfter(divclass+":last").slideDown(300);
-
-     //      // Remove the bits we don't want in the new row/form
-     //      // e.g. error messages
-     //      $(".errorlist", row).remove();
-     //      $(row).children().removeClass("error");
-
-     //      // Relabel or rename all the relevant bits
-     //      $(row).find('input, select').each(function () {
-     //          updateElementIndex(this, prefix, formCount);
-     //          $(this).val("");
-     //      });
-
-     //      // Add an event handler for the delete item/form link 
-     //      $(row).find(".delete").click(function () {
-     //          deleteForm(this, prefix, divclass);
-     //      });
-     //      // Update the total form count
-     //      $("#id_" + prefix + "-TOTAL_FORMS").val(formCount + 1);
-     //    } // End if
-     //    else {
-     //        alert("Sorry, you can only enter a maximum of ten items.");
-     //    }
-	    // }
 
 	    $("#student_sections .add").click(function () {
         addForm('{{ studentformset.prefix }}', '#student_sections', '.student_section');
@@ -387,6 +355,7 @@
 				{{ studentformset.management_form }}
 				{% for stform in studentformset %}
 					<div class="student_section section related_forms">
+						{{stform.errors}}
 						{{stform.id}}
 						<ul>
 							<li>
@@ -418,6 +387,7 @@
 				{{ employmentformset.management_form }}
 				{% for empform in employmentformset %}
 					<div class="employment_section section related_forms">
+						{{empform.errors}}
 						{{empform.id}}
 						<ul>
 							<li>
@@ -457,6 +427,7 @@
 				{{ higheredformset.management_form }}
 				{% for higheredform in higheredformset %}
 					<div class="highereducation_section section related_forms">
+						{{higheredform.errors}}
 						{{higheredform.id}}
 						<ul>
 							<li>
@@ -492,6 +463,7 @@
 				{{ facultyformset.management_form }}
 				{% for facultyform in facultyformset %}
 					<div class="faculty_section section related_forms">
+						{{facultyform.errors}}
 						{{facultyform.id}}
 						<ul>
 							<li>
