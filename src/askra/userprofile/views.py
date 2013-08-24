@@ -1,18 +1,21 @@
 # Create your views here.
-from django.shortcuts import render_to_response, redirect, render, get_object_or_404
+from django.shortcuts import render_to_response, render
 from django.template import RequestContext
-from userprofile.models import *
-from userprofile.forms import *
+from userprofile.models import UserProfile, StudentSection, HigherEducationDetail, Branch, City, \
+    EmployementDetail, FacultySection, ALUMNI
+from tag.models import Tag, GENERIC 
+from userprofile.forms import EditUserProfileForm, ProfileBulkUploadForm, ProfileSearchBasicForm, \
+    EditProfileBasicForm, EditProfileWeblinksForm, EditProfileEducationForm, EditProfileEmploymentForm  
 from django.http import HttpResponseRedirect, Http404
 from django.forms.util import ErrorList
-from django.core.exceptions import ObjectDoesNotExist
 from haystack.query import SearchQuerySet
-from models import *
-from forms import *
 from django.http import HttpResponse
 import json
 from django.forms.models import modelformset_factory
 from django.views.generic.base import TemplateView, View
+from django.core.exceptions import ObjectDoesNotExist
+import csv
+from django.forms.formsets import formset_factory
 
 #Number of results loaded on search page initially. Same number of results are loaded further
 # with each AJAX call after that.

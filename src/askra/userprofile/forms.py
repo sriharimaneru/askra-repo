@@ -1,6 +1,6 @@
 from django import forms
-from django.forms.formsets import formset_factory
-from userprofile.models import *
+from userprofile.models import UserProfile, StudentSection, Branch, College, Degree, HigherEducationBranch, \
+    Employer, JobDesignation, JobDomain
 from django.forms import widgets
 from django.template.loader import get_template
 from django.template import Context

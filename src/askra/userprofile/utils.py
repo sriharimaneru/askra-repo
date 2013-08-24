@@ -33,10 +33,10 @@ def getYOGFromRoll(roll_num):
     return None
 
 def isValidYOG(yog): 
-        #1. two digit number (or)
-        #2. four digit number that starts with 1 or 2 only
-		if((len(yog)!=2 and len(yog)!=4) or (len(yog)==2 and re.match('^\d{2}$',yog) is None) or (len(yog)==4 and re.match('^[12][0-9]{3}$',yog) is None)):
-		    log.debug("IMPORTANT: YOG [" +yog+ "] is invalid!")
-		    return False
-		else:
-			return True
+    #1. two digit number (or)
+    #2. four digit number that starts with 1 or 2 only
+    if((len(yog)!=2 and len(yog)!=4) or (len(yog)==2 and re.match('^\d{2}$',yog) is None) or (len(yog)==4 and re.match('^[12][0-9]{3}$',yog) is None)):
+        log.debug("IMPORTANT: YOG [" +yog+ "] is invalid!")
+        return False
+    else:
+        return True

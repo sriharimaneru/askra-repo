@@ -1,19 +1,14 @@
 from django.db import models
 from django.contrib.auth.models import User
-from tag.models import Tag, GENERIC
-from calendar import calendar
+from tag.models import Tag
 import csv
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.exceptions import MultipleObjectsReturned
-from xlrd import open_workbook, xldate_as_tuple, XL_CELL_TEXT, XL_CELL_DATE
-from xlrd import xldate_as_tuple
+from xlrd import open_workbook, xldate_as_tuple, XL_CELL_TEXT
 from django.db.models import Q
 import logging
-from utils import *
-import pdb
+from userprofile.utils import getYOGFromRoll, isValidEmailId, isValidRollNo, isValidYOG
 from datetime import datetime
-import codecs
-from django.utils.encoding import smart_str
 
 
 log = logging.getLogger('GROUPIFY')
@@ -398,8 +393,8 @@ class CsvUpload(models.Model):
         log.debug("Bulk upload successful")
         super(CsvUpload, self).save(**kwargs)
         if(emailErrorRow is not True):
-            errorRow.csv_file=self;
-            errorRow.save()
+            emailErrorRow.csv_file=self;
+            emailErrorRow.save()
     
     
 class ErrorRow(models.Model):
