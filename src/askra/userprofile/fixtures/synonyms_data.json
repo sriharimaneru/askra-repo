@@ -1,0 +1,502 @@
+[
+{
+  "pk": 1, 
+  "model": "userprofile.synonym", 
+  "fields": {
+    "resourcetype": 1, 
+    "parent_id": 13, 
+    "aliastype": 0, 
+    "value": "J&K"
+  }
+},
+{
+  "pk": 2, 
+  "model": "userprofile.synonym", 
+  "fields": {
+    "resourcetype": 2, 
+    "parent_id": 7, 
+    "aliastype": 0, 
+    "value": "VJA"
+  }
+},
+{
+  "pk": 3, 
+  "model": "userprofile.synonym", 
+  "fields": {
+    "resourcetype": 2, 
+    "parent_id": 126, 
+    "aliastype": 0, 
+    "value": "Sng'pore"
+  }
+},
+{
+  "pk": 4, 
+  "model": "userprofile.synonym", 
+  "fields": {
+    "resourcetype": 2, 
+    "parent_id": 133, 
+    "aliastype": 0, 
+    "value": "Viz'Ngrm"
+  }
+},
+{
+  "pk": 5, 
+  "model": "userprofile.synonym", 
+  "fields": {
+    "resourcetype": 2, 
+    "parent_id": 114, 
+    "aliastype": 0, 
+    "value": "Karim Nagar"
+  }
+},
+{
+  "pk": 6, 
+  "model": "userprofile.synonym", 
+  "fields": {
+    "resourcetype": 2, 
+    "parent_id": 123, 
+    "aliastype": 0, 
+    "value": "Bh'war"
+  }
+},
+{
+  "pk": 7, 
+  "model": "userprofile.synonym", 
+  "fields": {
+    "resourcetype": 2, 
+    "parent_id": 7, 
+    "aliastype": 0, 
+    "value": "Vij. Wada"
+  }
+},
+{
+  "pk": 8, 
+  "model": "userprofile.synonym", 
+  "fields": {
+    "resourcetype": 2, 
+    "parent_id": 78, 
+    "aliastype": 0, 
+    "value": "Vizag"
+  }
+},
+{
+  "pk": 9, 
+  "model": "userprofile.synonym", 
+  "fields": {
+    "resourcetype": 2, 
+    "parent_id": 36, 
+    "aliastype": 0, 
+    "value": "Niz'bad"
+  }
+},
+{
+  "pk": 10, 
+  "model": "userprofile.synonym", 
+  "fields": {
+    "resourcetype": 2, 
+    "parent_id": 57, 
+    "aliastype": 0, 
+    "value": "Kth'gudem"
+  }
+},
+{
+  "pk": 11, 
+  "model": "userprofile.synonym", 
+  "fields": {
+    "resourcetype": 2, 
+    "parent_id": 43, 
+    "aliastype": 0, 
+    "value": "Chndr'pur"
+  }
+},
+{
+  "pk": 12, 
+  "model": "userprofile.synonym", 
+  "fields": {
+    "resourcetype": 2, 
+    "parent_id": 40, 
+    "aliastype": 0, 
+    "value": "Mzf'nagar"
+  }
+},
+{
+  "pk": 13, 
+  "model": "userprofile.synonym", 
+  "fields": {
+    "resourcetype": 2, 
+    "parent_id": 37, 
+    "aliastype": 0, 
+    "value": "R'mundry"
+  }
+},
+{
+  "pk": 14, 
+  "model": "userprofile.synonym", 
+  "fields": {
+    "resourcetype": 2, 
+    "parent_id": 83, 
+    "aliastype": 0, 
+    "value": "Calcutta"
+  }
+},
+{
+  "pk": 15, 
+  "model": "userprofile.synonym", 
+  "fields": {
+    "resourcetype": 2, 
+    "parent_id": 8, 
+    "aliastype": 0, 
+    "value": "N'Delhi"
+  }
+},
+{
+  "pk": 16, 
+  "model": "userprofile.synonym", 
+  "fields": {
+    "resourcetype": 2, 
+    "parent_id": 26, 
+    "aliastype": 0, 
+    "value": "N'raopet"
+  }
+},
+{
+  "pk": 17, 
+  "model": "userprofile.synonym", 
+  "fields": {
+    "resourcetype": 2, 
+    "parent_id": 40, 
+    "aliastype": 0, 
+    "value": "Muz'fr'ngr"
+  }
+},
+{
+  "pk": 18, 
+  "model": "userprofile.synonym", 
+  "fields": {
+    "resourcetype": 2, 
+    "parent_id": 4, 
+    "aliastype": 0, 
+    "value": "RECW"
+  }
+},
+{
+  "pk": 19, 
+  "model": "userprofile.synonym", 
+  "fields": {
+    "resourcetype": 0, 
+    "parent_id": 4, 
+    "aliastype": 0, 
+    "value": "Saudi"
+  }
+},
+{
+  "pk": 20, 
+  "model": "userprofile.synonym", 
+  "fields": {
+    "resourcetype": 0, 
+    "parent_id": 3, 
+    "aliastype": 0, 
+    "value": "UK"
+  }
+},
+{
+  "pk": 21, 
+  "model": "userprofile.synonym", 
+  "fields": {
+    "resourcetype": 2, 
+    "parent_id": 126, 
+    "aliastype": 0, 
+    "value": "Sin'pore"
+  }
+},
+{
+  "pk": 22, 
+  "model": "userprofile.synonym", 
+  "fields": {
+    "resourcetype": 2, 
+    "parent_id": 1, 
+    "aliastype": 0, 
+    "value": "Hyd"
+  }
+},
+{
+  "pk": 23, 
+  "model": "userprofile.synonym", 
+  "fields": {
+    "resourcetype": 2, 
+    "parent_id": 6, 
+    "aliastype": 0, 
+    "value": "B'lore"
+  }
+},
+{
+  "pk": 24, 
+  "model": "userprofile.synonym", 
+  "fields": {
+    "resourcetype": 4, 
+    "parent_id": 1, 
+    "aliastype": 0, 
+    "value": "civil"
+  }
+},
+{
+  "pk": 25, 
+  "model": "userprofile.synonym", 
+  "fields": {
+    "resourcetype": 4, 
+    "parent_id": 2, 
+    "aliastype": 0, 
+    "value": "mechanical"
+  }
+},
+{
+  "pk": 26, 
+  "model": "userprofile.synonym", 
+  "fields": {
+    "resourcetype": 4, 
+    "parent_id": 2, 
+    "aliastype": 0, 
+    "value": "mech"
+  }
+},
+{
+  "pk": 27, 
+  "model": "userprofile.synonym", 
+  "fields": {
+    "resourcetype": 4, 
+    "parent_id": 3, 
+    "aliastype": 0, 
+    "value": "EEE"
+  }
+},
+{
+  "pk": 28, 
+  "model": "userprofile.synonym", 
+  "fields": {
+    "resourcetype": 4, 
+    "parent_id": 3, 
+    "aliastype": 0, 
+    "value": "Electrical"
+  }
+},
+{
+  "pk": 29, 
+  "model": "userprofile.synonym", 
+  "fields": {
+    "resourcetype": 4, 
+    "parent_id": 4, 
+    "aliastype": 0, 
+    "value": "ECE"
+  }
+},
+{
+  "pk": 30, 
+  "model": "userprofile.synonym", 
+  "fields": {
+    "resourcetype": 4, 
+    "parent_id": 4, 
+    "aliastype": 0, 
+    "value": "Electronics"
+  }
+},
+{
+  "pk": 31, 
+  "model": "userprofile.synonym", 
+  "fields": {
+    "resourcetype": 4, 
+    "parent_id": 5, 
+    "aliastype": 0, 
+    "value": "Chemical"
+  }
+},
+{
+  "pk": 32, 
+  "model": "userprofile.synonym", 
+  "fields": {
+    "resourcetype": 4, 
+    "parent_id": 5, 
+    "aliastype": 0, 
+    "value": "Chem"
+  }
+},
+{
+  "pk": 33, 
+  "model": "userprofile.synonym", 
+  "fields": {
+    "resourcetype": 4, 
+    "parent_id": 6, 
+    "aliastype": 0, 
+    "value": "Metallurgical"
+  }
+},
+{
+  "pk": 34, 
+  "model": "userprofile.synonym", 
+  "fields": {
+    "resourcetype": 4, 
+    "parent_id": 6, 
+    "aliastype": 0, 
+    "value": "Meta"
+  }
+},
+{
+  "pk": 35, 
+  "model": "userprofile.synonym", 
+  "fields": {
+    "resourcetype": 4, 
+    "parent_id": 7, 
+    "aliastype": 0, 
+    "value": "CSE"
+  }
+},
+{
+  "pk": 36, 
+  "model": "userprofile.synonym", 
+  "fields": {
+    "resourcetype": 4, 
+    "parent_id": 7, 
+    "aliastype": 0, 
+    "value": "Computers"
+  }
+},
+{
+  "pk": 37, 
+  "model": "userprofile.synonym", 
+  "fields": {
+    "resourcetype": 4, 
+    "parent_id": 3, 
+    "aliastype": 0, 
+    "value": "Elec"
+  }
+},
+{
+  "pk": 38, 
+  "model": "userprofile.synonym", 
+  "fields": {
+    "resourcetype": 4, 
+    "parent_id": 6, 
+    "aliastype": 0, 
+    "value": "met"
+  }
+},
+{
+  "pk": 39, 
+  "model": "userprofile.synonym", 
+  "fields": {
+    "resourcetype": 4, 
+    "parent_id": 7, 
+    "aliastype": 0, 
+    "value": "cs"
+  }
+},
+{
+  "pk": 40, 
+  "model": "userprofile.synonym", 
+  "fields": {
+    "resourcetype": 4, 
+    "parent_id": 8, 
+    "aliastype": 0, 
+    "value": "phy"
+  }
+},
+{
+  "pk": 41, 
+  "model": "userprofile.synonym", 
+  "fields": {
+    "resourcetype": 4, 
+    "parent_id": 1, 
+    "aliastype": 0, 
+    "value": "civ"
+  }
+},
+{
+  "pk": 42, 
+  "model": "userprofile.synonym", 
+  "fields": {
+    "resourcetype": 4, 
+    "parent_id": 3, 
+    "aliastype": 0, 
+    "value": "ele"
+  }
+},
+{
+  "pk": 43, 
+  "model": "userprofile.synonym", 
+  "fields": {
+    "resourcetype": 3, 
+    "parent_id": 3, 
+    "aliastype": 0, 
+    "value": "mca"
+  }
+},
+{
+  "pk": 44, 
+  "model": "userprofile.synonym", 
+  "fields": {
+    "resourcetype": 3, 
+    "parent_id": 2, 
+    "aliastype": 0, 
+    "value": "mtech"
+  }
+},
+{
+  "pk": 45, 
+  "model": "userprofile.synonym", 
+  "fields": {
+    "resourcetype": 3, 
+    "parent_id": 2, 
+    "aliastype": 0, 
+    "value": "m.tech"
+  }
+},
+{
+  "pk": 46, 
+  "model": "userprofile.synonym", 
+  "fields": {
+    "resourcetype": 4, 
+    "parent_id": 5, 
+    "aliastype": 0, 
+    "value": "che"
+  }
+},
+{
+  "pk": 47, 
+  "model": "userprofile.synonym", 
+  "fields": {
+    "resourcetype": 4, 
+    "parent_id": 2, 
+    "aliastype": 0, 
+    "value": "ME"
+  }
+},
+{
+  "pk": 48, 
+  "model": "userprofile.synonym", 
+  "fields": {
+    "resourcetype": 4, 
+    "parent_id": 1, 
+    "aliastype": 0, 
+    "value": "CE"
+  }
+},
+{
+  "pk": 49, 
+  "model": "userprofile.synonym", 
+  "fields": {
+    "resourcetype": 4, 
+    "parent_id": 6, 
+    "aliastype": 0, 
+    "value": "MME"
+  }
+},
+{
+  "pk": 50, 
+  "model": "userprofile.synonym", 
+  "fields": {
+    "resourcetype": 3, 
+    "parent_id": 3, 
+    "aliastype": 0, 
+    "value": "MCA"
+  }
+}
+]

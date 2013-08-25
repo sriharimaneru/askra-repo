@@ -1,13 +1,12 @@
 from django.db import models
 from django.contrib.auth.models import User
 from tag.models import Tag
-import csv
-from django.core.exceptions import ObjectDoesNotExist
-from django.core.exceptions import MultipleObjectsReturned
+from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned, ValidationError
 from xlrd import open_workbook, xldate_as_tuple, XL_CELL_TEXT
 from django.db.models import Q
 import logging
-from userprofile.utils import getYOGFromRoll, isValidEmailId, isValidRollNo, isValidYOG
+from userprofile.utils import getYOGFromRoll, isValidEmailId, isValidRollNo, \
+    isValidYOG, slugify
 from datetime import datetime
 
 
@@ -48,42 +47,300 @@ DO_NOTHING = 2
 ACTION_CHOICES = ((IGNORE, "Ignore"),
                (SAVE, "Save"),
                (DO_NOTHING, "Do nothing"),)
-            
 
-class City(models.Model):
-    city = models.CharField(max_length=150,null=True, blank=True)
-    state = models.CharField(max_length=150,null=True, blank=True)
-    country = models.CharField(max_length=150,null=True, blank=True)
+SYNONYM = 0
+GROUP = 1
+ALIAS_TYPES = ((SYNONYM, 'Synonym'),
+               (GROUP, 'Group'))
+
+CITY=0
+STATE=1
+COUNTRY=2
+PLACE_TYPES = ((CITY, 'City'),
+               (STATE, 'State'),
+               (COUNTRY, 'Country'))
+
+RT_COUNTRY=0
+RT_STATE=1
+RT_CITY=2
+RT_COURSE=3
+RT_BRANCH=4
+RT_EMPLOYER=5
+RT_JOBDESIGNATION=6
+RT_JOBDOMAIN=7
+RT_COLLEGE=8
+RT_DEGREE=9
+RT_HEBRANCH=10
+RT_DEPARTMENT=11
+RT_FACDESIGNATION=12
+RT_TAG=13
+
+RESOURCE_TYPES = ((RT_COUNTRY, 'Country'),
+                  (RT_STATE, 'State'),
+                  (RT_CITY, 'City'),
+                  (RT_COURSE, 'Course'),
+                  (RT_BRANCH, 'Branch'),
+                  (RT_EMPLOYER, 'Employer'),
+                  (RT_JOBDESIGNATION, 'Job Designation'),
+                  (RT_JOBDOMAIN, 'Job Domain'),
+                  (RT_COLLEGE, 'College'),
+                  (RT_DEGREE, 'Degree'),
+                  (RT_HEBRANCH, 'HigherEducationBranch'),
+                  (RT_DEPARTMENT, 'Department'),
+                  (RT_FACDESIGNATION, 'Designation'),
+                  (RT_TAG, 'Tag'))
+
+
+def get_resource_model_from_value(value):
+    if value == RT_COUNTRY:
+        return Country
+    elif value == RT_STATE:
+        return State
+    elif value == RT_CITY:
+        return City
+    elif value == RT_COURSE:
+        return Course
+    elif value == RT_BRANCH:
+        return Branch
+    elif value == RT_EMPLOYER:
+        return Employer
+    elif value == RT_JOBDESIGNATION:
+        return JobDesignation
+    elif value == RT_JOBDOMAIN:
+        return JobDomain
+    elif value == RT_COLLEGE:
+        return College
+    elif value == RT_DEGREE:
+        return Degree
+    elif value == RT_HEBRANCH:
+        return HigherEducationBranch
+    elif value == RT_DEPARTMENT:
+        return Department
+    elif value == RT_FACDESIGNATION:
+        return FacultyDesignation
+    elif value == RT_TAG:
+        return Tag
+  
+#Resources
+class Country(models.Model):
+    name = models.CharField(max_length=255)
+    slug = models.CharField(max_length=255, blank=True, unique=True)
     
     def __unicode__(self):
-        if(self.city):
-            return self.city
-        elif(self.state):
-            return self.state
-        else:
-            return self.country
+        return self.name
     
+    def save(self,**kwargs):
+        self.slug = slugify(self.name)
+        super(Country, self).save(**kwargs)
+        
     class Meta:
-        verbose_name_plural = "Cities"
+        verbose_name_plural = "Countries"    
+    
 
-class CitySynonym(models.Model):
-    city = models.ForeignKey(City)
-    name = models.CharField(max_length=100)
+class State(models.Model):    
+    name = models.CharField(max_length=255)    
+    slug = models.CharField(max_length=255, blank=True, unique=True)
+    country = models.ForeignKey(Country, null=True, blank=True)
+    
+    def __unicode__(self):
+        return self.name
+    
+    def get_country(self):
+        if self.country is None:
+            return ''
+        else:
+            return self.country.name
+    get_country.short_description="country"
+    
+    def save(self,**kwargs):
+        self.slug = slugify(self.name + " " + self.get_country())
+        super(State, self).save(**kwargs)
+
+class City(models.Model):
+    name = models.CharField(max_length=255)
+    slug = models.CharField(max_length=255, blank=True, unique=True)
+    state = models.ForeignKey(State, null=True, blank=True)
 
     def __unicode__(self):
         return self.name
+    
+    def get_state(self):
+        if self.state is None:
+            return ''
+        else:
+            return self.state.name
+    get_state.short_description = 'state'
+        
+    def get_country(self):
+        if self.state is None:
+            return ''
+        elif self.state.country is None:
+            return ''
+        else:
+            return self.state.country.name
+    get_country.short_description = 'country'
+    
+    def save(self,**kwargs):
+        self.slug = slugify(self.name + ' ' + self.get_state() + ' ' + self.get_country())
+        super(City, self).save(**kwargs)
+
+    class Meta:
+        verbose_name_plural = "Cities"    
+
+class Course(models.Model):
+    name = models.CharField(max_length=255)
+    slug = models.CharField(max_length=255, blank=True, unique=True)
+    
+    def __unicode__(self):
+        return self.name
+    
+    def save(self,**kwargs):
+        self.slug = slugify(self.name)
+        super(Course, self).save(**kwargs)
+        
+    class Meta:
+        verbose_name_plural = "Courses"
+
+class Branch(models.Model):
+    name = models.CharField(max_length=255, blank=True, null=True)
+    slug = models.CharField(max_length=255, blank=True, unique=True)
+    course = models.ForeignKey(Course, null=True, blank=True)
+    
+    def __unicode__(self):
+        return self.get_name()
+    
+    def get_name(self):
+        if self.name:
+            return self.name
+        else:
+            return ''
+    
+    def get_course(self):
+        if self.course:
+            return self.course.name
+        else:
+            return ''
+    get_course.short_description='course'
+    
+    def get_full_qualification(self):
+        if self.course:
+            if self.get_name() != '':
+                return self.course.name + ", " + self.get_name()
+            else:
+                return self.course.name
+        else:
+            return self.get_name()
+    
+    def save(self,**kwargs):
+        self.slug = slugify(self.get_name() + ' ' + self.get_course())
+        super(Branch, self).save(**kwargs)
+        
+    class Meta:
+        verbose_name_plural = "Branches"
+
+class Employer(models.Model):
+    name = models.CharField(max_length=255)
+    slug = models.CharField(max_length=255, blank=True, unique=True)
+    
+    def __unicode__(self):
+        return self.name
+    
+    def save(self,**kwargs):
+        self.slug = slugify(self.name)
+        super(Employer, self).save(**kwargs)
+
+class JobDesignation(models.Model):
+    name = models.CharField(max_length=255)
+    slug = models.CharField(max_length=255, blank=True, unique=True)
+    
+    def __unicode__(self):
+        return self.name
+    
+    def save(self,**kwargs):
+        self.slug = slugify(self.name)
+        super(JobDesignation, self).save(**kwargs)
+        
+            
+class JobDomain(models.Model):
+    name = models.CharField(max_length=255)
+    slug = models.CharField(max_length=255, blank=True, unique=True)
+    
+    def __unicode__(self):
+        return self.name
+    
+    def save(self,**kwargs):
+        self.slug = slugify(self.name)
+        super(JobDomain, self).save(**kwargs)
+
+class College(models.Model):
+    name = models.CharField(max_length=255)
+    slug = models.CharField(max_length=255, blank=True, unique=True)
+    
+    def __unicode__(self):
+        return self.name
+    
+    def save(self,**kwargs):
+        self.slug = slugify(self.name)
+        super(College, self).save(**kwargs)     
+    
+
+class Degree(models.Model):
+    name = models.CharField(max_length=255)
+    slug = models.CharField(max_length=255, blank=True, unique=True)
+    
+    def __unicode__(self):
+        return self.name
+    
+    def save(self,**kwargs):
+        self.slug = slugify(self.name)
+        super(Degree, self).save(**kwargs)     
+
+class HigherEducationBranch(models.Model):
+    name = models.CharField(max_length=255)
+    slug = models.CharField(max_length=255, blank=True, unique=True)
+    
+    def __unicode__(self):
+        return self.name
+    
+    def save(self,**kwargs):
+        self.slug = slugify(self.name)
+        super(HigherEducationBranch, self).save(**kwargs)
+
+class Department(models.Model):
+    name = models.CharField(max_length=255)
+    slug = models.CharField(max_length=255, blank=True, unique=True)
+    
+    def __unicode__(self):
+        return self.name
+    
+    def save(self,**kwargs):
+        self.slug = slugify(self.name)
+        super(Department, self).save(**kwargs)     
+
+class FacultyDesignation(models.Model):
+    name = models.CharField(max_length=255)
+    slug = models.CharField(max_length=255, blank=True, unique=True)
+    
+    def __unicode__(self):
+        return self.name
+    
+    def save(self,**kwargs):
+        self.slug = slugify(self.name)
+        super(FacultyDesignation, self).save(**kwargs)
 
 class UserProfile(models.Model):
     user = models.ForeignKey(User, null=True, blank=True)
     role = models.IntegerField("User Role", choices=USER_ROLES, help_text="Choose the appropriate userRole")
-    first_name = models.CharField(max_length=150, null=True, blank=True)
-    last_name = models.CharField(max_length=150, null=True, blank=True)
+    first_name = models.CharField(max_length=255, null=True, blank=True)
+    last_name = models.CharField(max_length=255, null=True, blank=True)
+    slug = models.CharField(max_length=255, blank=True, unique=True)
     email = models.EmailField(max_length=75)
     gender = models.IntegerField(choices=GENDER_CHOICES, null=True, blank=True)
     phone_number = models.CharField(max_length=100, null=True, blank=True)
     address = models.CharField(max_length=500, null=True, blank=True)
     photo = models.ImageField("Profile picture", upload_to="profile_pictures/", null=True, blank=True,)
-    city = models.ForeignKey(City, null=True, blank=True)
+    place_id = models.IntegerField(null=True, blank=True) #Should contain the city id, state id or country id
+    place_type = models.IntegerField(choices=PLACE_TYPES, null=True, blank=True)
     twitter_url = models.URLField(max_length=100, null=True, blank=True)
     facebook_url = models.URLField(max_length=100, null=True, blank=True)
     linked_url = models.URLField(max_length=100, null=True, blank=True)
@@ -94,8 +351,8 @@ class UserProfile(models.Model):
     tags = models.ManyToManyField(Tag, null=True, blank=True)
 
     def __unicode__(self):
-        return self.first_name + " " + self.last_name
-
+        return self.get_full_name()
+    
     def get_full_name(self):
         if self.first_name and self.last_name:
             return self.first_name + " " + self.last_name
@@ -113,7 +370,33 @@ class UserProfile(models.Model):
             return self.last_name
         else:
             return ""
-
+    
+    def get_place(self):
+        if self.place_id is None or self.place_type is None:
+            return ''
+        else:
+            if self.place_type == CITY:
+                try:
+                    city = City.objects.get(id=self.place_id)
+                    return city.name
+                except ObjectDoesNotExist:
+                    return ''
+            elif self.place_type == STATE:
+                try:
+                    state = State.objects.get(id=self.place_id)
+                    return state.name
+                except ObjectDoesNotExist:
+                    return ''
+            elif self.place_type == COUNTRY:
+                try:
+                    country = Country.objects.get(id=self.place_id)
+                    return country.name
+                except ObjectDoesNotExist:
+                    return ''
+            else:
+                return ''
+    get_place.short_description = 'place'
+    
     def set_gender(self, value):
         if(value):
             gender_dict=dict(GENDER_CHOICES)
@@ -126,162 +409,187 @@ class UserProfile(models.Model):
             self.role = [key for key,val in role_dict.items() if val==value ][0]
         return self
 
-    def set_city(self, value):
+    def set_place(self, value):
         value=value.strip()
-        junkcity=''
+        junkdata=''
         if(value):
             if('/' in value): #Multiple cities separated by '/'. We take the first one.
-                (value, junkcity) = value.split('/',1)
+                (value, junkdata) = value.split('/',1)
                 value=value.strip()
             
-            cities=City.objects.filter(Q(city__iexact=value) | Q(state__iexact=value) | Q(country__iexact=value))
+            cities = City.objects.filter(name__iexact=value)
             if(cities):
-                self.city = cities[0]
+                self.place_id = cities[0].id
+                self.place_type = CITY
             else:
-                synonyms=CitySynonym.objects.filter(name__iexact=value)
-                if(synonyms):
-                    self.city = synonyms[0].city
+                states = State.objects.filter(name__iexact=value)
+                if(states):
+                    self.place_id = states[0].id
+                    self.place_type = STATE
                 else:
-                    log.debug("IMPORTANT: City not added: [" + value + "]")
-                    junkcity=value
+                    countries = Country.objects.filter(name__iexact=value)
+                    if(countries):
+                        self.place_id = countries[0].id
+                        self.place_type = COUNTRY
+                    else:
+                        synonyms=Synonym.objects.filter(Q(name__iexact=value), Q(resourcetype=RT_CITY)| 
+                                                        Q(resourcetype=RT_STATE)|Q(resourcetype=RT_COUNTRY), 
+                                                        Q(aliastype=SYNONYM))
+                        if(synonyms):
+                            if(synonyms[0].resourcetype == RT_CITY):
+                                self.place_type = CITY
+                                self.place_id = synonyms[0].parent_id
+                            elif(synonyms[0].resourcetype == RT_STATE):
+                                self.place_type = STATE
+                                self.place_id = synonyms[0].parent_id
+                            elif(synonyms[0].resourcetype == RT_COUNTRY):
+                                self.place_type = COUNTRY
+                                self.place_id = synonyms[0].parent_id
+                            else:
+                                #Creating a new city be default. Admins will then change this data.
+                                newcity = City(name=value)
+                                newcity.save()
+                        else:
+                            #Creating a new city be default. Admins will then change this data.
+                            newcity = City(name=value)
+                            newcity.save()
+                            log.debug("IMPORTANT: New city added: [" + value + "]")
 
-            if junkcity!='':
-                junkdata = ProfileJunkData(userprofile=self, key='city', value=junkcity)
+            if junkdata!='':
+                junkdata = ProfileJunkData(userprofile=self, key='place', value=junkdata)
                 junkdata.save()
 
         return self
 
     def get_branch(self):
-        if(StudentSection.objects.filter(userprofile=self)):
-            if(StudentSection.objects.filter(userprofile=self)[0].branch):
-                return StudentSection.objects.filter(userprofile=self)[0].branch.branch
+        studentsections = StudentSection.objects.filter(userprofile=self)
+        if studentsections:
+            return studentsections[0].get_branch_name()
         else:
-            return ""
-
+            return ''
     get_branch.short_description = "Branch"
 
     def get_course(self):
-        if(StudentSection.objects.filter(userprofile=self)):
-            if(StudentSection.objects.filter(userprofile=self)[0].branch):
-                return StudentSection.objects.filter(userprofile=self)[0].branch.course
+        studentsections = StudentSection.objects.filter(userprofile=self)
+        if studentsections:
+            return studentsections[0].get_course_name()
         else:
-            return ""
-
+            return ''
     get_course.short_description = "Course"
 
     def get_year_of_graduation(self):
-        if(StudentSection.objects.filter(userprofile=self)):
-            return StudentSection.objects.filter(userprofile=self)[0].year_of_graduation
+        studentsections = StudentSection.objects.filter(userprofile=self) 
+        if(studentsections):
+            return studentsections[0].year_of_graduation
         else:
-            return ""
-
-    get_year_of_graduation.short_description = "Graudation Year"
+            return ''
+    get_year_of_graduation.short_description = "Graduation Year"
+        
+    def save(self,**kwargs):
+        name = self.get_full_name()
+        if name != '':
+            name = name + ' ' + self.id
+        else:
+            name = self.id
+        self.slug = slugify(name)
+        
+        if self.place_type is None:
+            if self.place_id != '' and self.place_id is not None:
+                raise ValidationError(('Place ID cannot be saved without place type'), code='invalid')
+            
+        if self.place_id is None or self.place_id == '':
+            if self.place_type is not None:
+                raise ValidationError(('Place type cannot be saved without place id'), code='invalid')
+        
+        super(UserProfile, self).save(**kwargs)
     
     def get_roll_num(self):
-        if(StudentSection.objects.filter(userprofile=self)):
-            return StudentSection.objects.filter(userprofile=self)[0].roll_num
+        studentsections = StudentSection.objects.filter(userprofile=self) 
+        if(studentsections):
+            return studentsections[0].roll_num
         else:
-            return 0
-
+            return ''
     get_roll_num.short_description = "Roll No"
 
 class ProfileJunkData(models.Model):
     userprofile = models.ForeignKey(UserProfile)
     key = models.CharField(max_length=50)
     value = models.CharField(max_length=500)
-    
-class Branch(models.Model):
-    branch = models.CharField(max_length=200, null=True, blank=True)
-    course = models.CharField(max_length=200, null=True, blank=True)
-    specialisation = models.CharField(max_length=200, null=True, blank=True)
-    
-    def get_full_name(self):
-        if(self.branch==''):
-            return self.course
-        elif(self.course==''):
-            return self.branch
-        else:
-            return self.course + ", " + self.branch
-
-    def __unicode__(self):
-        return self.get_full_name()
-
-    class Meta:
-        verbose_name_plural = "Branches"
-
-class BranchSynonym(models.Model):
-    branch = models.ForeignKey(Branch)
-    name = models.CharField(max_length=100)
-
-    def __unicode__(self):
-        return self.name
 
 class StudentSection(models.Model):
     userprofile = models.ForeignKey(UserProfile)
     roll_num = models.CharField(max_length=20, null=True, blank=True)
     year_of_graduation = models.IntegerField(null=True, blank=True, help_text="Year of passing out")
     branch = models.ForeignKey(Branch, null=True, blank=True)
+    
+    def get_branch_name(self):
+        if self.branch:
+            return self.branch.get_name()
+        else:
+            return ''
+    
+    def get_course_name(self):
+        if self.branch:
+            return self.branch.get_course()
+        else:
+            return ''
 
     def get_full_qualification(self):
         if self.branch and self.year_of_graduation:
-            return self.branch.get_full_name() + " " + str(self.year_of_graduation)
+            return self.branch.get_full_qualification() + " " + str(self.year_of_graduation)
         elif self.branch:
-            return self.branch.get_full_name()
+            return self.branch.get_full_qualification()
         elif self.year_of_graduation:
             return str(self.year_of_graduation)
         else:
             return ""
 
     def set_branch(self, branch, course, specialisation):
-#        specialisation=specialisation.strip()
-#        if(specialisation!=''):
-#            branches=Branch.objects.filter(specialisation__iexact=specialisation)
-#            if(branches):
-#                self.branch=branches[0]
-#            else:
-#                synonyms=BranchSynonym.objects.filter(name__iexact=specialisation)
-#                if(synonyms):
-#                    self.branch=synonyms[0].branch
-#                else:
-#                    log.debug("Could not find specialisation [" + specialisation + "]. Therefore not setting the value")
-#                    return False
-#            return True
-        
-        branch=branch.strip()
-        if(branch!=''):
-            branches=Branch.objects.filter(branch__iexact=branch)
-            if(branches):
-                self.branch=branches[0]
-            else:
-                synonyms=BranchSynonym.objects.filter(name__iexact=branch)
-                if(synonyms):
-                    self.branch=synonyms[0].branch
+        if course != '' and course != None:
+            course = course.strip()
+            try:
+                courseData = Course.objects.get(name__iexact=course)
+            except ObjectDoesNotExist:
+                courseDataSynonyms = Synonym.objects.filter(value__iexact=course, resourcetype=RT_COURSE, aliastype=SYNONYM)
+                if courseDataSynonyms:
+                    courseData = courseDataSynonyms[0]
                 else:
-                    log.debug("Could not find branch [" + branch + "]. Therefore not setting the value")
-                    return False
-        
-        return True
+                    courseData = Course(name=course)
+                    courseData.save()
+        else:
+            return #No course. Not saving any data.
 
-class Employer(models.Model):
-    name = models.CharField(max_length=200)
+        if specialisation != '' and specialisation != None:
+            branch = specialisation #If specialisation is specified, that is the branch
+                    
+        if branch != '' and branch != None:
+            branch = branch.strip()
+            branchData = Branch.objects.filter(name__iexact=branch)
+            if not branchData:
+                branchSynonyms = Synonym.objects.filter(value__iexact=branch, resourcetype=RT_BRANCH, aliastype=SYNONYM)
+                if branchSynonyms:
+                    branchData = branchSynonyms[0]
+                else:
+                    branchObj = Branch(name=branch, course=courseData)
+                    branchObj.save()
+                    self.branch = branchObj
+                    return
+                    
+            for branchObj in branchData:
+                if branchObj.course == courseData: #Course matches
+                    self.branch = branchObj
+                    return
+            
+            branchObj = Branch(name=branch, course=courseData)
+            branchObj.save()
+            self.branch = branchObj
+                    
     
-    def __unicode__(self):
-        return self.name    
+    def save(self, **kwargs):
+        #Add any validation here
+        super(StudentSection, self).save(**kwargs)
 
-class JobDesignation(models.Model):
-    name = models.CharField(max_length=200)
-
-    def __unicode__(self):
-        return self.name     
-    
-class JobDomain(models.Model):
-    name = models.CharField(max_length=200)
-    
-    def __unicode__(self):
-        return self.name     
-    
-                
-class EmployementDetail(models.Model):
+class EmploymentDetail(models.Model):
     userprofile = models.ForeignKey(UserProfile)
     employer = models.ForeignKey(Employer)
     designation = models.ForeignKey(JobDesignation)
@@ -299,24 +607,6 @@ class EmployementDetail(models.Model):
         else:
             return str(self.date_of_joining.strftime("%b %Y")) + " - " + str(self.date_of_joining.year)+ " - " + str(self.date_of_leaving.strftime("%b")) + ", " + str(self.date_of_leaving.year)
 
-class College(models.Model):
-    name = models.CharField(max_length=200)
-    
-    def __unicode__(self):
-        return self.name     
-    
-        
-class Degree(models.Model):
-    name = models.CharField(max_length=200)
-    
-    def __unicode__(self):
-        return self.name     
-
-class HigherEducationBranch(models.Model):
-    name = models.CharField(max_length=200)
-    
-    def __unicode__(self):
-        return self.name     
         
 class HigherEducationDetail(models.Model):
     userprofile = models.ForeignKey(UserProfile)
@@ -324,21 +614,6 @@ class HigherEducationDetail(models.Model):
     degree = models.ForeignKey(Degree)
     branch = models.ForeignKey(HigherEducationBranch)
     year_of_graduation = models.IntegerField(null=True, blank=True, help_text="Year of passing out")
-
-
-class Department(models.Model):
-    name = models.CharField(max_length=200)
-    
-    def __unicode__(self):
-        return self.name     
-    
-        
-class FacultyDesignation(models.Model):
-    name = models.CharField(max_length=200)
-    
-    def __unicode__(self):
-        return self.name     
-    
         
 class FacultySection(models.Model):
     userprofile = models.ForeignKey(UserProfile)
@@ -349,69 +624,33 @@ class UserTag(models.Model):
     userprofile = models.ForeignKey(UserProfile)
     tag = models.ForeignKey(Tag)
     status = models.IntegerField("Tag Category", choices=USERTAG_STATUS_OPTIONS,)
-    
-class CsvUpload(models.Model):
-    uploaded_file = models.FileField(upload_to="data/upload_files/", blank=False, null=False)
-    description = models.TextField(blank=True, null=True)
-    
-    def save(self,**kwargs):
-        log.debug(self.description)
-        reader = csv.DictReader(self.uploaded_file)
-        for row in reader:
-            first_name = row['First Name']
-            last_name = row['Last Name']
-            phone_number = row['Phone Number']
-            emailErrorRow = isValidEmailId(row['Email'])
-            if(emailErrorRow is True):
-                email = row['Email']
-            else:
-                email=''
-            gender = row['Gender']
-            role = row['User Role']
-            city = row['City']
 
-            try:
-                user_profile=UserProfile.objects.get(email=email)
-                text = "A profile with email ID [" + email + "] already exists. Updated the other fields."
-                user_profile.first_name = first_name
-                user_profile.last_name = last_name
-                user_profile.phone_number = phone_number
-                user_profile.email = email
-            except ObjectDoesNotExist:
-                user_profile = UserProfile(first_name=first_name, 
-                                           last_name=first_name,
-                                           email=email,
-                                           phone_number=phone_number)
-                text = "Added new profile with email ID [" + email + "]"
-
-            log.debug(text)
-            user_profile.set_gender(gender)
-            user_profile.set_role(role)
-            user_profile.set_city(city)
-            user_profile.save()
-                
-        log.debug("Bulk upload successful")
-        super(CsvUpload, self).save(**kwargs)
-        if(emailErrorRow is not True):
-            emailErrorRow.csv_file=self;
-            emailErrorRow.save()
+class Synonym(models.Model):
+    value = models.CharField(max_length=255)
+    parent_id = models.IntegerField()
+    resourcetype = models.IntegerField(choices=RESOURCE_TYPES)
+    aliastype = models.IntegerField(choices=ALIAS_TYPES, default=SYNONYM)
     
+    def __unicode__(self):
+        return self.value
     
-class ErrorRow(models.Model):
-    csv_file = models.ForeignKey(CsvUpload)
-    name = models.CharField(max_length=20)
-    reason = models.TextField()
-    action = models.IntegerField(choices = ACTION_CHOICES, default = DO_NOTHING)
-
-    def save(self,**kwargs):
-        #if action is ignore, do nothing 
-        
-        #if action is save, delete it and create correspoinding user profile
-        
-        #if action is ignore, just delete it
-        
-        
-        super(ErrorRow, self).save(**kwargs)
+    def get_parent_name(self):
+        resource = get_resource_model_from_value(self.resourcetype)
+        try:
+            obj = resource.objects.get(id=self.parent_id)
+            return obj.name
+        except ObjectDoesNotExist:
+            return ''
+    get_parent_name.short_description = 'Parent Value'
+    
+    def get_resourcetype_name(self):
+        return dict(RESOURCE_TYPES)[self.resourcetype]
+    get_resourcetype_name.short_description = 'Resource'
+    
+    def get_aliastype_name(self):
+        return dict(ALIAS_TYPES)[self.aliastype]
+    get_aliastype_name.short_description = 'Alias Type'
+    
 
 class XlsUpload(models.Model):
     uploaded_file = models.FileField(upload_to="data/upload_files/", blank=False, null=False)
@@ -596,7 +835,7 @@ class XlsUpload(models.Model):
                     #Part 3: Set the foreign key fields
                     if(user_profile):
                         #log.debug("Setting city for ["+user_profile.first_name+"] to ["+city+"]")
-                        user_profile.set_city(city)
+                        user_profile.set_place(city)
                         user_profile.save()
                     
                     if junk:
@@ -627,3 +866,65 @@ class XlsUpload(models.Model):
 
         log.debug("Bulk upload completed")
         super(XlsUpload, self).save(**kwargs)
+        
+#class CsvUpload(models.Model):
+#    uploaded_file = models.FileField(upload_to="data/upload_files/", blank=False, null=False)
+#    description = models.TextField(blank=True, null=True)
+#    
+#    def save(self,**kwargs):
+#        log.debug(self.description)
+#        reader = csv.DictReader(self.uploaded_file)
+#        for row in reader:
+#            first_name = row['First Name']
+#            last_name = row['Last Name']
+#            phone_number = row['Phone Number']
+#            emailErrorRow = isValidEmailId(row['Email'])
+#            if(emailErrorRow is True):
+#                email = row['Email']
+#            else:
+#                email=''
+#            gender = row['Gender']
+#            role = row['User Role']
+#            city = row['City']
+#
+#            try:
+#                user_profile=UserProfile.objects.get(email=email)
+#                text = "A profile with email ID [" + email + "] already exists. Updated the other fields."
+#                user_profile.first_name = first_name
+#                user_profile.last_name = last_name
+#                user_profile.phone_number = phone_number
+#                user_profile.email = email
+#            except ObjectDoesNotExist:
+#                user_profile = UserProfile(first_name=first_name, 
+#                                           last_name=first_name,
+#                                           email=email,
+#                                           phone_number=phone_number)
+#                text = "Added new profile with email ID [" + email + "]"
+#
+#            log.debug(text)
+#            user_profile.set_gender(gender)
+#            user_profile.set_role(role)
+#            user_profile.set_city(city)
+#            user_profile.save()
+#                
+#        log.debug("Bulk upload successful")
+#        super(CsvUpload, self).save(**kwargs)
+#        if(emailErrorRow is not True):
+#            emailErrorRow.csv_file=self;
+#            emailErrorRow.save()
+
+#class ErrorRow(models.Model):
+#    csv_file = models.ForeignKey(CsvUpload)
+#    name = models.CharField(max_length=20)
+#    reason = models.TextField()
+#    action = models.IntegerField(choices = ACTION_CHOICES, default = DO_NOTHING)
+#
+#    def save(self,**kwargs):
+#        #if action is ignore, do nothing 
+#        
+#        #if action is save, delete it and create correspoinding user profile
+#        
+#        #if action is ignore, just delete it
+#        
+#        
+#        super(ErrorRow, self).save(**kwargs)

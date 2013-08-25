@@ -1,344 +1,142 @@
 [
- {
-  "pk": 1,
-  "model": "userprofile.branch",
+{
+  "pk": 1, 
+  "model": "userprofile.branch", 
   "fields": {
-   "course": "B.Tech",
-   "specialisation": null,
-   "branch": "Civil"
+    "course": 1, 
+    "name": "Civil", 
+    "slug": "civil-b-tech"
   }
- },
- {
-  "pk": 2,
-  "model": "userprofile.branch",
+},
+{
+  "pk": 2, 
+  "model": "userprofile.branch", 
   "fields": {
-   "course": "B.Tech",
-   "specialisation": null,
-   "branch": "Mechanical"
+    "course": 1, 
+    "name": "Mechanical", 
+    "slug": "mechanical-b-tech"
   }
- },
- {
-  "pk": 3,
-  "model": "userprofile.branch",
+},
+{
+  "pk": 3, 
+  "model": "userprofile.branch", 
   "fields": {
-   "course": "B.Tech",
-   "specialisation": null,
-   "branch": "EEE"
+    "course": 1, 
+    "name": "EEE", 
+    "slug": "eee-b-tech"
   }
- },
- {
-  "pk": 4,
-  "model": "userprofile.branch",
+},
+{
+  "pk": 4, 
+  "model": "userprofile.branch", 
   "fields": {
-   "course": "B.Tech",
-   "specialisation": null,
-   "branch": "ECE"
+    "course": 1, 
+    "name": "ECE", 
+    "slug": "ece-b-tech"
   }
- },
- {
-  "pk": 5,
-  "model": "userprofile.branch",
+},
+{
+  "pk": 5, 
+  "model": "userprofile.branch", 
   "fields": {
-   "course": "B.Tech",
-   "specialisation": null,
-   "branch": "Chemical"
+    "course": 1, 
+    "name": "Chemical", 
+    "slug": "chemical-b-tech"
   }
- },
- {
-  "pk": 6,
-  "model": "userprofile.branch",
+},
+{
+  "pk": 6, 
+  "model": "userprofile.branch", 
   "fields": {
-   "course": "B.Tech",
-   "specialisation": null,
-   "branch": "Metallurgy"
+    "course": 1, 
+    "name": "Metallurgy", 
+    "slug": "metallurgy-b-tech"
   }
- },
- {
-  "pk": 7,
-  "model": "userprofile.branch",
+},
+{
+  "pk": 7, 
+  "model": "userprofile.branch", 
   "fields": {
-   "course": "B.Tech",
-   "specialisation": null,
-   "branch": "CSE"
+    "course": 1, 
+    "name": "CSE", 
+    "slug": "cse-b-tech"
   }
- },
- {
-  "pk": 8,
-  "model": "userprofile.branch",
+},
+{
+  "pk": 8, 
+  "model": "userprofile.branch", 
   "fields": {
-   "course": "M.Sc.",
-   "specialisation": null,
-   "branch": "Physics"
+    "course": 4, 
+    "name": "Physics", 
+    "slug": "physics-m-sc-"
   }
- },
- {
-  "pk": 9,
-  "model": "userprofile.branch",
+},
+{
+  "pk": 11, 
+  "model": "userprofile.branch", 
   "fields": {
-   "course": "MCA",
-   "specialisation": null,
-   "branch": ""
+    "course": 4, 
+    "name": "Chemistry", 
+    "slug": "chemistry-m-sc-"
   }
- },
- {
-  "pk": 10,
-  "model": "userprofile.branch",
+},
+{
+  "pk": 15, 
+  "model": "userprofile.branch", 
   "fields": {
-   "course": "M.Tech.",
-   "specialisation": null,
-   "branch": ""
+    "course": 4, 
+    "name": "Maths", 
+    "slug": "maths-m-sc-"
   }
- },
- {
-  "pk": 11,
-  "model": "userprofile.branch",
+},
+{
+  "pk": 16, 
+  "model": "userprofile.branch", 
   "fields": {
-   "course": "M.Sc.",
-   "specialisation": "Chemistry",
-   "branch": "Chemistry"
+    "course": 2, 
+    "name": "ICE & GT", 
+    "slug": "ice-gt-m-tech"
   }
- },
- {
-  "pk": 13,
-  "model": "userprofile.branch",
+},
+{
+  "pk": 17, 
+  "model": "userprofile.branch", 
   "fields": {
-   "course": "M.Tech",
-   "specialisation": "ICE & GT",
-   "branch": "ECE"
+    "course": 2, 
+    "name": "Geo-Tech. Engg.", 
+    "slug": "geo-tech-engg-m-tech"
   }
- },
- {
-  "pk": 14,
-  "model": "userprofile.branch",
+},
+{
+  "pk": 1, 
+  "model": "userprofile.course", 
   "fields": {
-   "course": "M.Tech",
-   "specialisation": "Geo-Tech. Engg.",
-   "branch": "Civil"
+    "name": "B.Tech", 
+    "slug": "b-tech"
   }
- },
- {
-  "pk": 15,
-  "model": "userprofile.branch",
+},
+{
+  "pk": 2, 
+  "model": "userprofile.course", 
   "fields": {
-   "course": "M.Sc.",
-   "specialisation": "Maths",
-   "branch": "Maths"
+    "name": "M.Tech", 
+    "slug": "m-tech"
   }
- },
- {
-  "pk": 1,
-  "model": "userprofile.branchsynonym",
+},
+{
+  "pk": 3, 
+  "model": "userprofile.course", 
   "fields": {
-   "name": "civil",
-   "branch": 1
+    "name": "MCA", 
+    "slug": "mca"
   }
- },
- {
-  "pk": 2,
-  "model": "userprofile.branchsynonym",
+},
+{
+  "pk": 4, 
+  "model": "userprofile.course", 
   "fields": {
-   "name": "mechanical",
-   "branch": 2
+    "name": "M.Sc.", 
+    "slug": "m-sc-"
   }
- },
- {
-  "pk": 3,
-  "model": "userprofile.branchsynonym",
-  "fields": {
-   "name": "mech",
-   "branch": 2
-  }
- },
- {
-  "pk": 4,
-  "model": "userprofile.branchsynonym",
-  "fields": {
-   "name": "EEE",
-   "branch": 3
-  }
- },
- {
-  "pk": 5,
-  "model": "userprofile.branchsynonym",
-  "fields": {
-   "name": "Electrical",
-   "branch": 3
-  }
- },
- {
-  "pk": 6,
-  "model": "userprofile.branchsynonym",
-  "fields": {
-   "name": "ECE",
-   "branch": 4
-  }
- },
- {
-  "pk": 7,
-  "model": "userprofile.branchsynonym",
-  "fields": {
-   "name": "Electronics",
-   "branch": 4
-  }
- },
- {
-  "pk": 8,
-  "model": "userprofile.branchsynonym",
-  "fields": {
-   "name": "Chemical",
-   "branch": 5
-  }
- },
- {
-  "pk": 9,
-  "model": "userprofile.branchsynonym",
-  "fields": {
-   "name": "Chem",
-   "branch": 5
-  }
- },
- {
-  "pk": 10,
-  "model": "userprofile.branchsynonym",
-  "fields": {
-   "name": "Metallurgical",
-   "branch": 6
-  }
- },
- {
-  "pk": 11,
-  "model": "userprofile.branchsynonym",
-  "fields": {
-   "name": "Meta",
-   "branch": 6
-  }
- },
- {
-  "pk": 12,
-  "model": "userprofile.branchsynonym",
-  "fields": {
-   "name": "CSE",
-   "branch": 7
-  }
- },
- {
-  "pk": 13,
-  "model": "userprofile.branchsynonym",
-  "fields": {
-   "name": "Computers",
-   "branch": 7
-  }
- },
- {
-  "pk": 14,
-  "model": "userprofile.branchsynonym",
-  "fields": {
-   "name": "Elec",
-   "branch": 3
-  }
- },
- {
-  "pk": 15,
-  "model": "userprofile.branchsynonym",
-  "fields": {
-   "name": "met",
-   "branch": 6
-  }
- },
- {
-  "pk": 16,
-  "model": "userprofile.branchsynonym",
-  "fields": {
-   "name": "cs",
-   "branch": 7
-  }
- },
- {
-  "pk": 17,
-  "model": "userprofile.branchsynonym",
-  "fields": {
-   "name": "phy",
-   "branch": 8
-  }
- },
- {
-  "pk": 18,
-  "model": "userprofile.branchsynonym",
-  "fields": {
-   "name": "civ",
-   "branch": 1
-  }
- },
- {
-  "pk": 19,
-  "model": "userprofile.branchsynonym",
-  "fields": {
-   "name": "ele",
-   "branch": 3
-  }
- },
- {
-  "pk": 20,
-  "model": "userprofile.branchsynonym",
-  "fields": {
-   "name": "mca",
-   "branch": 9
-  }
- },
- {
-  "pk": 21,
-  "model": "userprofile.branchsynonym",
-  "fields": {
-   "name": "mtech",
-   "branch": 10
-  }
- },
- {
-  "pk": 22,
-  "model": "userprofile.branchsynonym",
-  "fields": {
-   "name": "m.tech",
-   "branch": 10
-  }
- },
- {
-  "pk": 23,
-  "model": "userprofile.branchsynonym",
-  "fields": {
-   "name": "che",
-   "branch": 5
-  }
- },
- {
-  "pk": 24,
-  "model": "userprofile.branchsynonym",
-  "fields": {
-   "name": "ME",
-   "branch": 2
-  }
- },
- {
-  "pk": 25,
-  "model": "userprofile.branchsynonym",
-  "fields": {
-   "name": "CE",
-   "branch": 1
-  }
- },
- {
-  "pk": 26,
-  "model": "userprofile.branchsynonym",
-  "fields": {
-   "name": "MME",
-   "branch": 6
-  }
- },
- {
-  "pk": 28,
-  "model": "userprofile.branchsynonym",
-  "fields": {
-   "name": "MCA",
-   "branch": 9
-  }
- }
+}
 ]

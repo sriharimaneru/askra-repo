@@ -1,29 +1,49 @@
 from django.contrib import admin
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Q
-from userprofile.models import UserProfile, City, Branch, StudentSection, \
-                               Employer, JobDesignation, JobDomain, EmployementDetail, \
+from userprofile.models import UserProfile, Country, State, City, Course, Branch, \
+                               StudentSection, Employer, JobDesignation, JobDomain, EmploymentDetail, \
                                College, Degree, HigherEducationDetail, Department, \
-                               FacultyDesignation, FacultySection, UserTag, HigherEducationBranch, CsvUpload, ErrorRow, \
-                               XlsUpload, CitySynonym, BranchSynonym, ProfileJunkData
+                               FacultyDesignation, FacultySection, UserTag, HigherEducationBranch, \
+                               XlsUpload, ProfileJunkData, Synonym
 from tag.models import Tag
 
+class CountryAdmin(admin.ModelAdmin):
+    list_display = ('name', 'slug')
+    list_filter = ('name', 'slug')
+    search_fields = ('name', 'slug')
+
+class StateAdmin(admin.ModelAdmin):
+    list_display = ('name', 'slug', 'get_country')
+    list_filter = ('name', 'slug', 'country__name')
+    search_fields = ('name', 'slug')
+
 class CityAdmin(admin.ModelAdmin):
-    list_display = ('city', 'state', 'country')
-    list_filter = ('state','country')
-    search_fields = ('city', 'state', 'country')
+    list_display = ('name', 'slug', 'get_state', 'get_country')
+    list_filter = ('name','slug', 'state__name', 'state__country__name')
+    search_fields = ('name', 'slug')
+
+class CourseAdmin(admin.ModelAdmin):
+    list_display = ('name', 'slug')
+    list_filter = ('name', 'slug')
+    search_fields = ('name', 'slug')
     
 class BranchAdmin(admin.ModelAdmin):
-    list_display = ('branch', 'course', 'specialisation')
-    list_filter = ('branch', 'course', 'specialisation')
-    search_fields = ('branch', 'course', 'specialisation')
+    list_display = ('name', 'slug', 'get_course')
+    list_filter = ('name', 'slug', 'course__name')
+    search_fields = ('name', 'slug')
+
+class SynonymAdmin(admin.ModelAdmin):
+    list_display = ('value', 'get_parent_name', 'get_resourcetype_name', 'get_aliastype_name')
+    list_filter = ('value', )
+    search_fields = ('value', )
     
 class StudentSectionInline(admin.TabularInline):
     model = StudentSection
     extra=1
     
-class EmployementDetailInline(admin.TabularInline):
-    model = EmployementDetail
+class EmploymentDetailInline(admin.TabularInline):
+    model = EmploymentDetail
     extra=1        
 
 class HigherEducationDetailInline(admin.TabularInline):
@@ -75,7 +95,7 @@ class BranchListFilter(admin.SimpleListFilter):
     def lookups(self, request, model_admin):
         retval = ()
         for branch in Branch.objects.all():
-            retval += ((branch.get_full_name(), branch.get_full_name()),)
+            retval += ((branch.get_name(), branch.get_name()),)
         return retval
 
     def queryset(self, request, queryset):
@@ -93,33 +113,32 @@ class BranchListFilter(admin.SimpleListFilter):
         else:
             return queryset
 
+#TODO: Create a place filter and add to UserProfileAdmin
+
 class UserProfileAdmin(admin.ModelAdmin):
     fieldsets = [("Basic Details", {"fields" : (('user', 'role', 'profile_status'), ('first_name','last_name', 'gender',), 
-                                                ('email', 'phone_number','date_of_birth', ), ('photo', 'address', 'city',), ('about',),)}),
+                                                ('email', 'phone_number','date_of_birth', ), ('photo', 'address',), ('about',),)}),
                  ("Website Urls", {"fields" : (('linked_url', 'facebook_url',), ('website_url', 'twitter_url'))}),
                  ("Tags", {"fields": ('tags',)})]
     raw_id_fields = ('user',)
-    list_display = ('id', 'first_name', 'last_name', 'get_roll_num', 'get_course', 'get_branch', 'get_year_of_graduation', 'email', 'phone_number', 'city', 'role', 'profile_status', )
-    list_filter = ('role', 'profile_status', 'city', YOGListFilter, BranchListFilter)
+    list_display = ('id', 'first_name', 'last_name', 'get_roll_num', 'get_course', 'get_branch', 'get_year_of_graduation', 'email', 'phone_number', 'get_place', 'role', 'profile_status', )
+    list_filter = ('role', 'profile_status', YOGListFilter, BranchListFilter)
     search_fields = ('first_name', 'last_name', 'email',)
-    inlines = (StudentSectionInline, EmployementDetailInline, HigherEducationDetailInline, FacultySectionInline,
+    inlines = (StudentSectionInline, EmploymentDetailInline, HigherEducationDetailInline, FacultySectionInline,
                ProfileJunkDataInline,)
 
     change_list_template = "admin/change_list_filter_sidebar.html"
 
-class ErrorRowInline(admin.TabularInline):
-    model = ErrorRow
-       
-class CsvUploadAdmin(admin.ModelAdmin):
-    inlines = (ErrorRowInline, )
-    list_display = ('uploaded_file','description')
 
 class XlsUploadAdmin(admin.ModelAdmin):
     list_display = ('uploaded_file','description')
-    
+
 admin.site.register(City, CityAdmin)
-admin.site.register(UserProfile, UserProfileAdmin)
+admin.site.register(State, StateAdmin)    
+admin.site.register(Country, CountryAdmin)
+admin.site.register(Course, CourseAdmin)
 admin.site.register(Branch, BranchAdmin)
+admin.site.register(UserProfile, UserProfileAdmin)
 admin.site.register(Employer)
 admin.site.register(JobDesignation)
 admin.site.register(JobDomain)
@@ -128,7 +147,5 @@ admin.site.register(Degree)
 admin.site.register(Department)
 admin.site.register(FacultyDesignation)
 admin.site.register(HigherEducationBranch)
-admin.site.register(CsvUpload, CsvUploadAdmin)
 admin.site.register(XlsUpload, XlsUploadAdmin)
-admin.site.register(CitySynonym)
-admin.site.register(BranchSynonym)
+admin.site.register(Synonym, SynonymAdmin)

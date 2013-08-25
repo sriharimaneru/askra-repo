@@ -6,7 +6,7 @@ def key(d, key_name):
     return d[key_name]
 
 def multdec(value, num):
-	return value*num/10
+    return value*num/10
     
 def facet_url(value):
     if value.rfind("?") == -1 :

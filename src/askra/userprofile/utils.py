@@ -40,3 +40,14 @@ def isValidYOG(yog):
         return False
     else:
         return True
+    
+def slugify(value):
+    if value is None:
+        return None
+    if type(value) is not str:
+        value = str(value)
+    
+    value = value.strip()
+    # Any non word characters (letters, digits, and underscores) are replaced by '-'
+    value = re.sub(r'\W+','-',value).lower()
+    return value
