@@ -45,7 +45,7 @@ def slugify(value):
     if value is None:
         return None
     if type(value) is not str:
-        value = str(value)
+        value = unicode(value)
     
     value = value.strip()
     # Any non word characters (letters, digits, and underscores) are replaced by '-'

@@ -116,12 +116,12 @@ class BranchListFilter(admin.SimpleListFilter):
 #TODO: Create a place filter and add to UserProfileAdmin
 
 class UserProfileAdmin(admin.ModelAdmin):
-    fieldsets = [("Basic Details", {"fields" : (('user', 'role', 'profile_status'), ('first_name','last_name', 'gender',), 
+    fieldsets = [("Basic Details", {"fields" : (('user', 'role', 'profile_status'), ('first_name','last_name', 'gender', 'slug'), 
                                                 ('email', 'phone_number','date_of_birth', ), ('photo', 'address',), ('about',),)}),
                  ("Website Urls", {"fields" : (('linked_url', 'facebook_url',), ('website_url', 'twitter_url'))}),
                  ("Tags", {"fields": ('tags',)})]
     raw_id_fields = ('user',)
-    list_display = ('id', 'first_name', 'last_name', 'get_roll_num', 'get_course', 'get_branch', 'get_year_of_graduation', 'email', 'phone_number', 'get_place', 'role', 'profile_status', )
+    list_display = ('id', 'first_name', 'last_name', 'slug', 'get_roll_num', 'get_course', 'get_branch', 'get_year_of_graduation', 'email', 'phone_number', 'get_place', 'role', 'profile_status', )
     list_filter = ('role', 'profile_status', YOGListFilter, BranchListFilter)
     search_fields = ('first_name', 'last_name', 'email',)
     inlines = (StudentSectionInline, EmploymentDetailInline, HigherEducationDetailInline, FacultySectionInline,

@@ -8,6 +8,7 @@ import logging
 from userprofile.utils import getYOGFromRoll, isValidEmailId, isValidRollNo, \
     isValidYOG, slugify
 from datetime import datetime
+from django.db import IntegrityError
 
 
 log = logging.getLogger('GROUPIFY')
@@ -182,7 +183,16 @@ class City(models.Model):
     
     def save(self,**kwargs):
         self.slug = slugify(self.name + ' ' + self.get_state() + ' ' + self.get_country())
-        super(City, self).save(**kwargs)
+        isSaved = False
+        ctr = 1
+        
+        while not isSaved:
+            try:
+                super(City, self).save(**kwargs)
+                isSaved = True
+            except IntegrityError: #Duplicate slug
+                self.slug = self.slug + str(ctr)
+                ctr = ctr + 1
 
     class Meta:
         verbose_name_plural = "Cities"    
@@ -432,7 +442,7 @@ class UserProfile(models.Model):
                         self.place_id = countries[0].id
                         self.place_type = COUNTRY
                     else:
-                        synonyms=Synonym.objects.filter(Q(name__iexact=value), Q(resourcetype=RT_CITY)| 
+                        synonyms=Synonym.objects.filter(Q(value__iexact=value), Q(resourcetype=RT_CITY)| 
                                                         Q(resourcetype=RT_STATE)|Q(resourcetype=RT_COUNTRY), 
                                                         Q(aliastype=SYNONYM))
                         if(synonyms):
@@ -446,9 +456,15 @@ class UserProfile(models.Model):
                                 self.place_type = COUNTRY
                                 self.place_id = synonyms[0].parent_id
                             else:
-                                #Creating a new city be default. Admins will then change this data.
-                                newcity = City(name=value)
-                                newcity.save()
+                                slug = slugify(value)
+                                try:
+                                    city = City.objects.get(slug=slug)
+                                    self.place_type = CITY
+                                    self.place_id = city.id
+                                except ObjectDoesNotExist:
+                                    #Creating a new city be default. Admins will then change this data.
+                                    newcity = City(name=value)
+                                    newcity.save()
                         else:
                             #Creating a new city be default. Admins will then change this data.
                             newcity = City(name=value)
@@ -486,12 +502,6 @@ class UserProfile(models.Model):
     get_year_of_graduation.short_description = "Graduation Year"
         
     def save(self,**kwargs):
-        name = self.get_full_name()
-        if name != '':
-            name = name + ' ' + self.id
-        else:
-            name = self.id
-        self.slug = slugify(name)
         
         if self.place_type is None:
             if self.place_id != '' and self.place_id is not None:
@@ -499,10 +509,42 @@ class UserProfile(models.Model):
             
         if self.place_id is None or self.place_id == '':
             if self.place_type is not None:
-                raise ValidationError(('Place type cannot be saved without place id'), code='invalid')
+                raise ValidationError(('Place type cannot be saved without place id'), code='invalid')        
         
-        super(UserProfile, self).save(**kwargs)
-    
+        fullname = self.get_full_name()
+        if fullname == '':
+            fullname = 'default'
+        self.slug = slugify(fullname)
+        isSaved = False
+        ctr = 1
+        while not isSaved:
+            try:
+                super(UserProfile, self).save(**kwargs)
+                isSaved = True
+            except IntegrityError: #Duplicate slug
+                self.slug = self.slug + str(ctr)
+                ctr = ctr + 1
+
+    def get_unique_slug(self):
+        name = self.get_full_name()
+        if name == '':
+            name = 'default'
+        slug = slugify(name)
+        ctr = 0
+
+        while True:
+            userprofiles = UserProfile.objects.filter(slug=slug)
+            if not userprofiles:
+                return slug
+            else:
+                if userprofiles[0] == self:
+                    return slug
+                ctr = ctr + 1
+                slug = slug + '-' + str(ctr)
+
+        return slug
+
+            
     def get_roll_num(self):
         studentsections = StudentSection.objects.filter(userprofile=self) 
         if(studentsections):
@@ -710,25 +752,25 @@ class XlsUpload(models.Model):
                             phone=unicode(int(phonestr)).strip()
                         else:
                             phone=unicode(phonestr).strip()
-                        
-                        if phone!='':
-                            if (mobile!=''):
-                                mobile+=","+phone
-                            else:
-                                mobile=phone
-                    
+
+                    if phone!='':
+                        if mobile!='':
+                            mobile+=","+phone
+                        else:
+                            mobile=phone
+
                     if(colIndex.get('office phone') is not None):
                         offphonestr = s.cell(row,colIndex['office phone']).value
                         if type(offphonestr) is float: #to remove a trailing .0 for float numbers
-                            offphone=","+unicode(int(offphonestr)).strip()
+                            offphone=unicode(int(offphonestr)).strip()
                         else:
-                            offphone=","+unicode(offphonestr).strip()
-                        
-                        if offphone!='':
-                            if (mobile!=''):
-                                mobile+=","+offphone
-                            else:
-                                mobile=offphone
+                            offphone=unicode(offphonestr).strip()
+
+                    if offphone!='':
+                        if mobile!='':
+                            mobile+=","+offphone
+                        else:
+                            mobile=offphone
                     
                     log.debug("Mobile number is ["+mobile+ "]")
 
@@ -795,7 +837,7 @@ class XlsUpload(models.Model):
                         continue
 
                     log.debug("Details - First Name: ["+first_name+"], Last Name: ["+last_name+"], Email: ["+email+"], Branch: ["+branch+"]")
-                    #log.debug("Mobile: ["+mobile+"], City: ["+city+"], Address: ["+address+"], YOG: ["+ unicode(yog) +"], RollNo: ["+ unicode(rollno) + "]")
+#                    log.debug("Mobile: ["+mobile+"], City: ["+city+"], Address: ["+address+"], YOG: ["+ unicode(yog) +"], RollNo: ["+ unicode(rollno) + "]")
 
                     #Part 2: Set the values of UserProfile fields.
                     try:
@@ -828,9 +870,9 @@ class XlsUpload(models.Model):
 
                     except MultipleObjectsReturned:
                         text = "Seems like multiple profiles exist for [" +name+ "], email [" +email+ "]. Ignoring this row."
-                        
-                    user_profile.save()
+                    
                     log.debug(text)
+                    user_profile.save()
                     
                     #Part 3: Set the foreign key fields
                     if(user_profile):
