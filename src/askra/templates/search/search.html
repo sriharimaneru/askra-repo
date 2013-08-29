@@ -140,10 +140,10 @@
                 <div class="result_div">
                     <h2 class="name section-subtitle">{{ result.name }}</h2>
                     {% if result.branch %}
-                        <p class="branch">{{ result.branch }}</p> 
+                        <p class="branch">{{ result.branch.0 }}</p> 
                     {% endif %}  
                     {% if result.year_of_passing %}
-                        <p class="year_of_passing">{{ result.year_of_passing }}</p>    
+                        <p class="year_of_passing">{{ result.year_of_passing.0 }}</p>    
                     {% endif %} 
                     {% if result.city %}
                         <p class="city">{{ result.city }}</p>    
