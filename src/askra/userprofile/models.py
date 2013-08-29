@@ -121,7 +121,13 @@ def get_resource_model_from_value(value):
         return FacultyDesignation
     elif value == RT_TAG:
         return Tag
+
+def get_resource_type_from_string(resourcestring):
+    for key, value in dict(RESOURCE_TYPES).items():
+        if value.lower() == resourcestring.lower():
+            return key
   
+    return None
 #Resources
 class Country(models.Model):
     name = models.CharField(max_length=255)

@@ -33,6 +33,11 @@ class BranchAdmin(admin.ModelAdmin):
     list_filter = ('name', 'slug', 'course__name')
     search_fields = ('name', 'slug')
 
+class EmployerAdmin(admin.ModelAdmin):
+    list_display = ('id', 'name', 'slug')
+    list_filter = ('name', 'slug')
+    search_fields = ('id', 'name', 'slug')
+
 class SynonymAdmin(admin.ModelAdmin):
     list_display = ('value', 'get_parent_name', 'get_resourcetype_name', 'get_aliastype_name')
     list_filter = ('value', )
@@ -139,7 +144,7 @@ admin.site.register(Country, CountryAdmin)
 admin.site.register(Course, CourseAdmin)
 admin.site.register(Branch, BranchAdmin)
 admin.site.register(UserProfile, UserProfileAdmin)
-admin.site.register(Employer)
+admin.site.register(Employer, EmployerAdmin)
 admin.site.register(JobDesignation)
 admin.site.register(JobDomain)
 admin.site.register(College)

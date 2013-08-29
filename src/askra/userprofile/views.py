@@ -1,8 +1,10 @@
 # Create your views here.
 from django.shortcuts import render_to_response
 from django.template import RequestContext
-from userprofile.models import UserProfile, StudentSection, HigherEducationDetail, \
-    EmploymentDetail, FacultySection 
+from userprofile.models import UserProfile, Synonym, StudentSection, HigherEducationDetail, \
+    EmploymentDetail, FacultySection, Employer, City , State, Country, HigherEducationBranch, \
+    College, JobDesignation, JobDomain , RT_EMPLOYER, RT_CITY, \
+    get_resource_model_from_value, get_resource_type_from_string
 #from tag.models import Tag, GENERIC 
 from userprofile.forms import EditUserProfileForm, ProfileSearchBasicForm
 from django.http import HttpResponseRedirect, Http404
@@ -447,6 +449,33 @@ def ajaxresponse(request):
 def ajaxtest(request):
 
     return render_to_response('ajaxtest.html', {'dummy' : 123})
+
+
+class ResourceListAjaxView(View):
+    def get(self, request):
+        results = self.get_resultset(request.GET['r'], request.GET['q'])
+        return HttpResponse(json.dumps(results))
+    
+    def get_resultset(self, resource, query):
+        resourcetype = get_resource_type_from_string(resource)
+        if resourcetype is None:
+            return []
+        
+        model = get_resource_model_from_value(resourcetype) 
+        
+        #1. Direct objects
+        objects = model.objects.filter(name__icontains=query)
+        results = [obj.name for obj in objects] 
+        
+        #2. Synonyms
+        synonyms = Synonym.objects.filter(value__istartswith=query, resourcetype=resourcetype)
+        parent_ids = [synonym.parent_id for synonym in synonyms]
+        synonym_objects = model.objects.filter(id__in=parent_ids)
+        results = results + [synonym.name for synonym in synonym_objects]
+        results = list(set(results)) #To remove duplicates
+        
+        return results
+
         
 #def show_profile(request, profile_id):
 #    if not profile_id:
