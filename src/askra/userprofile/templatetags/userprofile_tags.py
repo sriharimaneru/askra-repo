@@ -9,6 +9,7 @@ def multdec(value, num):
 	return value*num/10
     
 def facet_url(value):
+    print value
     if value.rfind("?") == -1 :
         return value + "?"
     else:

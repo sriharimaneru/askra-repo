@@ -515,7 +515,7 @@ div#search p, div#search label{
 .scroll-pane
 {
 	width: 100%;
-	height: 200px;
+	height: 100px;
 	overflow-y: auto;
 	border: 1px solid;
 }
@@ -561,6 +561,11 @@ div#search-content #id_name{
 	font-size: 16px;
 }
 
+#search_submit{
+	padding-top: 50px;
+}	
+
+
 input.search_submit{
 	width: 150px;
 	height: 40px;
@@ -599,12 +604,15 @@ div#search-content p.search_submit{
 	padding-left: 25px;
 }
 
-#name_div{
+#q_div{
+	padding-top: 50px;
 	padding-left: 60px;
+	padding-bottom: 50px;
 }
 
-div#year_div{
-	padding-right: 20px;
+#q_div input{
+	width: 700px;
+	height: 42px;
 }
 
 div#facet-list a{

@@ -1,7 +1,6 @@
 # Django settings for askra project.
 import os
 
-#django 1.4, the settings file is moved inside the app. 
 PROJECT_APP_DIR = os.path.dirname(__file__)
 PROJECT_DIR = os.path.dirname(PROJECT_APP_DIR)
 
@@ -9,7 +8,8 @@ DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
-    # ('Your Name', 'your_email@example.com'),
+     ('Srihari', 'srihari@groupify.in'),
+     ('Kalyan', 'kalyan@groupify.in'),
 )
 
 MANAGERS = ADMINS
@@ -147,16 +147,17 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     #Grappelli admin interface
     'grappelli',
-    # Uncomment the next line to enable the admin:
     'django.contrib.admin',
-    # Uncomment the next line to enable admin documentation:
-    # 'django.contrib.admindocs',
-    'tag',
-    'userprofile',
+    #### ----- Below are third party apps ------ ###
     'south',
     'haystack',
     'registration',
     'social_auth',
+    'gunicorn',
+    #### ----- Below are our party apps ------ ###
+    'tag',
+    'userprofile',
+    'search',
 )
 
 # A sample logging configuration. The only tangible logging
@@ -227,9 +228,13 @@ LOGGING = {
 
 
 HAYSTACK_SEARCH_RESULTS_PER_PAGE = 12
-HAYSTACK_SITECONF = 'askra.search_sites'
-HAYSTACK_SEARCH_ENGINE = 'solr'
-HAYSTACK_SOLR_URL = 'http://127.0.0.1:8983/solr'
+
+HAYSTACK_CONNECTIONS = {
+    'default': {
+        'ENGINE': 'haystack.backends.solr_backend.SolrEngine',
+        'URL': 'http://127.0.0.1:8983/solr'
+    },
+}
 
 
 SOCIAL_AUTH_CREATE_USERS          = True

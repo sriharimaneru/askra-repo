@@ -1,6 +1,5 @@
 from django import forms
-from django.forms.formsets import formset_factory
-from userprofile.models import *
+from models import *
 from django.forms import widgets
 from django.template.loader import get_template
 from django.template import Context
@@ -80,11 +79,5 @@ class EditProfileEmploymentForm(forms.Form):
 class ProfileBulkUploadForm(forms.Form):
     uploaded_file = forms.FileField(label='Select a csv file', help_text='Maximum 1000 rows')
     
-class ProfileSearchBasicForm(forms.Form):
-    name = forms.CharField(max_length=100, required=False)
-    branches_list = [(branch.branch, branch.branch) for branch in Branch.objects.all() if branch.branch]
-    branches_list = [("", "All")] + sorted(branches_list, key=lambda x: x[1])
-    branch = forms.ChoiceField(choices = branches_list, required=False)
-    year_of_passing = forms.ChoiceField(choices = [("", "All")] + [(x,x) for x in range(1964, 2009)] + [("2011", "2011"), ("2013", "2013"), ("2014", "2014"), ("2015", "2015"), ("2016", "2016")], required=False)
 
 

@@ -100,7 +100,7 @@ class UserProfileAdmin(admin.ModelAdmin):
                  ("Tags", {"fields": ('tags',)})]
     raw_id_fields = ('user',)
     list_display = ('id', 'first_name', 'last_name', 'get_roll_num', 'get_course', 'get_branch', 'get_year_of_graduation', 'email', 'phone_number', 'city', 'role', 'profile_status', )
-    list_filter = ('role', 'profile_status', 'city', YOGListFilter, BranchListFilter)
+    list_filter = ('role', 'profile_status', 'city', )
     search_fields = ('first_name', 'last_name', 'email',)
     inlines = (StudentSectionInline, EmployementDetailInline, HigherEducationDetailInline, FacultySectionInline,
                ProfileJunkDataInline,)

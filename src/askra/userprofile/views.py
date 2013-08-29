@@ -1,22 +1,16 @@
-# Create your views here.
-from django.shortcuts import render_to_response, redirect, render, get_object_or_404
+from django.shortcuts import render_to_response, render
 from django.template import RequestContext
 from userprofile.models import *
 from userprofile.forms import *
 from django.http import HttpResponseRedirect, Http404
 from django.forms.util import ErrorList
-from django.core.exceptions import ObjectDoesNotExist
-from haystack.query import SearchQuerySet
 from models import *
-from forms import *
-from django.http import HttpResponse
+from forms import * 
 import json
 from django.forms.models import modelformset_factory
-from django.views.generic.base import TemplateView, View
+from django.views.generic.base import TemplateView
 
-#Number of results loaded on search page initially. Same number of results are loaded further
-# with each AJAX call after that.
-INITIAL_RESULTS_COUNT = 40
+
 
 class ShowProfileView(TemplateView):
     def get_template_names(self):
@@ -231,162 +225,6 @@ class ProfileBulkUploadView(TemplateView):
             errors.append("Bulk upload successful")
         return render(request, "profile_bulk_upload.html", {'form':form, })
 
-
-class BaseSearchView():
-    def get_results(self, name, branch, year, offset, branch_facet, year_facet, city_facet):
-        if year_facet:
-            year_facet = [int(x) for x in year_facet.split(",")]
-        
-        sqs = SearchQuerySet().facet('branch')
-        sqs = sqs.facet('year_of_passing')
-        sqs = sqs.facet('city')
-    
-        if name:
-            sqs = sqs.auto_query(name)
-        if branch:
-            sqs = sqs.filter(branch_exact = branch)
-        if year:
-            sqs = sqs.filter(year_of_passing_exact = year)
-        if branch_facet:
-            sqs = sqs.filter(branch_exact = branch_facet)
-        if year_facet:
-            sqs = sqs.filter(year_of_passing_exact__in = year_facet)
-        if city_facet:
-            sqs = sqs.filter(city_exact = city_facet)
-        
-        offsetvalue = int(offset)
-        results = sqs.order_by('name')[offsetvalue:offsetvalue+INITIAL_RESULTS_COUNT]
-        resultcount = len(results)
-        
-        return results, resultcount
-    
-class SearchView(BaseSearchView, TemplateView):
-    template_name="search/search.html"
-    
-    def get_context_data(self, **kwargs):
-        context = super(SearchView, self).get_context_data(**kwargs)
-        context['request'] = self.request
-        
-        name = self.request.GET.get("name", '')
-        branch = self.request.GET.get("branch", '')
-        year = self.request.GET.get("year_of_passing", '')
-        
-        branch_facet = self.request.GET.get("branch_facet", '') 
-        year_facet = self.request.GET.get("year_of_passing_facet", '')
-        
-#        results = self.get_results(name, branch, year, offset, branch_facet, year_facet)
-        if year_facet:
-            year_facet = [int(x) for x in year_facet.split(",")] 
-        city_facet = self.request.GET.get("city_facet", "")   
-               
-        sqs = SearchQuerySet().facet('branch')
-        sqs = sqs.facet('year_of_passing')
-        sqs = sqs.facet('city')
-        
-                
-        if name or branch or year:
-            context['form'] = ProfileSearchBasicForm(self.request.GET)
-            if name:
-                sqs = sqs.auto_query(name)
-                context['name_selected'] = name
-            if branch:
-                sqs = sqs.filter(branch_exact = branch)
-                context['branch_selected'] = branch
-            if year:
-                sqs = sqs.filter(year_of_passing_exact = year)
-                context['year_selected'] = year
-        else:
-            context['form'] = ProfileSearchBasicForm()
-        
-        context['facets'] = sqs.facet_counts()
-        
-            
-        ##Horrible hardcoding - need to tweak it - By Srihari
-        #To compute the facet counts
-        
-        if branch_facet:
-            temp = sqs.filter(branch_exact = branch_facet)
-            context['facets']['fields']['year_of_passing'] = temp.filter(city_exact = city_facet).facet_counts()['fields']['year_of_passing'] if city_facet else temp.facet_counts()['fields']['year_of_passing'] 
-        elif city_facet:
-            context['facets']['fields']['year_of_passing'] = sqs.filter(city_exact = city_facet).facet_counts()['fields']['year_of_passing']
-                
-        if year_facet:
-            temp = sqs.filter(year_of_passing_exact__in = year_facet)        
-            context['facets']['fields']['branch'] = temp.filter(city_exact = city_facet).facet_counts()['fields']['branch'] if city_facet else temp.facet_counts()['fields']['branch'] 
-        elif city_facet:
-            context['facets']['fields']['branch'] = sqs.filter(city_exact = city_facet).facet_counts()['fields']['branch']
-            
-        if year_facet:
-            temp = sqs.filter(year_of_passing_exact__in = year_facet)        
-            context['facets']['fields']['city'] = temp.filter(branch_exact = branch_facet).facet_counts()['fields']['city'] if branch_facet else temp.facet_counts()['fields']['city'] 
-        elif branch_facet:
-            context['facets']['fields']['city'] = sqs.filter(branch_exact = branch_facet).facet_counts()['fields']['city']
-               
-        if branch_facet:
-            sqs = sqs.filter(branch_exact = branch_facet)
-            context['branch_facet_selected'] = branch_facet
-        else:
-            context['branch_facet_selected'] = ''
-                
-        if year_facet:
-            sqs = sqs.filter(year_of_passing_exact__in = year_facet)
-            year_facet_string = None
-            for year in year_facet:
-                if not year_facet_string:
-                    year_facet_string = str(year)
-                else:
-                    year_facet_string = year_facet_string + "," + str(year)
-            context['year_facets_selected'] = year_facet_string
-        else:
-            context['year_facets_selected'] = ''
-            
-        if city_facet:
-            sqs = sqs.filter(city_exact = city_facet)
-            context['city_facet_selected'] = city_facet
-        else:
-            context['city_facet_selected'] = '' 
-        
-        context['facets']['fields']['year_of_passing'] = self.facet_sorting(context['facets']['fields']['year_of_passing'])
-        context['facets']['fields']['city'] = self.facet_sorting(context['facets']['fields']['city'])
-        context['facets']['fields']['branch'] = self.facet_sorting(context['facets']['fields']['branch'])
-        
-        results = sqs.order_by('name')[0:INITIAL_RESULTS_COUNT]
-        resultcount = sqs.count()
-        context['resultcount'] = resultcount
-        context['initialoffset'] = INITIAL_RESULTS_COUNT
-        context['results'] = results
-        
-        return context
-    
-    #Sort with in available options and then with in greyed out options
-    def facet_sorting(self, facets):
-        return sorted([x for x in facets if x[1]], key=lambda x: x[0]) + sorted([x for x in facets if not x[1]], key=lambda x: x[0])
-    
-
-class SearchAjaxView(BaseSearchView, View):
-    def dispatch(self, request):
-        response = {}
-        if request.method=='GET':
-            offset =  int(request.GET.get('offset',0))
-            results, resultcount = self.get_results(request.GET.get('name',''), request.GET.get('branch',''), request.GET.get('year',''), offset,
-                                       request.GET.get('branch_facet',''), request.GET.get('year_facet',''), request.GET.get('city_facet',''))
-            response['success'] = 'true'
-            resultdata = []
-            if results:
-                for result in results:
-                    resultobj = {}
-                    resultobj['profile_id'] = result.profile_id
-                    resultobj['name'] = result.name
-                    resultobj['branch'] = result.branch
-                    resultobj['year_of_passing'] = result.year_of_passing
-                    resultobj['city'] = result.city
-                    resultdata.append(resultobj)
-                
-            response['data'] = resultdata
-            response['latestoffset'] = offset + resultcount;
-            
-        return HttpResponse(json.dumps(response))
-    
 
 def reg_step_2(request,x):
     user_profiles = UserProfile.objects.filter(role=ALUMNI)
@@ -689,106 +527,8 @@ def edit_profile_employment(request, profile_id):
 #    
 #    return render(request, "search/search.html", context)
 
-def getsearchresults(request):
-    name = request.GET.get("name", '')
-    branch = request.GET.get("branch", '')
-    year = request.GET.get("year_of_passing", '')
-    offset = request.GET.get("offset", '0')
-    branch_facet = request.GET.get("branch_facet", '') 
-    year_facet = request.GET.get("year_of_passing_facet", '')    
 
-    offsetvalue = int(offset)
-           
-    sqs = SearchQuerySet().facet('branch')
-    sqs = sqs.facet('year_of_passing')
-        
-    if name or branch or year:
-        sqs = sqs.auto_query(name + branch + year)
 
-    results = sqs.auto_query(branch_facet + year_facet).order_by('name')[offsetvalue:offsetvalue+20]
-    print len(results)
-
-    return results
-
-def ajaxresponse(request):
-    print "Incoming query to ajax = [" +request.get_full_path()+ "]"
-    #results = getsearchresults(request)
-
-    context = {}   
-    context['request'] = request
-        
-    name = request.GET.get("name", '')
-    branch = request.GET.get("branch", '')
-    year = request.GET.get("year_of_passing", '')
-    offset = request.GET.get("offset", '0')
-    
-    branch_facet = request.GET.get("branch_facet", '') 
-    year_facet = request.GET.get("year_of_passing_facet", '')    
-           
-    sqs = SearchQuerySet().facet('branch')
-    sqs = sqs.facet('year_of_passing')
-        
-    if name or branch or year:
-        context['form'] = ProfileSearchBasicForm(request.GET)
-        sqs = sqs.auto_query(name + branch + year)
-    else:
-        context['form'] = ProfileSearchBasicForm()
-    
-    context['facets'] = sqs.facet_counts()
-        
-    if branch_facet:
-        context['facets']['fields']['year_of_passing'] = sqs.auto_query(branch_facet).facet_counts()['fields']['year_of_passing']
-        context['branch_facet_selected'] = branch_facet
-    else:
-        context['branch_facet_selected'] = ''
-            
-    if year_facet:
-        context['facets']['fields']['branch'] = sqs.auto_query(year_facet).facet_counts()['fields']['branch']
-        context['year_facet_selected'] = year_facet
-    else:
-        context['year_facet_selected'] = ''
-
-    offsetvalue=0
-    if(offset!=''):
-        offsetvalue = int(offset)
-    results = sqs.auto_query(branch_facet + year_facet).order_by('name')
-    context['resultcount'] = results.count()
-    results = results[offsetvalue:offsetvalue+20]
-
-    querystring=""
-    if(name!=''):
-        querystring+=('&name='+name)
-    if(branch!=''):
-        querystring+=('&branch='+branch)
-    if(year!=''):
-        querystring+=('&year_of_passing='+year)
-
-    #querystring+=('&offset='+str(offsetvalue+20))
-    
-    if(branch_facet!=''):
-        querystring+=('&branch_facet='+branch_facet)
-    if(year_facet!=''):
-        querystring+=('&year_facet='+year_facet)
-
-    print "Outgoing query string from ajax = [" +querystring+ "]"
-    context['querystring'] = querystring
-
-    html=""
-    if not results:
-        html+="<p>Sorry, no results found.</p>\n"
-    else:
-        for result in results:
-            html+="<div class=\"result_div\">\n"
-            html+="<h2 class=\"name section-subtitle\">" +result.name+ "</h2>\n"
-            if(result.branch):
-                html+="<p class=\"branch\">" +result.branch+ "</p>\n"
-            if(result.year_of_passing):
-                html+="<p class=\"year_of_passing\">" +str(result.year_of_passing)+ "</p>\n"
-            if(result.branch):
-                html+="<p class=\"city\">" +result.branch+ "</p>\n"
-            html+="</div>\n"
-    #print html
-    return HttpResponse(html)
 
 def ajaxtest(request):
 
