@@ -1,10 +1,12 @@
 import json
 import collections
+from pysolr import Solr
 
 from django.http import HttpResponse, Http404
 from django.views.generic.base import TemplateView, View
 from haystack.query import SearchQuerySet, EmptySearchQuerySet
 from haystack.views import SearchView
+from django.conf import settings
 
 from .forms import ProfileSearchBasicForm, CustomSearchForm
 from django.core.paginator import Paginator, InvalidPage
@@ -22,7 +24,7 @@ class FacetDetails():
     """
     facet_id = ""
     name = ""
-    options_selected = []
+    options_selected = ""
     facet_options = []
 
     def __init__(self, facet_id="", name="", options_selected=[], facet_options=[]):
@@ -51,16 +53,16 @@ def load_facet_detail_map():
 
 
 class ProfileSearchView(SearchView):
-    facet_detail_map = load_facet_detail_map()
-    form_results = EmptySearchQuerySet()
 
     def __init__(self, *args, **kwargs):
         super(ProfileSearchView, self).__init__(*args, **kwargs)
+        self.facet_detail_map = load_facet_detail_map()
+        self.resultcount = 0
 
     def extra_context(self):
         extra = super(ProfileSearchView, self).extra_context()
         extra['results'] = self.results
-        extra['resultcount'] = self.results.count()
+        extra['resultcount'] = self.resultcount
         extra['facet_detail_map'] = self.facet_detail_map
         extra['request'] = self.request
 
@@ -81,58 +83,60 @@ class ProfileSearchView(SearchView):
         self.form = self.build_form()
         self.query = self.get_query()
         self.update_selected_facets()
-        self.form_results = self.get_form_results()
         self.results = self.get_results()
-        self.update_facet_counts()
 
         return self.create_response()
 
     def update_selected_facets(self):
         for facet_id in self.facet_detail_map.keys():
             facet_options_selected = self.request.GET.get(facet_id, '')
+            print "-----------" + facet_options_selected
             if facet_options_selected:
-                self.facet_detail_map[facet_id].options_selected = facet_options_selected.split(",")
+                self.facet_detail_map[facet_id].options_selected = " OR ".join(facet_options_selected.split(","))
 
-    def get_form_results(self):
+    def build_args(self):
+        """Build the args in solr query - facets applied, counts
+        Uses tagging and filtering to correct the facet counts.
         """
-        Fetches the results via the form.
-        Returns a complete if there's no query to search with.
+        retval = {"fq": [],
+                  "facet": "on",
+                  "facet.field": [],
+                  "rows": 100,
+                  }
+        for facet_detail in self.facet_detail_map.values():
+            retval["facet.field"].append("{!ex=%s}%s" %
+                                         (facet_detail.facet_id, facet_detail.facet_id))
+            if facet_detail.options_selected:
+                retval["fq"].append("{!tag=%s}%s:%s" %
+                                    (facet_detail.facet_id, facet_detail.facet_id,
+                                     facet_detail.options_selected))
+        print retval
+        return retval
+
+    def update_facet_counts(self, facet_counts_map):
+
         """
-        return self.form.search()
+        output of pysolr.Solr.search() which is input for this function is
+        'facet_fields': {'branch': ['Chemical', 1, 'ECE', 1]}
+
+        We need it as
+        'branch': ['Chemical', 1, 'ECE', 1]}
+        """
+        for facet_id in facet_counts_map:
+            l = facet_counts_map[facet_id]
+            self.facet_detail_map[facet_id].facet_options = \
+                [l[i:i+2] for i in range(0, len(l), 2)]
 
     def get_results(self):
         """
         Applies all the selected facets on the form_results.
         """
-        return self.apply_facets()
-
-    def apply_facets(self, facet_to_exclude=None):
-        temp_sqs = self.form_results
-        for facet_detail in self.facet_detail_map.values():
-            if facet_detail.options_selected:
-                if facet_to_exclude and facet_detail.facet_id == facet_to_exclude:
-                    continue
-                temp_sqs = temp_sqs.filter(
-                    **{facet_detail.facet_id + "__exact__in": facet_detail.options_selected})
-        return temp_sqs
-
-    def update_facet_counts(self):
-        """
-        When drilling down on a particular facet, its facet count should not be changed
-        """
-        for facet_id in self.facet_detail_map.keys():
-            self.results = self.results.facet(facet_id)
-
-        facet_counts = self.results.facet_counts()
-
-        print facet_counts
-
-        for facet_id in self.facet_detail_map.keys():
-            self.facet_detail_map[facet_id].facet_options = facet_counts['fields'][facet_id]
-            if self.facet_detail_map[facet_id].options_selected:
-                temp_sqs = self.apply_facets(facet_to_exclude=facet_id).facet(facet_id)
-                self.facet_detail_map[
-                    facet_id].facet_options = temp_sqs.facet_counts()['fields'][facet_id]
+        query = self.query if self.query else "*"
+        complete_results = Solr(settings.HAYSTACK_CONNECTIONS['default']['URL']). \
+                                    search(query, **self.build_args())
+        self.update_facet_counts(complete_results.facets["facet_fields"])
+        self.resultcount = complete_results.hits
+        return complete_results.docs
 
 
 def getsearchresults(request):

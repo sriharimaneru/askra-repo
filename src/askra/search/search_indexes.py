@@ -1,8 +1,8 @@
 from haystack.indexes import SearchIndex, Indexable
-from userprofile.models import UserProfile, StudentSection
-from haystack.fields import FacetIntegerField, FacetMultiValueField, \
-    FacetCharField, IntegerField, CharField
-
+from userprofile.models import UserProfile, SYNONYM, Synonym, GROUP,\
+    RT_COLLEGE
+from haystack.fields import FacetMultiValueField, FacetCharField, \
+    IntegerField, CharField
 
 class UserProfileIndex(SearchIndex, Indexable):
     profile_id = IntegerField(indexed=False, model_attr="id")  # used for preparing url
@@ -16,6 +16,8 @@ class UserProfileIndex(SearchIndex, Indexable):
     country = FacetCharField()
     higher_education_degree = FacetMultiValueField()
     higher_education_college = FacetMultiValueField()
+    higher_education_college_synonyms = FacetMultiValueField()
+    higher_education_college_groups = FacetMultiValueField()
     company = FacetMultiValueField()
     tags = FacetMultiValueField()
 
@@ -37,6 +39,24 @@ class UserProfileIndex(SearchIndex, Indexable):
 
     def prepare_higher_education_degree(self, object):
         return [he.degree.name for he in object.highereducationdetail_set.all() if he.degree]
+
+    def prepare_higher_education_college_synonyms(self, object):
+        retval = []
+        for he in object.highereducationdetail_set.all():
+            if he.college:
+                retval.extend([hes.value for hes in Synonym.objects.filter(parent_id=he.college.id,
+                                                                          resourcetype=RT_COLLEGE,
+                                                                          aliastype=SYNONYM)])
+        return retval
+
+    def prepare_higher_education_college_groups(self, object):
+        retval = []
+        for he in object.highereducationdetail_set.all():
+            if he.college:
+                retval.extend([hes.value for hes in Synonym.objects.filter(parent_id=he.college.id,
+                                                                          resourcetype=RT_COLLEGE,
+                                                                          aliastype=GROUP)])
+        return retval
 
     def prepare_higher_education_college(self, object):
         return [he.college.name for he in object.highereducationdetail_set.all() if he.college]
@@ -61,9 +81,14 @@ class UserProfileIndex(SearchIndex, Indexable):
         searchable_text.extend([" ".join([str(x) for x in prepared_data['year_of_graduation']])])
         searchable_text.extend([" ".join(prepared_data['higher_education_degree'])])
         searchable_text.extend([" ".join(prepared_data['higher_education_college'])])
+        searchable_text.extend([" ".join(prepared_data['higher_education_degree'])])
+        searchable_text.extend([" ".join(prepared_data['higher_education_college_synonyms'])])
+        searchable_text.extend([" ".join(prepared_data['higher_education_college_groups'])])
+        searchable_text.extend([" ".join(prepared_data['higher_education_college'])])
         searchable_text.extend([" ".join(prepared_data['company'])])
         searchable_text.extend([" ".join(prepared_data['tags'])])
 
         prepared_data['text'] = "\n".join([x for x in searchable_text if x is not None])
+        print obj.id
 
         return prepared_data
