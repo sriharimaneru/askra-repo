@@ -254,6 +254,29 @@
 	    	$(this).hide();
 	    });
 
+	    $('.autofillme').each(function() {
+	    	var $this = $(this);
+		    $this.typeahead({
+		    	items: 5,
+		    	source: function(query, process)
+		    	{
+		    		$.ajax({
+		    			url: '/profile/resourcelist',
+		    			data: {'q':query, 'r': $this.data("type")}, 
+		    			success: function(result)
+		    			{
+		    				return process(JSON.parse(result));
+		    			}
+		    		});
+		    	},
+		    	matcher: function(item)
+		    	{
+		    		//Trust the results from the server. Don't do any further matching.
+		    		return true;
+		    	}
+		    });
+	    });
+
 	});
 </script>
 {% endblock %}
@@ -304,7 +327,7 @@
 						</td>
 						<td>
 							<span>City</span>
-							{{ userprofileform.city }}
+							<input type="text" id="city" class="autofillme" data-type="city" autocomplete="off"/>
 						</td>
 					</tr>
 					<tr>
@@ -392,7 +415,7 @@
 						<ul>
 							<li>
 								<span>Employer</span>
-								{{ empform.employer }}
+								<input type="text" class="employer autofillme" id="employer" data-type="employer" autocomplete="off">
 							</li>
 							<li>
 								<span>Designation</span>

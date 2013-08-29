@@ -1,9 +1,8 @@
-from django.conf.urls import patterns, include, url
+from django.conf.urls import patterns, url
 
 # Uncomment the next two lines to enable the admin:
 from django.contrib import admin
-from userprofile.views import ShowProfileView, EditProfileView,\
-    ProfileBulkUploadView
+from userprofile.views import ShowProfileView, EditProfileView, ResourceListAjaxView
 admin.autodiscover()
 
 urlpatterns = patterns('',
@@ -16,5 +15,6 @@ urlpatterns = patterns('',
 #    url(r'^edit_employment(/?)(?P<profile_id>.*)$', 'userprofile.views.edit_profile_employment', name='editprofileemployment'),
 #    url(r'^reg-step-2(/?)$', 'userprofile.views.reg_step_2', name='regstep2'),
 #    url(r'^reg-step-3(/?)$', 'userprofile.views.reg_step_3', name='regstep3'),
-    url(r'^bulk_upload(/?)$', ProfileBulkUploadView.as_view(), name='profilebulkupload'),
+#    url(r'^bulk_upload(/?)$', ProfileBulkUploadView.as_view(), name='profilebulkupload'),
+    url(r'^resourcelist/?$', ResourceListAjaxView.as_view(), name='resourcelist'),
 )

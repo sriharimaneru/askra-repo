@@ -1,0 +1,412 @@
+/************* START GENERIC **************/
+body{
+	font-family: 'Open Sans',Helvetica,Arial,sans-serif;
+	font-weight: 300;
+	font-size: 16px;
+	line-height: 25px;
+	color: white;
+	text-shadow: 0 2px 2px rgba(0, 0, 0, 0.25);
+  	margin:0;
+  	padding:0;
+  	width:100%;
+ }
+
+p, h1, h2, h3, h4{
+	margin: 0px;
+}
+
+.section-title, .section-subtitle {
+	line-height: 40px;
+	font-weight: 300;
+}
+
+div#about p, div#about h1, div#about h2, div#about h3, div#about h4, div#about .section-title, div#about .section-subtitle{
+	font-weight: 400;
+}
+
+div#communication p, div#communication h1, div#communication h2, div#communication h3, div#communication h4, div#communication .section-title, div#communication .section-subtitle {
+	font-weight: 400;
+}
+
+.section-title {
+	font-size: 32px;
+	padding-top: 35px;
+}
+
+.section-subtitle {
+	color: rgba(255, 255, 255, 0.4);
+	font-size: 28px;
+	padding-top: 20px;
+	padding-bottom: 20px;
+}
+
+.feature-title {
+	color: #6B9BB2;	
+	font-size: 24px;
+	padding-bottom: 10px;
+}
+
+.section-content {
+	position: relative;
+	max-width: 964px;
+	margin: auto;
+	padding: 0 20px;
+}
+
+.continuation-text {
+	font-size: 22px;
+	line-height: 35px;
+	padding-top: 20px;
+	padding-bottom: 30px;
+}
+
+.continuation-text span{
+	color: #6B9BB2;
+}
+
+.cB{
+	clear: both;
+}
+
+.left{
+	float: left;
+}
+
+.db-footer-note{
+	font-size: 20px;
+	line-height: 38px;
+}
+/************* END GENERIC **************/
+
+
+/************* START HOME SECTION **************/
+
+#header{
+	height: 100px;
+	background-image: url(../img/bg_header.png);
+}
+
+
+#logo {
+	padding-top: 25px;
+	color: white;
+	color: #FFEFEF; 
+	font: 40px 'LeagueGothicRegular';
+	text-shadow: 0 2px 4px rgba(0, 0, 0, 0.75);
+}
+
+#sign-in {
+	position: absolute;
+	top: 38px;
+	right: 62px;
+	height: 24px;
+	color: #E57300;
+	font-size: 14px;
+	text-shadow: 0 2px 4px rgba(0, 0, 0, 0.75);
+	text-transform: uppercase;
+	z-index:10;
+}
+
+#sign-in-note {
+	position: absolute;
+	top: 45px;
+	right: 27px;
+	height: 24px;
+	font-size: 11px;
+	padding-top: 10px;
+}
+
+div#home-section {
+	background-image: url(../img/bg_01.jpg);
+	margin: 0px;
+	text-shadow: 0 1px 3px rgba(0, 0, 0, 0.75);
+}
+
+div.home-section-content {
+	padding-top: 52px;
+	padding-bottom: 65px;
+}
+
+.home-section-title {
+	font-size: 36px;
+	line-height: 42px;
+	font-weight: 300;
+}
+
+.home-section-description {
+	font-size: 22px;
+	line-height: 34px;
+	max-width: 550px;
+	padding-top: 53px;
+}
+
+#home-intro-links {
+	background-image: url(../img/intro_nav_bg.png);	
+	width: 100%;
+}
+
+
+img#stakeholder-infographic {
+	position: absolute;
+	top: 46px;
+	right: 0px;
+	width: 354px;
+}
+
+.stake-holder{
+	width: 200px;
+	text-align: center;
+	padding-right: 40px;
+}
+
+.stake-holder-image{
+	padding-top: 10px;
+}
+
+.stake-holder-title{
+	font-size: 21px;
+}
+
+.stake-holder-number{
+	font-size: 13px;
+}
+
+.stake-holder-description{
+	font-size: 13px;
+	padding-top: 15px;
+	padding-bottom: 15px;
+	line-height: 20px;
+	font-weight: 400;
+}
+
+/************* END HOME SECTION **************/
+
+/************* START USECASES **************/
+
+div#usecases {
+	background-image: url(../img/paper_bg_dark.gif);
+}
+
+/************* END USECASES **************/
+
+/************* START DATABASE BUILDING **************/
+
+
+div#data-building {
+	background-image: url(../img/paper_bg.gif);	
+}
+
+#data-building-icon-list{
+	width: 450px;
+}
+
+#data-building-icon-list .icon-div{
+	margin-right: 70px;
+	margin-bottom: 50px;
+	width: 150px;
+	height: 150px;
+}
+
+#excel-icon{
+	background-image: url(../img/excel.png);
+}
+
+#excel-icon:hover {
+	background-image: url(../img/book_new-1.png);	
+}
+
+#collabative-icon{
+	background-image: url(../img/collaborative.png);
+}
+
+#collabative-icon:hover {
+	background-image: url(../img/book_new-1.png);	
+}
+
+#admin-data-icon{
+	background-image: url(../img/admin-data.png);
+}
+
+#admin-data-icon:hover {
+	background-image: url(../img/book_new-1.png);	
+}
+
+#social-media-icon{
+	background-image: url(../img/social.png);
+}
+
+#social-media-icon:hover {
+	background-image: url(../img/book_new-1.png);	
+}
+
+
+
+.data-building-icon-description{
+	width: 450px;
+	padding-left: 20px;
+	padding-top: 20px;
+}
+
+.data-building-icon-description li{
+	padding-bottom: 15px;
+}
+
+#facebook-band {
+	width: 100%;
+}
+/************* END DATABASE BUILDING **************/
+
+
+/************* START COMMUNICATION **************/
+
+div#communication {
+	background: #fff;
+	text-shadow: none;
+}
+
+div#communication .section-title,div#communication p, div#communication .communication-section-subtitle{
+	color: #4D4D4D;
+}
+
+.communication-section-subtitle{
+	padding-bottom: 0px;
+}
+
+div#communication p, div#data-building p{
+	padding-bottom: 15px;
+}
+
+div#communication .section-title{
+	color: #6B9BB2;
+}
+
+.communication-feature{
+	width: 450px;
+	padding-right: 20px;
+	padding-bottom: 10px;
+}
+
+div#data-building .communication-feature {
+	padding-bottom: 10px;
+}
+
+.communication-feature h2.section-subtitle{
+	color: #6B9BB2;	
+}
+
+.communication-feature div h2.section-subtitle{
+	display: inline;
+}
+
+.communication-feature h2.section-subtitle img{
+	width: 50px;
+	height: 50px;
+	padding-right: 20px;
+	vertical-align: center;
+}
+
+.communication-feature-title {
+	padding: 20px 0px;
+}
+
+.communication-feature-title img{
+	width: 50px;
+	height: 50px;
+	vertical-align: middle;
+}
+
+
+
+/************* END COMMUNICATION **************/
+
+
+/************* END COMMUNICATION **************/
+
+div#about {
+	background: #667780;
+}
+
+div#contact {
+	width: 350px;
+	text-align: center;
+	padding-top: 60px;
+}
+
+div#team_description {
+	width: 550px;
+	padding-bottom: 30px;
+}
+
+div.member-details {
+	width: 70%;
+	padding-top: 12px;
+	padding-left: 10px;
+}
+
+.member-description {
+	font-size: 13px;
+	line-height: 20px;
+}
+
+.member-name {
+	padding-bottom: 10px;
+}
+
+.member-section {
+	padding-bottom: 20px;
+}
+
+.member-pic {
+	width: 25%;
+}
+
+#footer-note {
+	font-size: 10px;
+	text-align: center;
+}
+
+.member-description a {
+	text-decoration: none;
+	color: white;
+}
+
+#contact a {
+	text-decoration: none;
+	color: rgba(255, 255, 255, 0.4);
+}
+
+#about a:hover{
+	text-decoration: underline;
+}
+
+/************* END COMMUNICATION **************/
+
+div#footer {
+	background: #3D474D;
+	background-origin: padding-box;
+}
+
+/******************Start Search Page ***********************/
+div#search p, div#search label{
+	color: #333;
+	text-shadow: none;
+}
+
+.profile_summary {
+	width: 200px;
+	border: 1px black solid;
+	color: black;
+	padding: 5px 5px;
+	margin: 5px 5px;
+}
+
+.profile_summary .graduation_tag{
+	color: #867F7F;
+	font-size: 12px;
+}
+
+
+
+
+
+/******************End Search Page ***********************/
