@@ -212,7 +212,16 @@ class Course(models.Model):
     
     def save(self,**kwargs):
         self.slug = slugify(self.name)
-        super(Course, self).save(**kwargs)
+        isSaved = False
+        ctr = 1
+        
+        while not isSaved:
+            try:
+                super(Course, self).save(**kwargs)
+                isSaved = True
+            except IntegrityError: #Duplicate slug
+                self.slug = self.slug + str(ctr)
+                ctr = ctr + 1
         
     class Meta:
         verbose_name_plural = "Courses"
@@ -249,7 +258,16 @@ class Branch(models.Model):
     
     def save(self,**kwargs):
         self.slug = slugify(self.get_name() + ' ' + self.get_course())
-        super(Branch, self).save(**kwargs)
+        isSaved = False
+        ctr = 1
+        
+        while not isSaved:
+            try:
+                super(Branch, self).save(**kwargs)
+                isSaved = True
+            except IntegrityError: #Duplicate slug
+                self.slug = self.slug + str(ctr)
+                ctr = ctr + 1
         
     class Meta:
         verbose_name_plural = "Branches"
@@ -600,7 +618,7 @@ class StudentSection(models.Model):
             except ObjectDoesNotExist:
                 courseDataSynonyms = Synonym.objects.filter(value__iexact=course, resourcetype=RT_COURSE, aliastype=SYNONYM)
                 if courseDataSynonyms:
-                    courseData = courseDataSynonyms[0]
+                    courseData = Course.objects.get(id=courseDataSynonyms[0].parent_id)
                 else:
                     courseData = Course(name=course)
                     courseData.save()
@@ -616,7 +634,8 @@ class StudentSection(models.Model):
             if not branchData:
                 branchSynonyms = Synonym.objects.filter(value__iexact=branch, resourcetype=RT_BRANCH, aliastype=SYNONYM)
                 if branchSynonyms:
-                    branchData = branchSynonyms[0]
+                    branchSynonymIds = [synonym.parent_id for synonym in branchSynonyms]
+                    branchData = Branch.objects.filter(id__in=branchSynonymIds)
                 else:
                     branchObj = Branch(name=branch, course=courseData)
                     branchObj.save()
@@ -653,7 +672,7 @@ class EmploymentDetail(models.Model):
         elif(self.date_of_joining is None):
             return " - " + str(self.date_of_leaving.strftime("%b %Y"))
         else:
-            return str(self.date_of_joining.strftime("%b %Y")) + " - " + str(self.date_of_joining.year)+ " - " + str(self.date_of_leaving.strftime("%b")) + ", " + str(self.date_of_leaving.year)
+            return str(self.date_of_joining.strftime("%b, %Y")) + " - " + str(self.date_of_leaving.strftime("%b, %Y"))
 
         
 class HigherEducationDetail(models.Model):
@@ -832,8 +851,8 @@ class XlsUpload(models.Model):
                             if dobnum!='':
                                 dob = datetime(*xldate_as_tuple(dobnum, wb.datemode))
                             
-                    if(colIndex.get('course') is not None):
-                        course = unicode(s.cell(row,colIndex['course']).value).strip()
+                    if(colIndex.get('degree') is not None):
+                        course = unicode(s.cell(row,colIndex['degree']).value).strip()
                     
                     if(colIndex.get('specialisation') is not None):
                         specialisation = unicode(s.cell(row,colIndex['specialisation']).value).strip()

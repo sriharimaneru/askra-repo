@@ -14,6 +14,8 @@ from django.http import HttpResponse
 import json
 from django.forms.models import modelformset_factory
 from django.views.generic.base import TemplateView, View
+from django.db.models import Q
+from userprofile.utils import is_integer
 #from django.forms.formsets import formset_factory
 
 #Number of results loaded on search page initially. Same number of results are loaded further
@@ -36,7 +38,10 @@ class ShowProfileView(TemplateView):
             return context
     
         try:
-            user_profile = UserProfile.objects.get(id=profile_id)
+            if is_integer(profile_id):
+                user_profile = UserProfile.objects.get(id=profile_id)
+            else:
+                user_profile = UserProfile.objects.get(slug=profile_id)
             context['user_profile'] = user_profile
         except UserProfile.DoesNotExist:
             return context
@@ -55,6 +60,7 @@ class ShowProfileView(TemplateView):
             
         context['education_details'] = HigherEducationDetail.objects.filter(userprofile = user_profile)
         context['employment_details'] = EmploymentDetail.objects.filter(userprofile = user_profile)
+        context['faculty_details'] = FacultySection.objects.filter(userprofile = user_profile)
         context['tags'] = user_profile.tags.all()
         
         return context
@@ -71,8 +77,8 @@ class ErrorView(TemplateView):
 class EditProfileView(TemplateView):
     
     StudentFormSet = modelformset_factory(StudentSection, exclude=('userprofile'), extra=0, can_delete=True)
-    EmploymentFormSet = modelformset_factory(EmploymentDetail, exclude = ('userprofile'), extra=0, can_delete=True)
-    HigherEducationFormSet = modelformset_factory(HigherEducationDetail, exclude = ('userprofile'), extra=0, can_delete=True)
+    EmploymentFormSet = modelformset_factory(EmploymentDetail, exclude = ('userprofile'), extra=1, can_delete=True)
+    HigherEducationFormSet = modelformset_factory(HigherEducationDetail, exclude = ('userprofile'), extra=1, can_delete=True)
     FacultyFormSet = modelformset_factory(FacultySection, exclude = ('userprofile'), extra=0, can_delete=True)
     
     def get_template_names(self):

@@ -56,9 +56,12 @@
 	</div>
 
 	<div id="contact">
-		<p id="contact_header">Contact {{user_profile.get_short_name}}</p>
+		<p id="contact_header">Contact</p>
 		<div id="contact_email">
 			<p>Send Email</p>
+			<div id="contact_note">
+				<p>Available soon</p>
+			</div>
 		</div>
 		<div id="contact_div">
 			<p>Contacting {{ user_profile.get_full_name }} through Email/Phone will be enabled soon</p>
@@ -149,12 +152,25 @@
 			{% endfor %}
 		{% endif %}
 
+		{% if faculty_details %}
+			<h3 class="section-subtitle">Faculty Details</h3>
+			{% for faculty_detail in faculty_details %}
+			<div class="detail_container">
+				{% if faculty_detail.designation %}
+					<p><b>{{ faculty_detail.designation.name }}</b></p>
+				{% endif %}
+				{% if faculty_detail.deparment %}
+					<p>{{ faculty_detail.deparment.name }}</p>
+				{% endif %}
+			</div>
+			{% endfor %}
+		{% endif %}
 
 	</div>
 
 	<div id="tags_container">
 		<h3 class="section-subtitle">Tags</h3>
-		<div id="tags">
+		<div id="tags" class="detail_container">
 			<ul>
 			{% if tags %}
 			{% for tag in tags %}

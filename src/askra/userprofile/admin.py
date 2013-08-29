@@ -104,15 +104,10 @@ class BranchListFilter(admin.SimpleListFilter):
         return retval
 
     def queryset(self, request, queryset):
-        print self.value()
         if self.value():
             try:
-                if ',' in self.value():
-                    (course, branch) = self.value().split(',', 1)
-                    selectedBranch=Branch.objects.get(course__iexact=course.strip(), branch__iexact=branch.strip())
-                else:
-                    selectedBranch=Branch.objects.get(Q(course__iexact=self.value()) | Q(branch__iexact=self.value()))
-                return queryset.filter(studentsection__branch=selectedBranch)
+                selectedBranches=Branch.objects.filter(name__iexact=self.value())
+                return queryset.filter(studentsection__branch__in=selectedBranches)
             except ObjectDoesNotExist:
                 return queryset
         else:

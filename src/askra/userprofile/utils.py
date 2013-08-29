@@ -51,3 +51,10 @@ def slugify(value):
     # Any non word characters (letters, digits, and underscores) are replaced by '-'
     value = re.sub(r'\W+','-',value).lower()
     return value
+
+def is_integer(value):
+    try:
+        int(value)
+        return True
+    except ValueError:
+        return False
