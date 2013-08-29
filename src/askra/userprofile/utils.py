@@ -1,22 +1,25 @@
-#Utility functions
+# Utility functions
 import re
 import logging
 
 log = logging.getLogger('GROUPIFY')
 
+
 def isValidEmailId(email):
-        if(re.match('[^@]+@[^@]+\.[^@]+',email) is None):
-            log.debug("IMPORTANT: Email ID ["+email+"] is invalid!")
+        if(re.match('[^@]+@[^@]+\.[^@]+', email) is None):
+            log.debug("IMPORTANT: Email ID [" + email + "] is invalid!")
             return False
         else:
             return True
 
-def isValidRollNo(rollno): #checking for a 2 to 8 digit number only
-        if(re.match('^\d{2,8}$',rollno) is None):
-            log.debug("IMPORTANT: Roll No [" +rollno+ "] is invalid!")
+
+def isValidRollNo(rollno):  # checking for a 2 to 8 digit number only
+        if(re.match('^\d{2,8}$', rollno) is None):
+            log.debug("IMPORTANT: Roll No [" + rollno + "] is invalid!")
             return False
         else:
             return True
+
 
 def getYOGFromRoll(roll_num):
     if len(roll_num) == 4 and roll_num[0:1] == "9":
@@ -32,24 +35,26 @@ def getYOGFromRoll(roll_num):
             return 2016
     return None
 
-def isValidYOG(yog): 
-    #1. two digit number (or)
-    #2. four digit number that starts with 1 or 2 only
-    if((len(yog)!=2 and len(yog)!=4) or (len(yog)==2 and re.match('^\d{2}$',yog) is None) or (len(yog)==4 and re.match('^[12][0-9]{3}$',yog) is None)):
-        log.debug("IMPORTANT: YOG [" +yog+ "] is invalid!")
+
+def isValidYOG(yog):
+    # 1. two digit number (or)
+    # 2. four digit number that starts with 1 or 2 only
+    if((len(yog) != 2 and len(yog) != 4) or (len(yog) == 2 and re.match('^\d{2}$', yog) is None) or (len(yog) == 4 and re.match('^[12][0-9]{3}$', yog) is None)):
+        log.debug("IMPORTANT: YOG [" + yog + "] is invalid!")
         return False
     else:
         return True
-    
+
+
 def slugify(value):
     if value is None:
         return None
-    if type(value) is not str:
+    if not isinstance(value, str):
         value = unicode(value)
-    
+
     value = value.strip()
     # Any non word characters (letters, digits, and underscores) are replaced by '-'
-    value = re.sub(r'\W+','-',value).lower()
+    value = re.sub(r'\W+', '-', value).lower()
     return value
 
 def is_integer(value):
