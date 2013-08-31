@@ -498,5 +498,215 @@
     "aliastype": 0, 
     "value": "MCA"
   }
+},
+{
+  "pk": 51, 
+  "model": "userprofile.synonym", 
+  "fields": {
+    "resourcetype": 5, 
+    "parent_id": 1, 
+    "aliastype": 0, 
+    "value": "gs"
+  }
+},
+{
+  "pk": 52, 
+  "model": "userprofile.synonym", 
+  "fields": {
+    "resourcetype": 5, 
+    "parent_id": 5, 
+    "aliastype": 0, 
+    "value": "ms"
+  }
+},
+{
+  "pk": 53, 
+  "model": "userprofile.synonym", 
+  "fields": {
+    "resourcetype": 5, 
+    "parent_id": 2, 
+    "aliastype": 0, 
+    "value": "INFY"
+  }
+},
+{
+  "pk": 54, 
+  "model": "userprofile.synonym", 
+  "fields": {
+    "resourcetype": 5, 
+    "parent_id": 1, 
+    "aliastype": 1, 
+    "value": "Investment Bank"
+  }
+},
+{
+  "pk": 55, 
+  "model": "userprofile.synonym", 
+  "fields": {
+    "resourcetype": 5, 
+    "parent_id": 5, 
+    "aliastype": 1, 
+    "value": "Investment Bank"
+  }
+},
+{
+  "pk": 56, 
+  "model": "userprofile.synonym", 
+  "fields": {
+    "resourcetype": 3, 
+    "parent_id": 1, 
+    "aliastype": 0, 
+    "value": "BE"
+  }
+},
+{
+  "pk": 58, 
+  "model": "userprofile.synonym", 
+  "fields": {
+    "resourcetype": 3, 
+    "parent_id": 4, 
+    "aliastype": 0, 
+    "value": "MSc Tech"
+  }
+},
+{
+  "pk": 60, 
+  "model": "userprofile.synonym", 
+  "fields": {
+    "resourcetype": 3, 
+    "parent_id": 1, 
+    "aliastype": 0, 
+    "value": "BTecg"
+  }
+},
+{
+  "pk": 62, 
+  "model": "userprofile.synonym", 
+  "fields": {
+    "resourcetype": 3, 
+    "parent_id": 1, 
+    "aliastype": 0, 
+    "value": "BTch"
+  }
+},
+{
+  "pk": 66, 
+  "model": "userprofile.synonym", 
+  "fields": {
+    "resourcetype": 3, 
+    "parent_id": 2, 
+    "aliastype": 0, 
+    "value": "ME"
+  }
+},
+{
+  "pk": 67, 
+  "model": "userprofile.synonym", 
+  "fields": {
+    "resourcetype": 3, 
+    "parent_id": 1, 
+    "aliastype": 0, 
+    "value": "BTech,"
+  }
+},
+{
+  "pk": 69, 
+  "model": "userprofile.synonym", 
+  "fields": {
+    "resourcetype": 3, 
+    "parent_id": 4, 
+    "aliastype": 0, 
+    "value": "MScTech"
+  }
+},
+{
+  "pk": 72, 
+  "model": "userprofile.synonym", 
+  "fields": {
+    "resourcetype": 3, 
+    "parent_id": 1, 
+    "aliastype": 0, 
+    "value": "B Tech"
+  }
+},
+{
+  "pk": 73, 
+  "model": "userprofile.synonym", 
+  "fields": {
+    "resourcetype": 3, 
+    "parent_id": 1, 
+    "aliastype": 0, 
+    "value": "B,Tech"
+  }
+},
+{
+  "pk": 74, 
+  "model": "userprofile.synonym", 
+  "fields": {
+    "resourcetype": 3, 
+    "parent_id": 2, 
+    "aliastype": 0, 
+    "value": "M Tech"
+  }
+},
+{
+  "pk": 75, 
+  "model": "userprofile.synonym", 
+  "fields": {
+    "resourcetype": 3, 
+    "parent_id": 1, 
+    "aliastype": 0, 
+    "value": "B E"
+  }
+},
+{
+  "pk": 76, 
+  "model": "userprofile.synonym", 
+  "fields": {
+    "resourcetype": 8, 
+    "parent_id": 1, 
+    "aliastype": 1, 
+    "value": "Ivy league"
+  }
+},
+{
+  "pk": 77, 
+  "model": "userprofile.synonym", 
+  "fields": {
+    "resourcetype": 8, 
+    "parent_id": 2, 
+    "aliastype": 1, 
+    "value": "Ivy league"
+  }
+},
+{
+  "pk": 78, 
+  "model": "userprofile.synonym", 
+  "fields": {
+    "resourcetype": 5, 
+    "parent_id": 3, 
+    "aliastype": 0, 
+    "value": "TCS"
+  }
+},
+{
+  "pk": 79, 
+  "model": "userprofile.synonym", 
+  "fields": {
+    "resourcetype": 2, 
+    "parent_id": 6, 
+    "aliastype": 0, 
+    "value": "Bengaluru"
+  }
+},
+{
+  "pk": 80, 
+  "model": "userprofile.synonym", 
+  "fields": {
+    "resourcetype": 4, 
+    "parent_id": 3, 
+    "aliastype": 0, 
+    "value": "EE"
+  }
 }
 ]

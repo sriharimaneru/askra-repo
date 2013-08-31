@@ -5,7 +5,7 @@
   "fields": {
     "course": 1, 
     "name": "Civil", 
-    "slug": "civil-b-tech"
+    "slug": "civil-btech"
   }
 },
 {
@@ -14,7 +14,7 @@
   "fields": {
     "course": 1, 
     "name": "Mechanical", 
-    "slug": "mechanical-b-tech"
+    "slug": "mechanical-btech"
   }
 },
 {
@@ -23,7 +23,7 @@
   "fields": {
     "course": 1, 
     "name": "EEE", 
-    "slug": "eee-b-tech"
+    "slug": "eee-btech"
   }
 },
 {
@@ -32,7 +32,7 @@
   "fields": {
     "course": 1, 
     "name": "ECE", 
-    "slug": "ece-b-tech"
+    "slug": "ece-btech"
   }
 },
 {
@@ -41,7 +41,7 @@
   "fields": {
     "course": 1, 
     "name": "Chemical", 
-    "slug": "chemical-b-tech"
+    "slug": "chemical-btech"
   }
 },
 {
@@ -50,7 +50,7 @@
   "fields": {
     "course": 1, 
     "name": "Metallurgy", 
-    "slug": "metallurgy-b-tech"
+    "slug": "metallurgy-btech"
   }
 },
 {
@@ -59,7 +59,7 @@
   "fields": {
     "course": 1, 
     "name": "CSE", 
-    "slug": "cse-b-tech"
+    "slug": "cse-btech"
   }
 },
 {
@@ -68,7 +68,7 @@
   "fields": {
     "course": 4, 
     "name": "Physics", 
-    "slug": "physics-m-sc-"
+    "slug": "physics-msc"
   }
 },
 {
@@ -77,7 +77,7 @@
   "fields": {
     "course": 4, 
     "name": "Chemistry", 
-    "slug": "chemistry-m-sc-"
+    "slug": "chemistry-msc"
   }
 },
 {
@@ -86,7 +86,7 @@
   "fields": {
     "course": 4, 
     "name": "Maths", 
-    "slug": "maths-m-sc-"
+    "slug": "maths-msc"
   }
 },
 {
@@ -95,7 +95,7 @@
   "fields": {
     "course": 2, 
     "name": "ICE & GT", 
-    "slug": "ice-gt-m-tech"
+    "slug": "ice-gt-mtech"
   }
 },
 {
@@ -103,24 +103,24 @@
   "model": "userprofile.branch", 
   "fields": {
     "course": 2, 
-    "name": "Geo-Tech. Engg.", 
-    "slug": "geo-tech-engg-m-tech"
+    "name": "Geo-Tech Engg.", 
+    "slug": "geo-tech-engg-mtech"
   }
 },
 {
   "pk": 1, 
   "model": "userprofile.course", 
   "fields": {
-    "name": "B.Tech", 
-    "slug": "b-tech"
+    "name": "BTech", 
+    "slug": "btech"
   }
 },
 {
   "pk": 2, 
   "model": "userprofile.course", 
   "fields": {
-    "name": "M.Tech", 
-    "slug": "m-tech"
+    "name": "MTech", 
+    "slug": "mtech"
   }
 },
 {
@@ -135,8 +135,8 @@
   "pk": 4, 
   "model": "userprofile.course", 
   "fields": {
-    "name": "M.Sc.", 
-    "slug": "m-sc-"
+    "name": "MSc", 
+    "slug": "msc"
   }
 }
 ]
