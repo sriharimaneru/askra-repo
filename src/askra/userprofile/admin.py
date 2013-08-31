@@ -21,13 +21,13 @@ class StateAdmin(admin.ModelAdmin):
 
 
 class CityAdmin(admin.ModelAdmin):
-    list_display = ('name', 'slug', 'get_state', 'get_country')
+    list_display = ('id', 'name', 'slug', 'get_state', 'get_country', 'get_synonyms')
     list_filter = ('name', 'slug', 'state__name', 'state__country__name')
     search_fields = ('name', 'slug')
 
 
 class CourseAdmin(admin.ModelAdmin):
-    list_display = ('name', 'slug')
+    list_display = ('id', 'name', 'slug')
     list_filter = ('name', 'slug')
     search_fields = ('name', 'slug')
 
@@ -39,7 +39,7 @@ class BranchAdmin(admin.ModelAdmin):
 
 
 class EmployerAdmin(admin.ModelAdmin):
-    list_display = ('id', 'name', 'slug')
+    list_display = ('id', 'name', 'slug', 'get_synonyms')
     list_filter = ('name', 'slug')
     search_fields = ('id', 'name', 'slug')
 
@@ -48,6 +48,10 @@ class SynonymAdmin(admin.ModelAdmin):
     list_display = ('value', 'get_parent_name', 'get_resourcetype_name', 'get_aliastype_name')
     list_filter = ('value', )
     search_fields = ('value', )
+    
+class CollegeAdmin(admin.ModelAdmin):
+    list_display = ('id', 'name', 'slug', 'get_synonyms')
+    search_fields = ('name', 'slug')
 
 
 class StudentSectionInline(admin.TabularInline):
@@ -177,7 +181,7 @@ admin.site.register(UserProfile, UserProfileAdmin)
 admin.site.register(Employer, EmployerAdmin)
 admin.site.register(JobDesignation)
 admin.site.register(JobDomain)
-admin.site.register(College)
+admin.site.register(College, CollegeAdmin)
 admin.site.register(Degree)
 admin.site.register(Department)
 admin.site.register(FacultyDesignation)

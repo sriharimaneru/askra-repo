@@ -1,6 +1,7 @@
 # Utility functions
 import re
 import logging
+from twisted.python.reflect import isinst
 
 log = logging.getLogger('GROUPIFY')
 
@@ -55,6 +56,15 @@ def slugify(value):
     value = value.strip()
     # Any non word characters (letters, digits, and underscores) are replaced by '-'
     value = re.sub(r'\W+', '-', value).lower()
+    return value
+
+def remove_dots(value):
+    if value is None:
+        return None
+    if not isinst(value, str):
+        value = unicode(value)
+        
+    value = re.sub(r'\.', '', value)
     return value
 
 def is_integer(value):

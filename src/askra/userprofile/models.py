@@ -6,7 +6,7 @@ from xlrd import open_workbook, xldate_as_tuple, XL_CELL_TEXT
 from django.db.models import Q
 import logging
 from userprofile.utils import getYOGFromRoll, isValidEmailId, isValidRollNo, \
-    isValidYOG, slugify
+    isValidYOG, slugify, remove_dots
 from datetime import datetime
 from django.db import IntegrityError
 
@@ -191,6 +191,19 @@ class City(models.Model):
             return self.state.country.name
     get_country.short_description = 'country'
 
+    def get_synonyms(self):
+        value =''
+        synonyms = Synonym.objects.filter(parent_id=self.id, resourcetype=RT_CITY)
+        if synonyms:
+            for synonym in synonyms:
+                if value!='':
+                    value = value + ',' + synonym.value
+                else:
+                    value = value + synonym.value
+        
+        return value
+    get_synonyms.short_description="synonyms"
+
     def save(self, **kwargs):
         self.slug = slugify(self.name + ' ' + self.get_state() + ' ' + self.get_country())
         isSaved = False
@@ -286,6 +299,19 @@ class Employer(models.Model):
     def __unicode__(self):
         return self.name
 
+    def get_synonyms(self):
+        value =''
+        synonyms = Synonym.objects.filter(parent_id=self.id, resourcetype=RT_EMPLOYER)
+        if synonyms:
+            for synonym in synonyms:
+                if value!='':
+                    value = value + ',' + synonym.value
+                else:
+                    value = value + synonym.value
+        
+        return value
+    get_synonyms.short_description="synonyms"
+
     def save(self, **kwargs):
         self.slug = slugify(self.name)
         super(Employer, self).save(**kwargs)
@@ -321,6 +347,19 @@ class College(models.Model):
 
     def __unicode__(self):
         return self.name
+    
+    def get_synonyms(self):
+        value =''
+        synonyms = Synonym.objects.filter(parent_id=self.id, resourcetype=RT_COLLEGE)
+        if synonyms:
+            for synonym in synonyms:
+                if value!='':
+                    value = value + ',' + synonym.value
+                else:
+                    value = value + synonym.value
+        
+        return value
+    get_synonyms.short_description="synonyms"
 
     def save(self, **kwargs):
         self.slug = slugify(self.name)
@@ -646,6 +685,7 @@ class StudentSection(models.Model):
     def set_branch(self, branch, course, specialisation):
         if course != '' and course is not None:
             course = course.strip()
+            course = remove_dots(course)
             try:
                 courseData = Course.objects.get(name__iexact=course)
             except ObjectDoesNotExist:
@@ -931,7 +971,7 @@ class XlsUpload(models.Model):
     "], Branch: [" +
     branch +
     "]")
-                    print "Details - First Name: [" + first_name + "], Last Name: [" + last_name + "], Email: [" + email + "], Branch: [" + branch + "]"
+#                    print "Details - First Name: [" + first_name + "], Last Name: [" + last_name + "], Email: [" + email + "], Branch: [" + branch + "]"
 #                    log.debug("Mobile: ["+mobile+"], City: ["+city+"], Address: ["+address+"], YOG: ["+ unicode(yog) +"], RollNo: ["+ unicode(rollno) + "]")
 
                     # Part 2: Set the values of UserProfile fields.
