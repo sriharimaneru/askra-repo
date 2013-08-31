@@ -90,12 +90,12 @@ class EditProfileView(TemplateView):
     EmploymentFormSet = modelformset_factory(
         EmploymentDetail,
         exclude=('userprofile'),
-        extra=0,
+        extra=1,
         can_delete=True)
     HigherEducationFormSet = modelformset_factory(
         HigherEducationDetail,
         exclude=('userprofile'),
-        extra=0,
+        extra=1,
         can_delete=True)
     FacultyFormSet = modelformset_factory(
         FacultySection,
