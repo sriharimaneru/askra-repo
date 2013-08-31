@@ -103,16 +103,20 @@
 		<p>{{ user_profile.about|safe }}</p>
 		{% endif %}
 
-		<h3 class="section-subtitle">Education Details</h3>	
-		<div class="detail_container">
-			<p><b>National Insitute Of Technology, Warangal</b></p>
-			{% if student_section.branch.branch %}
-			<p>{{ student_section.branch.course }}, {{ student_section.branch.branch }}</p>
-			{% endif %}
-			{% if student_section.year_of_graduation %}
-			<p>Graduated in {{student_section.year_of_graduation}}</p>
-			{% endif %}
-		</div>
+		{% if all_student_sections %}
+			<h3 class="section-subtitle">Education Details</h3>
+			{% for student_sect in all_student_sections %}
+				<div class="detail_container">
+					<p><b>National Insitute Of Technology, Warangal</b></p>
+					{% if student_sect.branch %}
+					<p>{{ student_sect.branch.name }}, {{ student_sect.branch.course.name }}</p>
+					{% endif %}
+					{% if student_sect.year_of_graduation %}
+					<p>Graduated in {{student_sect.year_of_graduation}}</p>
+					{% endif %}
+				</div>
+			{% endfor %}
+		{% endif %}
 
 		{% if education_details %}
 			<h3 class="section-subtitle">Higher Education Details</h3>

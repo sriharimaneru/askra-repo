@@ -33,7 +33,7 @@ class CourseAdmin(admin.ModelAdmin):
 
 
 class BranchAdmin(admin.ModelAdmin):
-    list_display = ('name', 'slug', 'get_course')
+    list_display = ('id', 'name', 'slug', 'get_course')
     list_filter = ('name', 'slug', 'course__name')
     search_fields = ('name', 'slug')
 

@@ -47,6 +47,7 @@ class ShowProfileView(TemplateView):
         if student_sections:
             student_section = student_sections[0]
             context['student_section'] = student_section
+            context['all_student_sections'] = student_sections
 
             if student_section.branch:
                 related_profiles = StudentSection.objects.filter(
