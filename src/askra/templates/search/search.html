@@ -47,6 +47,25 @@
                 window.location.href = "{{ request.get_full_path|facet_url}}{{facet_detail.facet_id}}=" + a+"&";
             });
 
+            $('#{{facet_detail.facet_id}}_search').keyup(function () {
+                $(".{{facet_detail.facet_id}}_facet_option").show();
+                val = $(this).val().toLowerCase();
+                $(".{{facet_detail.facet_id}}_facet_option").each(function() {
+                    try{
+                        if ($(this)[0].children[0].value.toLowerCase().indexOf(val) == -1){
+                            $(this).hide();
+                        }                    
+                    }catch(err){
+                        if ($(this)[0].children[0].innerText.toLowerCase().indexOf(val) == -1){
+                            $(this).hide();
+                        }                     
+                    }
+                });
+                $('.scroll-pane').jScrollPane();
+            }); //key up 
+
+
+
         {% endfor %}
 
         $('#search_results').masonry({
@@ -56,6 +75,7 @@
         $('#pagetop').click(function() {
             $(document.body).animate({ scrollTop: 0 }, "fast");
         });
+
 
 
     });
@@ -81,14 +101,18 @@
     <dl id="{{facet_detail.facet_id}}_facet" class="facet">
         {% if facet_detail.facet_options %}
             <dt>{{facet_detail.name}}</dt>
-            <!-- <input id="{{facet_detail.facet_id}}_search" type="text" placeholder="Search {{facet_detail.name}}" /> -->
+            <input id="{{facet_detail.facet_id}}_search" type="text" placeholder="Search {{facet_detail.name}}" />
             <div class="scroll-pane">
             {% for option in facet_detail.facet_options %}
                 {% if option.0 != '0' %}
                     {% if option.1 %}
-                        <input type="checkbox" class="{{facet_detail.facet_id}}_check {% if option.0 in facet_detail.options_selected %} {{facet_detail.facet_id}}_check_select {% endif %}" value="{{ option.0 }}" style="display:inline"><span>{{ option.0 }}({{ option.1 }})</span><br>
+                        <div class="{{facet_detail.facet_id}}_facet_option">
+                            <input type="checkbox" class="{{facet_detail.facet_id}}_check {% if option.0 in facet_detail.options_selected %} {{facet_detail.facet_id}}_check_select {% endif %}" value="{{ option.0 }}" style="display:inline"><span>{{ option.0 }}({{ option.1 }})</span><br>
+                        </div>
                     {% else %}
-                        <dd class="{{facet_detail.facet_id}}_facet_option">{{ option.0 }}({{ option.1 }})</dd>
+                        <div class="{{facet_detail.facet_id}}_facet_option">
+                            <dd>{{ option.0 }}({{ option.1 }})</dd>
+                        </div>
                     {% endif %}
                 {% endif %}
             {% endfor %}

@@ -66,11 +66,6 @@ class ProfileSearchView(SearchView):
         extra['facet_detail_map'] = self.facet_detail_map
         extra['request'] = self.request
 
-        print "****************"
-        for fd in self.facet_detail_map.values():
-            print fd.facet_options
-        print "****************"
-
         return extra
 
     def __call__(self, request):
@@ -90,7 +85,6 @@ class ProfileSearchView(SearchView):
     def update_selected_facets(self):
         for facet_id in self.facet_detail_map.keys():
             facet_options_selected = self.request.GET.get(facet_id, '')
-            print "-----------" + facet_options_selected
             if facet_options_selected:
                 self.facet_detail_map[facet_id].options_selected = " OR ".join(facet_options_selected.split(","))
 
@@ -110,7 +104,6 @@ class ProfileSearchView(SearchView):
                 retval["fq"].append("{!tag=%s}%s:%s" %
                                     (facet_detail.facet_id, facet_detail.facet_id,
                                      facet_detail.options_selected))
-        print retval
         return retval
 
     def update_facet_counts(self, facet_counts_map):
